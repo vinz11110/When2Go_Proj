@@ -1,0 +1,40 @@
+@import url(base.css);
+main section{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+button{
+    width: 500px;
+    height: 200px;
+    margin: 50px;
+    font-size:x-large;
+    font-style: bold;
+    background-color: aqua;
+}
+button:hover{
+    background-color: rgba(0, 255, 255, 0.776);
+    box-shadow: 10px 10px 20px rgb(0, 0, 0);
+}
+h1{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}h2{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+body{
+    display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: minmax(64px, 128px) auto minmax(64px, 128px);
+  grid-template-areas: 
+    " header"
+    " main"
+    " footer";
+}
