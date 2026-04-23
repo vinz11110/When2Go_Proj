@@ -9,29 +9,35 @@
 </head>
 <body>
     <nav>
-        <section class="top">
-        <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
-        <button class="back" onclick="window.history.back()">Back</button>
-        </section>
-        <section class="bottom">
+         <div class="nav-left">
+            <button class="back" onclick="window.history.back()">Back</button>
+
+        </div>
+        <div class="nav-right">
+            <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
+
+        </div>
+    </nav>
+    <main>
+        <section class="vacationPickContainer">
             <h3>Find your type of vacation</h3>
-            <ul>
+            <ul class="categoryList">
                 <li><button>Beach</button></li>
                 <li><button>Mountains</button></li>
                 <li><button>Urban</button></li>
                 <li><button>History</button></li>
                 <li><button>Wellness</button></li>
             </ul> 
-            <form id="locationSearchForm">
-            <div>
+            <form id="locationSearchForm" class="locationSearchForm">
+                <div>
                 <label for="Search"></label>
                 <input type="text" id="Search">
-            </div>
-            <button type="button" onclick="searchPlace()">Search</button>
+                </div>
+                <button type="button" onclick="searchPlace()">Search</button>
             </form>
         </section>
-    </nav>
-    <main>
+        <section class="destinations" id="destinationsContainer">
+        </section>
     </main>
     <footer>
         <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>

@@ -9,11 +9,15 @@
 </head>
 <body>
     <nav>
-        <section class="top">
-        <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
-        <button class="back" onclick="window.history.back()">Back</button>
-        </section>
-        <section class="bottom">
+        <div class="nav-left">
+            <button class="back" onclick="window.history.back()">Back</button>
+        </div>
+        <div class="nav-right">
+            <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
+        </div>
+    </nav>
+    <main>
+        <section class="vacationPick">
             <h3>Find the best time for your vacation</h3>
             <ul>
                 <li><button>Spring</button></li>
@@ -30,8 +34,8 @@
             <button type="button" onclick="vacationTimeRecom()">Search</button>
              </form>
         </section>
-    </nav>
-    <main>
+        <section class="timeOfYear" id="calenderContainer">
+        </section>
     </main>
     <footer>
         <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>

@@ -9,13 +9,19 @@
 </head>
 <body>
     <nav>
-        <section class="top">
-        <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
-        <button class="back" onclick="window.history.back()">Back</button>
-        </section>
+        <div class="nav-left">
+            <button class="back" onclick="window.history.back()">Back</button>
+
+        </div>
+        <div class="nav-right">
+            <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
+
+        </div>
     </nav>
     <main>
-        <button onclick="saveCalender()">Save</button>
+        <button onclick="saveCalender()" class="saveButton">Save</button>
+        <section class="mainContentContainer">
+        </section>
     </main>
     <footer>
         <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>

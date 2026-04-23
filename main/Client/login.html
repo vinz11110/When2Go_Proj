@@ -12,21 +12,19 @@
         <button class="back" onclick="window.history.back()">Back</button>
     </nav>
     <main>
-        <section>
-            <h2>login</h2>
-            <form id="loginForm">
-                <div>
+        <h2>login</h2>
+        <form id="loginForm">
+            <div>
                 <label for="username">Username:</label>
                 <input type="text" id="username" minlength="1">
             </div>
-                <div>
+            <div>
                 <label for="password">Password:</label>
                 <input type="password" id="password" minlength="1">
             </div>
-                <button type="button" onclick="login()">login</button>
-            </form>
-            <p>If you are new please sign up <a href="signUp.html">here</a></p>
-        </section>
+            <button type="button" class="loginButton" onclick="login()">login</button>
+        </form>
+        <p>If you are new please sign up <a href="signUp.html">here</a></p>
     </main>
     <footer>
         <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>
