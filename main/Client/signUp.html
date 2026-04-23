@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When2Go</title>
+    <link rel="stylesheet" href="signUp.css" />
+    <script src="signUp.js"></script>
+</head>
+<body>
+    <nav>
+        <button class="back" onclick="window.history.back()">Back</button>
+    </nav>
+    <main>
+        <section>
+            <h2>Create new account</h2>
+            <form id="signUpForm">
+                <div>
+                <label for="username">New Username:</label>
+                <input type="text" id="username" minlength="1">
+                </div>
+                <div>
+                <label for="password">New Password:</label>
+                <input type="password" id="password" minlength="1">
+                </div>
+                <div>
+                <label for="password2">Repeat Password:</label>
+                <input type="password" id="password2" minlength="1">
+                </div>
+                <button type="button" onclick="login()">create</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>
+    </footer>
+</body>
+</html>

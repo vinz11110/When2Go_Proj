@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When2Go</title>
+    <link rel="stylesheet" href="login.css" />
+    <script src="login.js"></script>
+</head>
+<body>
+    <nav>
+        <button class="back" onclick="window.history.back()">Back</button>
+    </nav>
+    <main>
+        <section>
+            <h2>login</h2>
+            <form id="loginForm">
+                <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" minlength="1">
+            </div>
+                <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" minlength="1">
+            </div>
+                <button type="button" onclick="login()">login</button>
+            </form>
+            <p>If you are new please sign up <a href="signUp.html">here</a></p>
+        </section>
+    </main>
+    <footer>
+        <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>
+    </footer>
+</body>
+</html>

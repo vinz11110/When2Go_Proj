@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When2Go</title>
+    <link rel="stylesheet" href="time_choice.css" />
+    <script src="time_choice.js"></script>
+</head>
+<body>
+    <nav>
+        <section class="top">
+        <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
+        <button class="back" onclick="window.history.back()">Back</button>
+        </section>
+        <section class="bottom">
+            <h3>Find the best time for your vacation</h3>
+            <ul>
+                <li><button>Spring</button></li>
+                <li><button>Summer</button></li>
+                <li><button>Autumn</button></li>
+                <li><button>Winter</button></li>
+            </ul>
+            <h3>Or tell us how much time you have</h3>
+             <form id="vacationTimeForm">
+            <div>
+                <label for="search">Vacation days</label>
+                <input type="number" id="search">
+            </div>
+            <button type="button" onclick="vacationTimeRecom()">Search</button>
+             </form>
+        </section>
+    </nav>
+    <main>
+    </main>
+    <footer>
+        <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>
+    </footer>
+</body>
+</html>

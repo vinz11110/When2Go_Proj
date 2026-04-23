@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When2Go</title>
+    <link rel="stylesheet" href="dest_choice.css" />
+    <script src="dest_choice.js"></script>
+</head>
+<body>
+    <nav>
+        <section class="top">
+        <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
+        <button class="back" onclick="window.history.back()">Back</button>
+        </section>
+        <section class="bottom">
+            <h3>Find your type of vacation</h3>
+            <ul>
+                <li><button>Beach</button></li>
+                <li><button>Mountains</button></li>
+                <li><button>Urban</button></li>
+                <li><button>History</button></li>
+                <li><button>Wellness</button></li>
+            </ul> 
+            <form id="locationSearchForm">
+            <div>
+                <label for="Search"></label>
+                <input type="text" id="Search">
+            </div>
+            <button type="button" onclick="searchPlace()">Search</button>
+            </form>
+        </section>
+    </nav>
+    <main>
+    </main>
+    <footer>
+        <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>
+    </footer>
+</body>
+</html>
