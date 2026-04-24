@@ -8,6 +8,9 @@
     <script src="dest_choice.js"></script>
 </head>
 <body>
+    <header>
+         <h1><a href="index.html">When2Go(LOGO)</a></h1>
+    </header>
     <nav>
          <div class="nav-left">
             <button class="back" onclick="window.history.back()">Back</button>
@@ -19,24 +22,24 @@
         </div>
     </nav>
     <main>
-        <section class="vacationPickContainer">
-            <h3>Find your type of vacation</h3>
-            <ul class="categoryList">
-                <li><button>Beach</button></li>
-                <li><button>Mountains</button></li>
-                <li><button>Urban</button></li>
-                <li><button>History</button></li>
-                <li><button>Wellness</button></li>
-            </ul> 
-            <form id="locationSearchForm" class="locationSearchForm">
-                <div>
-                <label for="Search"></label>
-                <input type="text" id="Search">
-                </div>
-                <button type="button" onclick="searchPlace()">Search</button>
-            </form>
-        </section>
-        <section class="destinations" id="destinationsContainer">
+        <div class="mainTitle">
+            <h3>Find your Destination</h3>
+        </div>
+        <form id="locationSearchForm" class="locationSearchForm">
+            <div>
+            <label for="Search"></label>
+            <input type="text" id="Search" class="searchBar">
+            </div>
+            <button class="searchButton" type="button" onclick="searchPlace()">Search</button>
+        </form>
+        <ul class="categoryList">
+            <li><button >Beach</button></li>
+            <li><button >Mountains</button></li>
+            <li><button >Urban</button></li>
+            <li><button >History</button></li>
+            <li><button >Wellness</button></li>
+        </ul> 
+        <section class="contentContainer" id="destinations">
         </section>
     </main>
     <footer>

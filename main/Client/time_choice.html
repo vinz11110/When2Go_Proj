@@ -8,6 +8,9 @@
     <script src="time_choice.js"></script>
 </head>
 <body>
+    <header>
+         <h1><a href="index.html">When2Go(LOGO)</a></h1>
+    </header>
     <nav>
         <div class="nav-left">
             <button class="back" onclick="window.history.back()">Back</button>
@@ -17,24 +20,28 @@
         </div>
     </nav>
     <main>
-        <section class="vacationPick">
+        <div class="title">
             <h3>Find the best time for your vacation</h3>
-            <ul>
-                <li><button>Spring</button></li>
-                <li><button>Summer</button></li>
-                <li><button>Autumn</button></li>
-                <li><button>Winter</button></li>
+        </div>
+        <section class="define">
+            <ul class="catMonths">
+                <li><button >Spring</button></li>
+                <li><button >Summer</button></li>
+                <li><button >Autumn</button></li>
+                <li><button >Winter</button></li>
             </ul>
-            <h3>Or tell us how much time you have</h3>
-             <form id="vacationTimeForm">
-            <div>
-                <label for="search">Vacation days</label>
-                <input type="number" id="search">
-            </div>
-            <button type="button" onclick="vacationTimeRecom()">Search</button>
-             </form>
+            <div class="vacationTime">
+                <p>Or tell us how much time you have</p>
+                <form id="vacationTimeForm">
+                    <div>
+                        <label for="search">Vacation days</label>
+                        <input type="number" id="search">
+                    </div>
+                    <button type="button" onclick="vacationTimeRecom()">Search</button>
+                </form>
+            </div>    
         </section>
-        <section class="timeOfYear" id="calenderContainer">
+        <section class="contentContainer" id="calenders">
         </section>
     </main>
     <footer>

@@ -1,1 +1,48 @@
 @import url(base.css);
+main{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 30rem 1fr;
+    grid-template-areas:
+    "section"
+    "buttons";
+}
+.introContainer{
+    align-items: center;
+    justify-content:end;
+    grid-area: section;
+    flex-direction: column;
+    padding: 4rem ;
+    background-color: rgba(209, 5, 5, 0.3);
+}
+.choiceButtonContainer{
+    align-items:start;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    gap: 4rem;
+    grid-area: buttons;
+    background-color: rgba(148, 255, 25, 0.3);
+}
+.mainSelect{
+    font-size: 4rem;
+    padding: 5rem 3rem;
+    border-radius: 1.5rem;
+}
+p{
+    margin-top: auto; 
+    padding-bottom: 2rem;
+}
+h1{
+    margin: 2rem;
+}
+@media (max-width: 30rem) {
+  .mainSelect{
+    font-size: 3rem;
+    padding: 5rem 2rem;
+    border-radius: 1rem;
+    }
+    h2{
+    font-size: 2rem;
+    }
+}
