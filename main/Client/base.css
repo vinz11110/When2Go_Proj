@@ -84,11 +84,13 @@ header{
 main{
   grid-area: main;
   overflow-y: auto;
+
 }
 section{
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
 }
 ul{
   display: flex;

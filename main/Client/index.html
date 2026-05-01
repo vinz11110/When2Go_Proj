@@ -5,33 +5,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>When2Go</title>
     <link rel="stylesheet" href="index.css" />
-    <script src="index.js"></script>
+    <script src="index.js" defer></script>
 </head>
 <body>
     <header>
          <h1><a href="index.html">When2Go(LOGO)</a></h1>
     </header>
     <nav>
-         <div class="nav-left">
-
+        <div class="nav-left">
         </div>
         <div class="nav-right">
              <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
 
         </div>
     </nav>
-    <main>
-        <section class="introContainer">
-             <h1>Welcome to When2Go </h1>
-             <h2>The cure to your travel Planning headaches</h2>
-             <p>Choose here:</p>
-        </section>
-        <ul class="choiceButtonContainer">
-                <li><button class="mainSelect" onclick="window.location.href='dest_choice.html'">Find out where to go</button>
-                </li>
-                <li><button class="mainSelect" onclick="window.location.href='time_choice.html'">Find out when to go</button>
-                </li>
-        </ul>
+    <main id="main">
+          <section id="startView" class="view1">
+               <section class="introContainer" id="introContainer">
+                    <h1>Welcome to When2Go </h1>
+                    <h2>The cure to your travel Planning headaches</h2>
+               </section>
+               <section class="vacationTime" id="vacationTime">
+                         <p id="introText">Tell us how much time you have</p>
+                         <form id="vacationTimeForm">
+                              <div>
+                                   <label for="search">Vacation days</label>
+                                   <input type="number" id="search" maxlength="2">
+                              </div>
+                              <button type="button" onclick="toggleView('start')" id="searchButton">
+                                   Search
+                              </button>
+                         </form>
+                    </section>
+          </section>
+          <section id="categoryView1" class="viewCat hidden">
+               <div id="resultHeader">
+                    <h2> Pick your favourite time to travel</h2>
+               </div>
+               <section id="contentContain" class="content">
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+               </section>
+               <div id="navButtonContain" class="buttons">
+                    <button class="next" id="nextButton" onclick="toggleView('timeframeBack')">
+                         Back
+                    </button>
+                    <button class="next" id="nextButton" onclick="toggleView('timeframe')">
+                         Next
+                    </button>
+               </div>
+          </section>
+          <section id="categoryView2" class="viewCat hidden">
+               <div id="resultHeader">
+                    <h2>Pick your favourite type of vacation</h2>
+               </div>
+               <section id="contentContain" class="content">
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+                    <button type="button" onclick="()" id="">
+                         Search
+                    </button>
+               </section>
+               <div id="navButtonContain" class="buttons">
+                    <button class="next" id="nextButton " onclick="toggleView('vacTypeBack')">
+                         Back
+                    </button>
+                    <button class="next" id="nextButton" onclick="toggleView('vacType')">
+                         Next
+                    </button>
+               </div>
+          </section>
+          <section id="categoryView3" class="viewCat hidden">
+               <div id="resultHeader">
+                    <h2> What you might like:</h2>
+               </div>
+               <section id="contentContain" class="content">
+               </section>
+               <div id="navButtonContain" class="buttons">
+                    <button class="next" id="nextButton" onclick="toggleView('recommsBack')">
+                         Back
+                    </button>
+                    <button class="next" id="nextButton" onclick="window.location.href='final_choice.html'">
+                         Next
+                    </button>
+               </div>
+          </section>
     </main>
     <footer>
          <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>

@@ -1,11 +1,11 @@
 @import url(base.css);
-main{
+.view1{
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 30rem 1fr;
     grid-template-areas:
     "section"
-    "buttons";
+    "searchBox";
 }
 .introContainer{
     align-items: center;
@@ -15,34 +15,91 @@ main{
     padding: 4rem ;
     background-color: rgba(209, 5, 5, 0.3);
 }
-.choiceButtonContainer{
+h1{
+    margin: 2rem;
+}
+.vacationTime{
+    grid-area: searchBox;
+    background-color: rgba(175, 8, 58, 0.505);
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: auto;
+}
+p{
+    margin: 2rem;
+}
+.vacationTime form{
+    display: flex;
     align-items:start;
+    justify-content: center;
+    flex-direction: row;
+    font-size: 3rem;
+  
+}
+.vacationTime form input{
+  border-radius: 1rem;
+    font-size: 3rem;
+}
+.vacationTime form button{
+    font-size: 2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+.viewCat{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 10rem 1fr auto;
+    grid-template-areas:
+    "title"
+    "content"
+    "next"
+    ;
+}
+
+.hidden{
+    display: none !important;
+}
+
+#resultHeader{
+    grid-area: title;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+#contentContain{
+    grid-area: content;
+    align-items:center;
     justify-content: center;
     display: flex;
     flex-direction: row;
     gap: 4rem;
-    grid-area: buttons;
-    background-color: rgba(148, 255, 25, 0.3);
+    background-color: rgba(141, 241, 27, 0.3);
+    flex-wrap: wrap;
+    overflow-y: auto;
 }
-.mainSelect{
+#contentContain button{
     font-size: 4rem;
     padding: 5rem 3rem;
     border-radius: 1.5rem;
 }
-p{
-    margin-top: auto; 
-    padding-bottom: 2rem;
-}
-h1{
+#navButtonContain{
+    grid-area: next;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: rgba(186, 109, 87, 0.3);
     margin: 2rem;
+    margin-bottom: auto;
+}
+#navButtonContain button{
+  font-size: 1.5rem;
+  padding: 1rem 1rem;
+  border-radius: 1.5rem;
+  margin-right: 3rem;
 }
 @media (max-width: 30rem) {
-  .mainSelect{
-    font-size: 3rem;
-    padding: 5rem 2rem;
-    border-radius: 1rem;
-    }
-    h2{
-    font-size: 2rem;
-    }
+
 }
