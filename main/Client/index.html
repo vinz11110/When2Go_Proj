@@ -20,120 +20,170 @@
         </div>
     </nav>
     <main id="main">
-          <section id="startView" class="view1">
-               <section class="introContainer" id="introContainer">
+          <section id="mainPage" class="viewMain">
+               <section class="introContainer" id="mainPage-introContainer">
                     <h1>Welcome to When2Go </h1>
                     <h2>The cure to your travel Planning headaches</h2>
                </section>
-               <section class="vacationTime" id="vacationTime">
+               <section class="inputContain" id="time-inputContain">
                          <p id="introText">Tell us how much time you have</p>
-                         <form id="vacationTimeForm">
+                         <form id="TimeForm" onsubmit="toggleView('start'); return false;">
                               <div>
-                                   <label for="search">Vacation days</label>
-                                   <input type="number" id="search" maxlength="2">
+                                   <label for="search" hidden>Vacation days</label>
+                                   <input type="number" id="search" min="1" placeholder="Days go here">
                               </div>
-                              <button type="button" onclick="toggleView('start')" id="searchButton">
+                              <button type="submit" id="searchButton">
                                    Search
                               </button>
                          </form>
                     </section>
           </section>
-          <section id="categoryView1" class="viewCat hidden">
-               <div id="resultHeader">
+          <section id="chPage1" class="viewCh hidden">
+               <div class="choiceHeader">
                     <h2> Pick your favourite time to travel</h2>
                </div>
-               <section id="contentContain" class="content">
-                    <button type="button" onclick="()" id="">
+               <section id="contentContain1" class="content">
+                    <button type="button" onclick="monthChoice('Jan', this)" id="Jan">
+                         Jan
+                    </button>
+                    <button type="button" onclick="monthChoice('Feb', this)" id="Feb">
                          Search
                     </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Mar', this)" id="Mar">
                          Search
                     </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Apr', this)" id="Apr">
                          Search
                     </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('May', this)" id="May">
                          Search
                     </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Jun', this)" id="Jun">
                          Search
                     </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Jul', this)" id="Jul">
                          Search
                     </button>
-               </section>
-               <div id="navButtonContain" class="buttons">
-                    <button class="next" id="nextButton" onclick="toggleView('timeframeBack')">
-                         Back
-                    </button>
-                    <button class="next" id="nextButton" onclick="toggleView('timeframe')">
-                         Next
-                    </button>
-               </div>
-          </section>
-          <section id="categoryView2" class="viewCat hidden">
-               <div id="resultHeader">
-                    <h2>Pick your favourite type of vacation</h2>
-               </div>
-               <section id="contentContain" class="content">
-                    <button type="button" onclick="()" id="">
-                         Search
-                    </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Aug', this)" id="Aug">
                          search
                     </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Sep', this)" id="Sep">
                          Search
                     </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Oct', this)" id="Oct">
                          Search
                     </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Nov', this)" id="Nov">
                          Search
                     </button>
-                    <button type="button" onclick="()" id="">
-                         Search
-                    </button>
-                    <button type="button" onclick="()" id="">
-                         Search
-                    </button>
-                    <button type="button" onclick="()" id="">
-                         Search
-                    </button>
-                    <button type="button" onclick="()" id="">
-                         Search
-                    </button>
-                    <button type="button" onclick="()" id="">
-                         Search
-                    </button>
-                    <button type="button" onclick="()" id="">
-                         Search
-                    </button>
-                    <button type="button" onclick="()" id="">
+                    <button type="button" onclick="monthChoice('Dec', this)" id="Dec">
                          Search
                     </button>
                </section>
-               <div id="navButtonContain" class="buttons">
-                    <button class="next" id="nextButton " onclick="toggleView('vacTypeBack')">
+               <div class="navButtonContain">
+                    <button class="navButton" onclick="toggleView('timeframeBack')">
                          Back
                     </button>
-                    <button class="next" id="nextButton" onclick="toggleView('vacType')">
+                    <button class="navButton" onclick="toggleView('timeframe')">
                          Next
                     </button>
                </div>
           </section>
-          <section id="categoryView3" class="viewCat hidden">
-               <div id="resultHeader">
-                    <h2> What you might like:</h2>
+          <section id="chPage2" class="viewCh hidden">
+               <div class="choiceHeader">
+                    <h2>Pick your favourite type of vacation</h2>
                </div>
-               <section id="contentContain" class="content">
+               <section id="contentContain2" class="content">
+                    <button type="button" onclick="Catchoice()">
+                         Search
+                    </button>
+                    <button type="button" onclick="Catchoice()" >
+                         Search
+                    </button>
+                    <button type="button" onclick="Catchoice()" >
+                         Search
+                    </button>
+                    <button type="button" onclick="Catchoice()" >
+                         Search
+                    </button>
+                    <button type="button" onclick="Catchoice()" >
+                         Search
+                    </button>
+                    <button type="button" onclick="Catchoice()" >
+                         Search
+                    </button>
                </section>
-               <div id="navButtonContain" class="buttons">
-                    <button class="next" id="nextButton" onclick="toggleView('recommsBack')">
+               <div class="navButtonContain">
+                    <button class="navButton" onclick="toggleView('vacTypeBack')">
                          Back
                     </button>
-                    <button class="next" id="nextButton" onclick="window.location.href='final_choice.html'">
+                    <button class="navButton" onclick="toggleView('vacType')">
                          Next
+                    </button>
+               </div>
+          </section>
+          <section id="chPage3" class="viewCh hidden">
+               <div class="choiceHeader">
+                    <h2> What you might like:</h2>
+               </div>
+               <section id="contentContain3" class="content">
+               </section>
+               <div class="navButtonContain">
+                    <button class="navButton" onclick="toggleView('recommsBack')">
+                         Back
+                    </button>
+                    <button class="navButton" onclick="toggleView('recomms')">
+                         Next
+                    </button>
+               </div>
+          </section>
+          <section id="finPage" class="viewF hidden">
+               <section id="contentContainF" class="content">
+                    <div class="leftAlign">
+                         <article class="ContainerCal" id="CalenderOutContainer" >
+                              <div id="calTitle">
+                                   <h2>Title</h2>
+                              </div>
+                              <div id="calendarGrid" class="calendarContain"></div>
+                              <div id="calNavBtnCont">
+                                   <button class="calNavBtn" onclick="changeMonth('+')">
+                                   next
+                                   </button>
+                                   <button class="calNavBtn" onclick="changeMonth('-')">
+                                        last
+                                   </button>
+                              </div>
+                         </article>
+                         <article class="weatherDash">
+                              <h2>Hey</h2>
+                         </article>
+                    </div>
+                    <div class="rightAlign">
+                         <article class="dayPlanner">
+                              <form onsubmit="addPlans(); return false;">
+                                   <div>
+                                        <textarea name="dayPlan" id="dayPlanText" rows="5"></textarea>
+                                   </div>
+                                   <button type="submit">
+                                        Add
+                                   </button>
+                              </form>
+                              <ul class="dayPlanList" id="planLiContain"> 
+                                   <li>hey</li>
+                                   <li>hey</li>
+                                   <li>hey</li>
+                              </ul>
+                         </article>
+                         <article class="packingListContain">
+                              <ul class="packingList">
+                                  
+                              </ul>
+                         </article>
+                    </div>
+               </section>
+               <div class="navButtonContain">
+                    <button class="navButton"s onclick="toggleView('finalViewBack')">
+                         Back
                     </button>
                </div>
           </section>

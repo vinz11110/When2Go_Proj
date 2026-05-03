@@ -1,5 +1,21 @@
 @import url(base.css);
-.view1{
+h1{
+    margin: 2rem;
+}
+p{
+    margin: 2rem;
+}
+.hidden{
+    display: none !important;
+}
+.selected{
+    background-color: #2b2d42 !important;
+    color: white !important;
+    border: 2px solid #edf2f4;
+    transform: scale(1.05);
+}
+/*Main Page styling*/
+.viewMain{
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 30rem 1fr;
@@ -15,10 +31,7 @@
     padding: 4rem ;
     background-color: rgba(209, 5, 5, 0.3);
 }
-h1{
-    margin: 2rem;
-}
-.vacationTime{
+.inputContain{
     grid-area: searchBox;
     background-color: rgba(175, 8, 58, 0.505);
     display: flex;
@@ -27,10 +40,8 @@ h1{
     flex-direction: column;
     margin-bottom: auto;
 }
-p{
-    margin: 2rem;
-}
-.vacationTime form{
+
+.inputContain form{
     display: flex;
     align-items:start;
     justify-content: center;
@@ -38,16 +49,18 @@ p{
     font-size: 3rem;
   
 }
-.vacationTime form input{
+.inputContain form input{
   border-radius: 1rem;
     font-size: 3rem;
 }
-.vacationTime form button{
+.inputContain form button{
     font-size: 2rem;
     padding: 0.5rem 1rem;
     border-radius: 1rem;
 }
-.viewCat{
+
+/*Choice Page styling*/
+.viewCh{
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 10rem 1fr auto;
@@ -57,18 +70,13 @@ p{
     "next"
     ;
 }
-
-.hidden{
-    display: none !important;
-}
-
-#resultHeader{
+.choiceHeader{
     grid-area: title;
     display: flex;
     align-items: center;
     justify-content:center;
 }
-#contentContain{
+.content{
     grid-area: content;
     align-items:center;
     justify-content: center;
@@ -79,12 +87,150 @@ p{
     flex-wrap: wrap;
     overflow-y: auto;
 }
-#contentContain button{
+.content button{
     font-size: 4rem;
     padding: 5rem 3rem;
     border-radius: 1.5rem;
 }
-#navButtonContain{
+
+/*Final Page styling*/
+.viewF{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+    "content"
+    "next"
+    ;
+}
+#contentContainF{
+    grid-area: content;
+    display: grid;
+    grid-template-columns: 1fr 600px;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "left right"
+    ;
+}
+.leftAlign{
+    grid-area: left;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+    "cal"
+    "weather"
+    ;
+}
+.rightAlign{
+    grid-area: right;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+    "plan"
+    "pack"
+    ;
+}
+#calTitle{
+    font-size: 3rem;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+}
+.ContainerCal{
+    grid-area: cal;
+    background-color: rgb(95, 95, 95);
+    border-radius: 5%;
+    padding: 2rem;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+}
+.calendarContain {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 days a week */
+    gap: 1px;
+}
+.calDay-card {
+    background-color: rgb(230, 230, 230);
+    border-radius: 2px;
+    min-width: 60px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    padding: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+} 
+#calendarGrid .calDateBtn {
+    color: #2b2d42;
+    width: 100%;
+    height: 100%;
+    font-size: 2rem;
+    padding: 1rem 1rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+}
+#CalenderOutContainer #calNavBtnCont{
+    display: flex;
+    flex-direction: row;
+}
+#CalenderOutContainer .calNavBtn {
+    font-size: 2rem;
+    padding: 1rem 3rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+}
+.dayPlanner{
+    grid-area: plan;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    border-radius: 5%;
+    border: #2b2d42;
+    margin-right: 1rem;
+    margin-top: auto;
+    border: 2px solid #2b2d42;
+}
+.dayPlanner button{
+    font-size: 2rem;
+    padding: 1rem 6rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+}
+.dayPlanner form{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+}
+.dayPlanner ul{
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+
+}
+.dayPlanner ul li{
+    border: 2px solid #2b2d42;
+    border-radius: 10%;
+    padding:1rem 5rem;
+    padding-left: 0.5rem;
+}
+.packingList{
+    grid-area: pack;
+    background-color: rgb(15, 40, 32);
+}
+.weatherDash{
+    grid-area: weather;
+    background-color: rgb(187, 65, 65);
+}
+
+/*Nav Button Styling*/
+.navButtonContain{
     grid-area: next;
     display: flex;
     align-items: center;
@@ -94,12 +240,14 @@ p{
     margin: 2rem;
     margin-bottom: auto;
 }
-#navButtonContain button{
+.navButton{
   font-size: 1.5rem;
   padding: 1rem 1rem;
   border-radius: 1.5rem;
   margin-right: 3rem;
 }
+
+/*Mobile View Styling*/
 @media (max-width: 30rem) {
 
 }
