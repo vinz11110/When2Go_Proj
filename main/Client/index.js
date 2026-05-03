@@ -124,8 +124,30 @@ function changeMonth(switchDir){
 }
 function addPlans(){
     let inputText = document.getElementById('dayPlanText').value
+    createLi(inputText)
+}
+function deletePl(){
+    const allSelected = document.getElementsByClassName('selectedPl');
+    for(const e of allSelected){
+        e.remove();
+    }
+    checkSelectPl()
+}
+function checkSelectPl(){
+    const anySelected = document.querySelectorAll('.selectedPl').length > 0;
+    if (anySelected) {
+        document.getElementById('deleteBtnPl').classList.remove('hidden');
+    }else {
+        document.getElementById('deleteBtnPl').classList.add('hidden');
+    }
+}
+function createLi(text){
     const listContain = document.getElementById('planLiContain')
     const newLi= document.createElement("li");
-    newLi.textContent = inputText
-    listContain.appendChild(newLi)
+    newLi.textContent = text
+    newLi.onclick=function(){
+     this.classList.toggle('selectedPl');
+     checkSelectPl()
+    }
+    listContain.appendChild(newLi);
 }
