@@ -9,9 +9,9 @@ p{
     display: none !important;
 }
 .selected{
-    background-color: #2b2d42 !important;
-    color: white !important;
-    border: 2px solid #edf2f4;
+    background-color: #2b2d4290 !important;
+    color: rgb(192, 192, 192) !important;
+    border: 2px solid #edf2f470;
     transform: scale(1.05);
 }
 /*Main Page styling*/
@@ -82,19 +82,49 @@ p{
     justify-content: center;
     display: flex;
     flex-direction: row;
-    gap: 4rem;
-    background-color: rgba(141, 241, 27, 0.3);
+    background-color: rgb(241, 229, 229);
     flex-wrap: wrap;
     overflow-y: auto;
 }
 .content button{
     font-size: 4rem;
-    padding: 5rem 3rem;
+    padding: 1rem 2rem;
     border-radius: 1.5rem;
-    margin: 2rem;
+    margin: 4rem;
+    background-color: #2b2d4284;
 }
 #contentContain2{
-    justify-content:space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "city beach adventure wellness"
+    ;
+        background-color: rgb(0, 0, 0);
+}
+.catSect{
+    font-size: 3rem;
+}
+#citSect{
+    grid-area: city;
+    background-image: url('https://images.unsplash.com/photo-1541336032412-2048a678540d?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#beachSect{
+    grid-area: beach;
+    background-image: url('https://images.unsplash.com/photo-1534570122623-99e8378a9aa7?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#wellSect{
+    grid-area: wellness;
+    background-image: url('https://images.unsplash.com/photo-1538998073820-4dfa76300194?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#advSect{
+    grid-area: adventure;
+    background-image: url('https://images.unsplash.com/photo-1506773090264-ac0b07293a64?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+.catSect:hover{
+  transform: translateY(-10px) translateX(-10px);
+  box-shadow: 2rem 1rem 4rem rgba(0, 0, 0, 0.23);
+  transition: transform 0.4s ease, box-shadow 0.2s ease;
 }
 #contentContain1{
     display: grid;
@@ -105,17 +135,38 @@ p{
     "Aut Win"
     ;
 }
+.ChContain{
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    flex-direction: column;
+}
+.ChContain h2{
+    margin-top: auto;
+    font-size: 5rem;
+}
+.ChBtn{
+    margin-top: auto;
+}
 #springBtns{
+    background-image: url('https://plus.unsplash.com/premium_photo-1711217237364-827b31b57e92?q=80&w=1768&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') ;
     grid-area: Spr;
 }
 #summerBtns{
     grid-area: Sum;
+    background-image: url('https://plus.unsplash.com/premium_photo-1677494867836-3f56b1261bc5?q=80&w=1708&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 }
 #fallBtns{
     grid-area: Aut;
+    background-image: url('https://images.unsplash.com/photo-1507371341162-763b5e419408?q=80&w=1339&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 }
 #winterBtns{
     grid-area: Win;
+    background-image: url('https://plus.unsplash.com/premium_photo-1669990950563-8b31d8ed237b?q=80&w=1550&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 }
 
 /*Final Page styling*/

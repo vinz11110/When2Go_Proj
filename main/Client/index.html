@@ -44,52 +44,63 @@
                     <button class="navButton" onclick="toggleView('timeframe')">
                          Next
                     </button>
-                    
                </div>
                <section id="contentContain1" class="content">
-                    <div id="springBtns">
-                         <button type="button" onclick="monthChoice('Jan', this)" id="Jan">
-                              Jan
-                         </button>
-                         <button type="button" onclick="monthChoice('Feb', this)" id="Feb">
-                              Search
-                         </button>
-                         <button type="button" onclick="monthChoice('Mar', this)" id="Mar">
-                              Search
-                         </button>
+                    <div id="springBtns" class="ChContain">
+                         <h2>Spring</h2>
+                         <div class="ChBtn">
+                              <button type="button" onclick="monthChoice('Mar', this)" id="Mar">
+                                   Mar
+                              </button>
+                              <button type="button" onclick="monthChoice('Apr', this)" id="Apr">
+                                   Apr
+                              </button>
+                              <button type="button" onclick="monthChoice('May', this)" id="May">
+                                   May
+                              </button>
+                         </div>
                     </div>
-                    <div id="summerBtns">
-                         <button type="button" onclick="monthChoice('Apr', this)" id="Apr">
-                              Search
-                         </button>
-                         <button type="button" onclick="monthChoice('May', this)" id="May">
-                              Search
-                         </button>
-                         <button type="button" onclick="monthChoice('Jun', this)" id="Jun">
-                              Search
-                         </button>
+                    <div id="summerBtns" class="ChContain">
+                         <h2>Summer</h2>
+                         <div class="ChBtn">
+                              <button type="button" onclick="monthChoice('Jun', this)" id="Jun">
+                                   Jun
+                              </button>
+                              <button type="button" onclick="monthChoice('Jul', this)" id="Jul">
+                                   Jul
+                              </button>
+                              <button type="button" onclick="monthChoice('Aug', this)" id="Aug">
+                                   Aug
+                              </button>
+                         </div>
                     </div>
-                    <div id="fallBtns">
-                         <button type="button" onclick="monthChoice('Jul', this)" id="Jul">
-                              Search
-                         </button>
-                         <button type="button" onclick="monthChoice('Aug', this)" id="Aug">
-                              search
-                         </button>
-                         <button type="button" onclick="monthChoice('Sep', this)" id="Sep">
-                              Search
-                         </button>
+                    <div id="fallBtns" class="ChContain">        
+                         <h2>Autumn</h2> 
+                         <div class="ChBtn">
+                              <button type="button" onclick="monthChoice('Sep', this)" id="Sep">
+                                   Sep
+                              </button>
+                              <button type="button" onclick="monthChoice('Oct', this)" id="Oct">
+                                   Oct
+                              </button>
+                              <button type="button" onclick="monthChoice('Nov', this)" id="Nov">
+                                   Nov
+                              </button>
+                         </div>
                     </div>
-                    <div id="winterBtns">
-                         <button type="button" onclick="monthChoice('Oct', this)" id="Oct">
-                              Search
-                         </button>
-                         <button type="button" onclick="monthChoice('Nov', this)" id="Nov">
-                              Search
-                         </button>
-                         <button type="button" onclick="monthChoice('Dec', this)" id="Dec">
-                              Search
-                         </button>
+                    <div id="winterBtns" class="ChContain">
+                         <h2>Winter</h2>
+                         <div class="ChBtn">
+                              <button type="button" onclick="monthChoice('Dec', this)" id="Dec">
+                                   Dec
+                              </button>
+                              <button type="button" onclick="monthChoice('Jan', this)" id="Jan">
+                                   Jan
+                              </button>
+                              <button type="button" onclick="monthChoice('Feb', this)" id="Feb">
+                                   Feb
+                              </button>
+                         </div>
                     </div>
                </section>
           </section>
@@ -105,18 +116,26 @@
                     
                </div>
                <section id="contentContain2" class="content">
-                    <button type="button" onclick="Catchoice()">
-                         Search
-                    </button>
-                    <button type="button" onclick="Catchoice()" >
-                         Search
-                    </button>
-                    <button type="button" onclick="Catchoice()" >
-                         Search
-                    </button>
-                    <button type="button" onclick="Catchoice()" >
-                         Search
-                    </button>
+                    <section onclick="catchoice('city', this)" id="citSect" class="catSect">
+                         <h2>
+                              City-Trip
+                         </h2>
+                    </section>
+                    <section onclick="catchoice('beach', this)" id="beachSect" class="catSect">
+                         <h2>
+                              Beach
+                         </h2>
+                    </section>
+                    <section onclick="catchoice('adventure', this)" id="advSect" class="catSect">
+                         <h2>
+                              Adventure
+                         </h2>
+                    </section>
+                    <section onclick="catchoice('wellness', this)" id="wellSect" class="catSect">
+                         <h2>
+                              Wellness
+                         </h2>
+                    </section>
                </section>
           </section>
           <section id="chPage3" class="viewCh hidden">

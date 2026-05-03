@@ -25,7 +25,7 @@ function monthChoice(month, element){
     }
     
 }
-function Catchoice(category, element){
+function catchoice(category, element){
     if(!userdata.category.includes(category)){
         userdata.category.push(category)
         element.classList.add('selected');
@@ -55,7 +55,7 @@ function toggleView(currentPage){
             document.getElementById('chPage2').classList.remove('hidden');}
             break;
         case 'vacType':
-            if(userdata.timeframe.length!==0){
+            if(userdata.category.length!==0){
             document.getElementById('chPage2').classList.add('hidden');
             document.getElementById('chPage3').classList.remove('hidden');}
             break;
@@ -123,8 +123,9 @@ function changeMonth(switchDir){
     generateCalendar(startMonth)
 }
 function addPlans(){
-    let inputText = document.getElementById('dayPlanText').value
-    createLi(inputText)
+    let inputText = document.getElementById('dayPlanText')
+    createLi(inputText.value)
+    inputText.value="";
 }
 function deletePl(){
     const allSelected = document.getElementsByClassName('selectedPl');
