@@ -1,17 +1,22 @@
 @import url(base.css);
 h1{
     margin: 2rem;
+    font-weight: 900;
 }
-p{
+.mainPText p{
+    font-weight: 600;
     margin: 2rem;
+}
+em{
+
 }
 .hidden{
     display: none !important;
 }
 .selected{
-    background-color: #2b2d4290 !important;
-    color: rgb(192, 192, 192) !important;
-    border: 2px solid #edf2f470;
+    background-color: #AACDDC !important;
+    color: rgb(255, 255, 255) !important;
+    border: 5px solid #b9ebff;
     transform: scale(1.05);
 }
 /*Main Page styling*/
@@ -29,11 +34,11 @@ p{
     grid-area: section;
     flex-direction: column;
     padding: 2rem ;
-    background-color: rgba(209, 5, 5, 0.3);
+    background-color: rgba(209, 5, 5, 0);
 }
 .inputContain{
     grid-area: searchBox;
-    background-color: rgba(175, 8, 58, 0.505);
+    background-color: rgba(175, 8, 58, 0);
     display: flex;
     align-items:center;
     justify-content: start;
@@ -47,23 +52,41 @@ p{
     justify-content: center;
     flex-direction: row;
     font-size: 3rem;
-  
+    backdrop-filter: blur(5px);
+    border-radius: 2rem;
+    background-color: rgba(255, 255, 255, 0.13);
+    padding: 4rem;
 }
 .inputContain form input{
   border-radius: 1rem;
-    font-size: 3rem;
+  font-size: 3rem;
+  padding: 1rem 1.5rem;
+  border: 2px solid #d2c4b462;
+  background-color: rgba(255, 255, 255, 0.646);
+  text-align: center;
+  box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.655);
 }
 .inputContain form button{
-    font-size: 2rem;
+    font-size: 3rem;
     padding: 0.5rem 1rem;
     border-radius: 1rem;
+}
+.mainPText{
+    font-size: 4rem;
+    color: white;
+}
+#mainPage{
+    background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: bottom;
+    flex-direction: column;
 }
 
 /*Choice Page styling*/
 .viewCh{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 5rem 1fr;
+    grid-template-rows: 6rem 1fr;
     grid-template-areas:
     "title"
     "content"
@@ -75,6 +98,8 @@ p{
     align-items: center;
     justify-content:space-between;
     flex-direction: row;
+    font-size: 2rem;
+    background-color: #81A6C6;
 }
 .content{
     grid-area: content;
@@ -82,7 +107,7 @@ p{
     justify-content: center;
     display: flex;
     flex-direction: row;
-    background-color: rgb(241, 229, 229);
+    background-color: #abe2ff;
     flex-wrap: wrap;
     overflow-y: auto;
 }
@@ -91,7 +116,7 @@ p{
     padding: 1rem 2rem;
     border-radius: 1.5rem;
     margin: 4rem;
-    background-color: #2b2d4284;
+    background-color: #aacddcd9;
 }
 #contentContain2{
     display: grid;
@@ -100,7 +125,7 @@ p{
     grid-template-areas:
     "city beach adventure wellness"
     ;
-        background-color: rgb(0, 0, 0);
+    background-color: rgb(0, 0, 0);
 }
 .catSect{
     font-size: 3rem;
@@ -123,7 +148,7 @@ p{
 }
 .catSect:hover{
   transform: translateY(-10px) translateX(-10px);
-  box-shadow: 2rem 1rem 4rem rgba(0, 0, 0, 0.23);
+  box-shadow: 2rem 1rem 4rem #D2C4B4;
   transition: transform 0.4s ease, box-shadow 0.2s ease;
 }
 #contentContain1{
@@ -148,6 +173,8 @@ p{
 .ChContain h2{
     margin-top: auto;
     font-size: 5rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8)
 }
 .ChBtn{
     margin-top: auto;
@@ -173,7 +200,7 @@ p{
 .viewF{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 6rem 1fr;
     grid-template-areas:
     "next"
     "content"

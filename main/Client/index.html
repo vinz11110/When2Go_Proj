@@ -19,15 +19,15 @@
     <main id="main">
           <section id="mainPage" class="viewMain">
                <section class="introContainer" id="mainPage-introContainer">
-                    <h1>Welcome to When2Go </h1>
-                    <h2>The cure to your travel Planning headaches</h2>
+                    <h1 class="mainPText">Welcome to <em>When2Go</em> </h1>
+                    <h2 class="mainPText">The cure to your travel Planning headaches</h2>
                </section>
                <section class="inputContain" id="time-inputContain">
-                         <p id="introText">Tell us how much time you have</p>
+                         <p id="introText" class="mainPText">Tell us how much time you have</p>
                          <form id="TimeForm" onsubmit="toggleView('start'); return false;">
                               <div>
                                    <label for="search" hidden>Vacation days</label>
-                                   <input type="number" id="search" min="1" placeholder="Days go here">
+                                   <input type="number" id="search" min="1" max="31" placeholder=". . . ">
                               </div>
                               <button type="submit" id="searchButton">
                                    Search
