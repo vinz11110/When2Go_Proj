@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Gravitas+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gravitas+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 *{
   margin: 0;
   padding: 0;
@@ -8,14 +8,14 @@ html {
   font-size: 62.5%; 
 }
 body {
-  font-family: "Gravitas One", sans-serif;
-  background-color: #CAF0F8;
+  font-family: "Montserrat", sans-serif;
+  background-color: #81A6C6;
   color: rgb(24, 24, 24);
   font-size: 1.6rem;
   display: grid;
   height: 100vh;
   grid-template-columns: 1fr;
-  grid-template-rows: 5rem 1fr 4.5rem;
+  grid-template-rows: 6rem 1fr 4.5rem;
   grid-template-areas:
     "nav"
     "main"
@@ -24,29 +24,31 @@ body {
 }
 button{
   border-radius: 0.25rem;
-  background: #1E88E5;
+  background: #81A6C6;
+  border-color: antiquewhite;
   color: rgb(255, 255, 255);
   font-size: 1rem;
   line-height: 1.2;
   padding: 0.25rem 0.5rem;
   margin: 0.25rem;
   cursor: pointer;
-  box-shadow: 0 0.5rem 2rem 0 rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+  box-shadow: 0.3rem 0.5rem 1rem 0 #0000007e;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 button:hover{
   transform: translateY(-2px);
-  box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.23);
-  background-color: #1868ae;
+  box-shadow: 0.4rem 0.7rem 1rem #000000a6;
+  background-color: #6293be;
 }
 button:active{
   transform: translateY(2px);
-  box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.23);
-  background: #e7525294;
+  box-shadow: 0.3rem 0.2rem 1rem #00000049;
+  background: #94c2ea;
 }
 nav{
   grid-area: nav;
-  background-color: #0077B6;
+  background-color :#77afc7;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -66,7 +68,7 @@ nav{
 }
 footer{
   grid-area: footer;
-  background-color: #0077B6;
+  background-color: #2b2d42;
   display: flex;
   flex-wrap:wrap;
   flex-direction: row;

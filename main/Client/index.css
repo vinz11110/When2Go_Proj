@@ -1,18 +1,37 @@
 @import url(base.css);
 h1{
     margin: 2rem;
+    font-weight: 900;
 }
-p{
+.mainPText p{
+    font-weight: 600;
     margin: 2rem;
 }
 .hidden{
     display: none !important;
 }
 .selected{
-    background-color: #2b2d4290 !important;
-    color: rgb(192, 192, 192) !important;
-    border: 2px solid #edf2f470;
+    background-color: #AACDDC !important;
+    color: rgb(255, 255, 255) !important;
+    border: 2px solid #b9ebff;
     transform: scale(1.05);
+}
+.logForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.dialog{
+    margin-left: auto;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    border-radius: 1.5rem; 
+    padding: 2rem;
+}
+.savedRecomms{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #000000;;
 }
 /*Main Page styling*/
 .viewMain{
@@ -29,11 +48,11 @@ p{
     grid-area: section;
     flex-direction: column;
     padding: 2rem ;
-    background-color: rgba(209, 5, 5, 0.3);
+    background-color: rgba(209, 5, 5, 0);
 }
 .inputContain{
     grid-area: searchBox;
-    background-color: rgba(175, 8, 58, 0.505);
+    background-color: rgba(175, 8, 58, 0);
     display: flex;
     align-items:center;
     justify-content: start;
@@ -47,23 +66,41 @@ p{
     justify-content: center;
     flex-direction: row;
     font-size: 3rem;
-  
+    backdrop-filter: blur(5px);
+    border-radius: 2rem;
+    background-color: rgba(255, 255, 255, 0.13);
+    padding: 4rem;
 }
 .inputContain form input{
   border-radius: 1rem;
-    font-size: 3rem;
+  font-size: 3rem;
+  padding: 1rem 1.5rem;
+  border: 2px solid #d2c4b462;
+  background-color: rgba(255, 255, 255, 0.646);
+  text-align: center;
+  box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.655);
 }
 .inputContain form button{
-    font-size: 2rem;
+    font-size: 3rem;
     padding: 0.5rem 1rem;
     border-radius: 1rem;
+}
+.mainPText{
+    font-size: 4rem;
+    color: white;
+}
+#mainPage{
+    background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: bottom;
+    flex-direction: column;
 }
 
 /*Choice Page styling*/
 .viewCh{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 5rem 1fr;
+    grid-template-rows: 6rem 1fr;
     grid-template-areas:
     "title"
     "content"
@@ -75,6 +112,8 @@ p{
     align-items: center;
     justify-content:space-between;
     flex-direction: row;
+    font-size: 2rem;
+    background-color: #81A6C6;
 }
 .content{
     grid-area: content;
@@ -82,7 +121,7 @@ p{
     justify-content: center;
     display: flex;
     flex-direction: row;
-    background-color: rgb(241, 229, 229);
+    background-color: #abe2ff;
     flex-wrap: wrap;
     overflow-y: auto;
 }
@@ -91,7 +130,7 @@ p{
     padding: 1rem 2rem;
     border-radius: 1.5rem;
     margin: 4rem;
-    background-color: #2b2d4284;
+    background-color: #aacddcd9;
 }
 #contentContain2{
     display: grid;
@@ -100,30 +139,30 @@ p{
     grid-template-areas:
     "city beach adventure wellness"
     ;
-        background-color: rgb(0, 0, 0);
+    background-color: rgb(0, 0, 0);
 }
 .catSect{
     font-size: 3rem;
 }
-#citSect{
+#city{
     grid-area: city;
     background-image: url('https://images.unsplash.com/photo-1541336032412-2048a678540d?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
 }
-#beachSect{
+#beach{
     grid-area: beach;
     background-image: url('https://images.unsplash.com/photo-1534570122623-99e8378a9aa7?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
 }
-#wellSect{
+#wellness{
     grid-area: wellness;
     background-image: url('https://images.unsplash.com/photo-1538998073820-4dfa76300194?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
 }
-#advSect{
+#adventure{
     grid-area: adventure;
     background-image: url('https://images.unsplash.com/photo-1506773090264-ac0b07293a64?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
 }
 .catSect:hover{
   transform: translateY(-10px) translateX(-10px);
-  box-shadow: 2rem 1rem 4rem rgba(0, 0, 0, 0.23);
+  box-shadow: 2rem 1rem 4rem #D2C4B4;
   transition: transform 0.4s ease, box-shadow 0.2s ease;
 }
 #contentContain1{
@@ -148,6 +187,8 @@ p{
 .ChContain h2{
     margin-top: auto;
     font-size: 5rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8)
 }
 .ChBtn{
     margin-top: auto;
@@ -173,7 +214,7 @@ p{
 .viewF{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 6rem 1fr;
     grid-template-areas:
     "next"
     "content"
@@ -181,48 +222,31 @@ p{
 }
 #contentContainF{
     grid-area: content;
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    grid-template-rows: 1fr;
-    grid-template-areas:
-    "left right"
-    ;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
 }
+
 .leftAlign{
-    grid-area: left;
-    display: grid;
-    grid-template-columns: 1fr ;
-    grid-template-rows: auto auto;
-    grid-template-areas:
-    "cal"
-    "weather"
-    ;
-}
-.rightAlign{
-    grid-area: right;
-    display: grid;
-    grid-template-columns: 1fr ;
-    grid-template-rows: auto auto;
-    grid-template-areas:
-    "plan"
-    "pack"
-    ;
+    display: flex;
+    flex-direction: row;
 }
 #calTitleNav{
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
+    height: 8rem;
 }
 .ContainerCal{
-    grid-area: cal;
     background-color: rgb(247, 247, 247);
     border-radius: 5%;
     padding: 1rem;
-    margin: 1rem;
+    margin: 3rem;
     display: flex;
     flex-direction: column;
-    max-width: 500px;
+    max-width: 50rem;
+    height: 48rem;
 }
 .calendarContain {
     display: grid;
@@ -238,6 +262,7 @@ p{
     text-align: center;
     justify-content: center;
     padding: 0.5rem;
+
 } 
 #calendarGrid .calDateBtn {
     color: #2b2d42;
@@ -256,8 +281,10 @@ p{
     border-radius: 1.5rem;
     background-color: rgb(159, 159, 159);
 }
-.dayPlanner{
-    grid-area: plan;
+.dateRange{
+    background-color: #ff1919;
+}
+.customList{
     background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
@@ -265,20 +292,21 @@ p{
     align-items: center;
     border: #2b2d42;
     margin-right: 1rem;
+    border-radius: 10px;
 }
-.dayPlanner button{
+.customList button{
     font-size: 1.5rem;
     padding: 0.5rem 1.5rem;
     border-radius: 1.5rem;
     background-color: rgb(159, 159, 159);
     margin: 0;
 }
-.dayPlanner form{
+.customList form{
     display: flex;
     flex-direction: row;
     margin: 1rem;
 }
-.dayPlanner ul{
+.customList ul{
     margin: 2rem;
     display: flex;
     flex-direction: column;
@@ -286,7 +314,7 @@ p{
     justify-content: center;
     
 }
-.dayPlanner ul li{
+.customList ul li{
     border: 2px solid #2b2d42;
     border-radius: 1rem;
     padding:1rem 5rem;
@@ -306,12 +334,7 @@ p{
     border: 2px solid #edf2f4;
     transform: scale(1.05);
 }
-.packingList{
-    grid-area: pack;
-    background-color: rgb(15, 40, 32);
-}
 .weatherDash{
-    grid-area: weather;
     background-color: rgb(187, 65, 65);
 }
 

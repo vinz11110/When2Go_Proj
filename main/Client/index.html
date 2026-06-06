@@ -12,22 +12,23 @@
         <div class="nav-left">
         </div>
         <div class="nav-right">
-             <button class="login" onclick="window.location.href='login.html'">Sign up / Log in</button>
-
+             <button class="login" id="loginBtn" onclick="toggleLoginDialog()">Sign up / Log in</button>
+             <button class="login hidden" id="logoutBtn" onclick="logoutUsr()">Logout</button>
+             <button class="login hidden" id="accountBtn" onclick="toggleRecommsUl()">My Account</button>
         </div>
     </nav>
     <main id="main">
           <section id="mainPage" class="viewMain">
                <section class="introContainer" id="mainPage-introContainer">
-                    <h1>Welcome to When2Go </h1>
-                    <h2>The cure to your travel Planning headaches</h2>
+                    <h1 class="mainPText">Welcome to <em>When2Go</em> </h1>
+                    <h2 class="mainPText">The cure to your travel Planning headaches</h2>
                </section>
                <section class="inputContain" id="time-inputContain">
-                         <p id="introText">Tell us how much time you have</p>
+                         <p id="introText" class="mainPText">Tell us how much time you have</p>
                          <form id="TimeForm" onsubmit="toggleView('start'); return false;">
                               <div>
                                    <label for="search" hidden>Vacation days</label>
-                                   <input type="number" id="search" min="1" placeholder="Days go here">
+                                   <input type="number" id="search" min="1" max="31" placeholder=". . . ">
                               </div>
                               <button type="submit" id="searchButton">
                                    Search
@@ -49,13 +50,13 @@
                     <div id="springBtns" class="ChContain">
                          <h2>Spring</h2>
                          <div class="ChBtn">
-                              <button type="button" onclick="monthChoice('Mar', this)" id="Mar">
+                              <button type="button" onclick="multiChoice('Mar', this, 'month')" id="Mar">
                                    Mar
                               </button>
-                              <button type="button" onclick="monthChoice('Apr', this)" id="Apr">
+                              <button type="button" onclick="multiChoice('Apr', this, 'month')" id="Apr">
                                    Apr
                               </button>
-                              <button type="button" onclick="monthChoice('May', this)" id="May">
+                              <button type="button" onclick="multiChoice('May', this, 'month')" id="May">
                                    May
                               </button>
                          </div>
@@ -63,13 +64,13 @@
                     <div id="summerBtns" class="ChContain">
                          <h2>Summer</h2>
                          <div class="ChBtn">
-                              <button type="button" onclick="monthChoice('Jun', this)" id="Jun">
+                              <button type="button" onclick="multiChoice('Jun', this, 'month')" id="Jun">
                                    Jun
                               </button>
-                              <button type="button" onclick="monthChoice('Jul', this)" id="Jul">
+                              <button type="button" onclick="multiChoice('Jul', this, 'month')" id="Jul">
                                    Jul
                               </button>
-                              <button type="button" onclick="monthChoice('Aug', this)" id="Aug">
+                              <button type="button" onclick="multiChoice('Aug', this, 'month')" id="Aug">
                                    Aug
                               </button>
                          </div>
@@ -77,13 +78,13 @@
                     <div id="fallBtns" class="ChContain">        
                          <h2>Autumn</h2> 
                          <div class="ChBtn">
-                              <button type="button" onclick="monthChoice('Sep', this)" id="Sep">
+                              <button type="button" onclick="multiChoice('Sep', this, 'month')" id="Sep">
                                    Sep
                               </button>
-                              <button type="button" onclick="monthChoice('Oct', this)" id="Oct">
+                              <button type="button" onclick="multiChoice('Oct', this, 'month')" id="Oct">
                                    Oct
                               </button>
-                              <button type="button" onclick="monthChoice('Nov', this)" id="Nov">
+                              <button type="button" onclick="multiChoice('Nov', this, 'month')" id="Nov">
                                    Nov
                               </button>
                          </div>
@@ -91,13 +92,13 @@
                     <div id="winterBtns" class="ChContain">
                          <h2>Winter</h2>
                          <div class="ChBtn">
-                              <button type="button" onclick="monthChoice('Dec', this)" id="Dec">
+                              <button type="button" onclick="multiChoice('Dec', this, 'month')" id="Dec">
                                    Dec
                               </button>
-                              <button type="button" onclick="monthChoice('Jan', this)" id="Jan">
+                              <button type="button" onclick="multiChoice('Jan', this, 'month')" id="Jan">
                                    Jan
                               </button>
-                              <button type="button" onclick="monthChoice('Feb', this)" id="Feb">
+                              <button type="button" onclick="multiChoice('Feb', this, 'month')" id="Feb">
                                    Feb
                               </button>
                          </div>
@@ -116,22 +117,22 @@
                     
                </div>
                <section id="contentContain2" class="content">
-                    <section onclick="catchoice('city', this)" id="citSect" class="catSect">
+                    <section onclick="multiChoice('city', this, 'cat')" id="city" class="catSect">
                          <h2>
                               City-Trip
                          </h2>
                     </section>
-                    <section onclick="catchoice('beach', this)" id="beachSect" class="catSect">
+                    <section onclick="multiChoice('beach', this, 'cat')" id="beach" class="catSect">
                          <h2>
                               Beach
                          </h2>
                     </section>
-                    <section onclick="catchoice('adventure', this)" id="advSect" class="catSect">
+                    <section onclick="multiChoice('adventure', this, 'cat')" id="adventure" class="catSect">
                          <h2>
                               Adventure
                          </h2>
                     </section>
-                    <section onclick="catchoice('wellness', this)" id="wellSect" class="catSect">
+                    <section onclick="multiChoice('wellness', this, 'cat')" id="wellness" class="catSect">
                          <h2>
                               Wellness
                          </h2>
@@ -147,9 +148,9 @@
                     <button class="navButton" onclick="toggleView('recomms')">
                          Next
                     </button>
-                    
                </div>
                <section id="contentContain3" class="content">
+                    <ul id="recommendsList"></ul>
                </section>
           </section>
           <section id="finPage" class="viewF hidden">
@@ -157,15 +158,17 @@
                     <div class="leftAlign">
                          <article class="ContainerCal" id="CalenderOutContainer" >
                               <div id="calTitleNav">
-                                   <button class="calNavBtn" onclick="changeMonth('-')">
+                                   <button class="calNavBtn" onclick="calChangeMonth('-')">
                                         last
                                    </button>
                                    <h2 id="calTitle">Title</h2>
-                                   <button class="calNavBtn" onclick="changeMonth('+')">
+                                   <button class="calNavBtn" onclick="calChangeMonth('+')">
                                         next
                                    </button>
                               </div>
-                              <div id="calendarGrid" class="calendarContain"></div>
+                              <div id="calendarGrid" class="calendarContain">
+                                   
+                              </div>
                          </article>
                          <article class="weatherDash">
                               <h2>Hey</h2>
@@ -174,19 +177,19 @@
                     <div class="rightAlign">
                          <article id="dayPlanContain">
                               <h2>Dayplanner</h2>
-                              <div class="dayPlanner">
+                              <div class="dayPlanner customList">
                                    <div id="planListTopContain">
                                         <ul class="dayPlanList" id="planLiContain"> 
                                         </ul>
                                    </div>
-                                   <form onsubmit="addPlans(); return false;" id="planForm">
+                                   <form onsubmit="createLi('plan'); return false;" id="planForm">
                                         <div>
                                              <textarea name="dayPlan" id="dayPlanText" rows="2"></textarea>
                                         </div>
                                         <button type="submit">
                                              +
                                         </button>
-                                        <button type="button" onclick="deletePl()" id="deleteBtnPl" class="hidden">
+                                        <button type="button" onclick="delLi(this)" id="deleteBtnPl" class="hidden">
                                              -
                                         </button>
                                    </form>
@@ -194,8 +197,24 @@
                          </article>
                          
                          <article class="packingListContain">
-                              <ul class="packingList">
-                              </ul>
+                              <h2>Packing List</h2>
+                              <div class="packList customList">
+                                   <div id="planListTopContain">
+                                        <ul class="packingListli" id="packListList">
+                                        </ul>
+                                   </div>
+                                   <form onsubmit="createLi('pack'); return false;" id="packForm">
+                                        <div>
+                                             <textarea name="packList" id="packText" rows="2"></textarea>
+                                        </div>
+                                        <button type="submit">
+                                             +
+                                        </button>
+                                        <button type="button" onclick="delLi(this)" id="deleteBtnPack" class="hidden">
+                                             -
+                                        </button>
+                                   </form>
+                              </div>
                          </article>
                     </div>
                </section>
@@ -209,5 +228,43 @@
     <footer>
          <p>Created by students of <a href="https://www.hcw.ac.at/">HCW</a></p>
     </footer>
+    <dialog id="loginDialog" class="dialog">
+      <form id="loginForm" class="logForm">
+          <div>
+               <label for="username">Username:</label>
+               <input type="text" id="logUsername" name="username" required>
+          </div>
+          <div>
+               <label for="password">Password:</label>
+               <input type="password" id="logPassword" name="password" required>
+          </div>
+          <div>
+               <button type="submit">Login</button>
+               <button type="button" id="cancelLogin" onclick="closeDialog()">Cancel</button>
+          </div>
+          <p>If you are new here, sign up <a onclick="toggleLoginDialog()">here</a></p>
+      </form>
+    </dialog>
+    <dialog id="signupDialog" class="dialog">
+      <form id="signupForm" class="logForm">
+          <div>
+               <label for="username">Username:</label>
+               <input type="text" id="signUsername" name="username" required>
+          </div>
+          <div>
+               <label for="password">Password:</label>
+               <input type="password" id="signPassword" name="password" required>
+          </div>
+          <div>
+               <button type="submit">Sign up</button>
+               <button type="button" id="cancelSign" onclick="closeDialog()">Cancel</button>
+          </div>
+          <p>If you already have an account, login <a onclick="toggleLoginDialog()">here</a></p>
+      </form>
+    </dialog>
+    <dialog id="accountSavedRecoms" class="dialog">
+          <div id="savedRecommsTitle"><p>Your saved trips</p></div>
+      <ul id="recommsList"></ul>
+    </dialog>
 </body>
 </html>
