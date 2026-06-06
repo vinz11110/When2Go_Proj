@@ -1,53 +1,71 @@
 const jwt = require('jsonwebtoken');
-
-// 🛑 TEMPORARY FAKE DATABASE 
-const fakeUsers = [];
+const bcrypt = require('bcryptjs');
+const User = require('../models/user');
 
 exports.registerUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        //Checking if user exists in fakearray
-        const userExists = fakeUsers.find(user => user.email === email);
-        if (userExists) {
-            return res.status(400).json({ success: false, message: 'User already exists' });
+        //checking if user already exists in Databse
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: "User already exists"});
         }
 
-        //Saving to temporary fake database
-        const newUser = { id: Date.now(), email, password };
-        fakeUsers.push(newUser);
-        
-        //Checking in terminal
-        console.log("Current Fake Database:", fakeUsers); 
+        // Hashing the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-        //Creating fake token
-        const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '7d' });
+        // Creating and saving the new user
+        const newUser = new User({
+            email,
+            password: hashedPassword
+        });
+        await newUser.save();
 
-        res.status(201).json({ success: true, message: 'User registered successfully', token });
-    } catch (error) {
-        //Error detection
+        // Creating JWT
+        const token = jwt.sign(
+            {
+                userId: newUser._id
+            },
+            process.env.JWT_SECRET || 'fallback_secret',
+            { expiresIn: '7d'}
+        );
+
+        res.status(201).json({ success: true, message: 'User registered successfully', token});
+    }   catch (error) {
         console.error("Registration Error:", error);
-        res.status(500).json({ success: false, message: 'Server error' });
+        res.status(500).json({ success: false, message: "Server error during registration"});
     }
 };
 
 exports.loginUser = async (req, res) => {
     try {
-        const {email, password} = req.body;
+        const { email, password } = req.body;
 
-        const user = fakeUsers.find(u => u.email === email);
+        //Finding user in DB
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({sucess: false, message: 'Invalid credentials'});
+            return res.status(400).json({sucess: false, message: "Invalid credentials"});
         }
 
-        if (user.password !== password) {
-            return res.status(400).json({sucess: false, message: 'Invalid credentials'});
+        // Comparing password with hashed password in the DB
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, message: 'Invalid credentials'});
         }
 
-        const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET || 'fallback_secret', {expiresIn: '7d'});
-        res.status(200).json({success: true, message: 'Logged in successfully', token});
+        //Creating JWT
+        const token = jwt.sign(
+            { userId: user._id},
+            process.env.JWT_SECRET || 'fallback_secret',
+            { expiresIn: '7d'}
+        );
+
+        res.status(200).json({ sucess: true, message: 'Logged in successfully', token});
     }   catch (error) {
-        console.error("Login Error:", error);
-        res.status(500).json({success: false, message: 'Server error'});
+        console.error("Login Error: ", error);
+        res.status(500).json({ success: false, message: 'Server error during login'});
     }
 };
+

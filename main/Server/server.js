@@ -15,21 +15,15 @@ app.use('/api/auth', authRoutes);
 
 
 
-/* can't connect to database, need to fix later
-mongoose.connect(process.env.MONGODB_URI)
+const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/when2go';
+
+mongoose.connect(dbURI)
     .then(() => {
-    console.log("Successfully connected to MongoDB");
+        console.log("Successfully connected to MongoDB");
     })
     .catch((error) => {
-        console.log("Error connecting to MongoDB", error);
+        console.log("Error connecting to MongoDB: " + error.message);
     })
-*/
-app.get('/api/test', (req, res) => {
-    res.status(200).json({
-        sucess: true,
-        message: "Welcome to When2Go. The server is running"
-    });
-});
 
 const clientPath = path.join(__dirname, '../Client');
 console.log("Looking for HTML files in:", clientPath);
@@ -38,4 +32,11 @@ app.use(express.static(clientPath));
 app.listen(PORT, () => {
     console.log(`When2Go Server is running on http://localhost:${PORT}`);
 });
+
+
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+
+const tripRoutes = require('./routes/tripRoutes');
+app.use('/api/trips', tripRoutes);
 

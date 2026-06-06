@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     savedPlans: [{
-        desintation: String,
+        destination: String,
         startDate: Date,
         endDate: Date,
         vacationType: String
@@ -20,3 +20,6 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true 
 });
+
+//exporting user model so controller can use it
+module.exports = mongoose.model('User', userSchema)
