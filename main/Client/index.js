@@ -5,7 +5,7 @@ let userdata = {
     selectDates:[],
     selectCalD:null,
     session: 'true',
-    recommId:null,
+    recommId:'575647655',
     currentPage:'mainPage',
     startMonth: null,
     savedPackingLists: {},
@@ -20,9 +20,11 @@ window.addEventListener('load', () => {
     checkState();
     document.getElementById('mainPage').classList.add('hidden');
     document.getElementById(`${userdata.currentPage}`).classList.remove('hidden');
+    userdata.selectCalD=null;
     if(userdata.currentPage==='finPage'){
-        if(findCheckedRecomms()){
-        generateCalendar()
+        if(userdata.recommId){
+        generateCalendar();
+        fillSavedPackLi();
         }
     }
     fillInSaved();
@@ -141,7 +143,8 @@ function toggleView(currentPage){
             document.getElementById('chPage3').classList.add('hidden');
             document.getElementById('finPage').classList.remove('hidden');
             getTotalDays();
-            generateCalendar();}
+            generateCalendar();
+            fillSavedPackLi();}
             break;
         case 'timeframeBack':
             userdata.currentPage='mainPage';
@@ -218,6 +221,47 @@ function calBtnToggle(element){
     }
     userdata.selectCalD=element.id;
     saveUsrData();
+    const dayPLans = userdata.savedDayPlanners[`${userdata.recommId}_${element.id}`]||[];
+    
+    if(dayPLans){
+        let listContain = document.getElementById('planLiContain');
+        listContain.innerHTML = "";
+        for(const plan of dayPLans){
+        dayPLanListElement(plan)
+        }
+    }
+}
+function fillSavedPackLi(){
+    const packList = userdata.savedPackingLists[`${userdata.recommId}`]||[];
+    if(packList){
+        let listContain = document.getElementById('packListList');
+        listContain.innerHTML = "";
+        for(const pack of packList){
+        packListElement(pack)
+        }
+    }
+}
+function dayPLanListElement(text){
+    let listContain = document.getElementById('planLiContain');
+    const newLi= document.createElement("li");
+    newLi.textContent = text
+    newLi.className='dayPl'
+    newLi.onclick=function(){
+        this.classList.toggle('selectedPl');
+        checkSelectLi(document.getElementById('deleteBtnPl'))
+    }
+    listContain.appendChild(newLi);
+}
+function packListElement(text){
+    let listContain = document.getElementById('packListList');
+    const newLi= document.createElement("li");
+    newLi.textContent = text
+    newLi.className='packLi'
+    newLi.onclick=function(){
+        this.classList.toggle('selectedPl');
+        checkSelectLi(document.getElementById('deleteBtnPack'))
+    }
+    listContain.appendChild(newLi);
 }
 function getDaysForSelectedMonths(month) {
     let results = {};
@@ -247,11 +291,31 @@ function calChangeMonth(switchDir){
     saveUsrData();
 }
 function delLi(element){
-    const allSelected = document.getElementsByClassName('selectedPl');
+    const allSelected = document.querySelectorAll('.selectedPl');
+
+    const currentTrip = userdata.recommId;
+    const currentDay = userdata.selectCalD;
+    const plannerKey = `${currentTrip}_${currentDay}`;
     for(const e of allSelected){
+        const textToRemove = e.textContent; 
+        if (e.classList.contains('dayPl')) {
+            if (userdata.savedDayPlanners[plannerKey]) {
+                userdata.savedDayPlanners[plannerKey] = userdata.savedDayPlanners[plannerKey].filter(
+                    task => task !== textToRemove
+                );
+            }
+        } 
+        else if (e.classList.contains('packLi')) {
+            if (userdata.savedPackingLists[currentTrip]) {
+                userdata.savedPackingLists[currentTrip] = userdata.savedPackingLists[currentTrip].filter(
+                    item => item !== textToRemove
+                );
+            }
+        }
         e.remove();
     }
-    checkSelectLi(element)
+    checkSelectLi(element);
+    saveUsrData();
 }
 function checkSelectLi(element){
     let anySelected = 0;
@@ -279,6 +343,7 @@ function createLi(choice){
     const currentDay = userdata.selectCalD;
     const currentTrip = userdata.recommId;
     let Id = 0;
+    let textIn =0;
 
     switch(choice){
         case 'plan':{
@@ -286,7 +351,7 @@ function createLi(choice){
             listContainId = 'planLiContain';
             liClassName ='dayPl'
             deleteId = 'deleteBtnPl'
-            let textIn = document.getElementById(formId);
+            textIn = document.getElementById(formId);
             if (!currentDay) {
                 alert("Please click a day on the calendar first!");
             return;
@@ -298,6 +363,7 @@ function createLi(choice){
             if (textIn.value.trim() !== "") {
                 userdata.savedDayPlanners[plannerKey].push(textIn.value);
             }
+            dayPLanListElement(textIn.value)
             break;
         }
         case 'pack':{
@@ -305,28 +371,23 @@ function createLi(choice){
             listContainId = 'packListList';
             liClassName ='packLi'
             deleteId = 'deleteBtnPack'
-            let textIn = document.getElementById(formId);
+            textIn = document.getElementById(formId);
             if (!userdata.savedPackingLists[currentTrip]) {
                 userdata.savedPackingLists[currentTrip] = [];
             }
             if (textIn.value.trim() !== "") {
                 userdata.savedPackingLists[currentTrip].push(textIn.value);
             }
+            packListElement(textIn.value);
             break;
         }
     }
-    let text = document.getElementById(formId);
-    let listContain = document.getElementById(listContainId);
-    const newLi= document.createElement("li");
-    newLi.textContent = text.value
-    newLi.className=liClassName
-    newLi.onclick=function(){
-        this.classList.toggle('selectedPl');
-        checkSelectLi(document.getElementById(deleteId))
-    }
-    listContain.appendChild(newLi);
-    text.value="";
+    textIn.value="";
+    console.log(JSON.stringify(userdata.savedPackingLists, null, 2));
+    console.log(JSON.stringify(userdata.savedDayPlanners, null, 2));
     updatePlanLists();
+    saveUsrData();
+    
 }
 function toggleLoginDialog(){
     const login=document.getElementById('loginDialog')
