@@ -33,10 +33,6 @@ app.listen(PORT, () => {
     console.log(`When2Go Server is running on http://localhost:${PORT}`);
 });
 
-
-const authRoutes = require('./routes/authRoutes');
-app.use('/api/auth', authRoutes);
-
 const tripRoutes = require('./routes/tripRoutes');
 app.use('/api/trips', tripRoutes);
 
