@@ -15,7 +15,14 @@ const userSchema = new mongoose.Schema({
         destination: String,
         startDate: Date,
         endDate: Date,
-        vacationType: String
+        vacationType: String,
+        packingList: [{
+            item: String,
+            isPacked: {
+                type: Boolean,
+                default: false
+            }
+        }]
     }],
 }, {
     timestamps: true 
