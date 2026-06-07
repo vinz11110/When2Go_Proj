@@ -11,6 +11,7 @@ let userdata = {
     savedPackingLists: {},
     savedDayPlanners: {},
     savedRecommIds: [],
+    tripData: {},
 };
 window.addEventListener('load', () => {
     let savedData = localStorage.getItem('when2go_data');
@@ -138,11 +139,10 @@ function toggleView(currentPage){
             getRecomms();}
             break;
         case 'recomms':
-            if(!findCheckedRecomms()){
+            if(document.getElementsByClassName('recommPick selected')){
             userdata.currentPage='finPage';
             document.getElementById('chPage3').classList.add('hidden');
             document.getElementById('finPage').classList.remove('hidden');
-            getTotalDays();
             generateCalendar();
             fillSavedPackLi();}
             break;
@@ -222,7 +222,6 @@ function calBtnToggle(element){
     userdata.selectCalD=element.id;
     saveUsrData();
     const dayPLans = userdata.savedDayPlanners[`${userdata.recommId}_${element.id}`]||[];
-    
     if(dayPLans){
         let listContain = document.getElementById('planLiContain');
         listContain.innerHTML = "";
@@ -288,6 +287,8 @@ function calChangeMonth(switchDir){
     }
     userdata.startMonth=reverseMonthMap[currentMonthNumb];
     generateCalendar(userdata.startMonth)
+    let listContain = document.getElementById('planLiContain');
+        listContain.innerHTML = "";
     saveUsrData();
 }
 function delLi(element){
@@ -414,15 +415,23 @@ function toggleRecommsUl(){
     const accountDial = document.getElementById('accountSavedRecoms')
     accountDial.showModal()
     const list = document.getElementById('recommsList')
-    list.innerHTML = "";
+    list.innerHTML = ``;
     for(const recomm of userdata.savedRecommIds){
-        const box = document.createElement('li')
-        box.className='savedRecomms'
-        const title = document.createElement('p')
-            title.textContent= getLocation(recomm)
-        const dates = document.createElement('p')
-            dates.textContent = getDateRange(recomm)
-        box.append(title, dates);
+        getTripData(recomm);
+        const box = document.createElement('button')
+        box.onclick = () => {
+            document.getElementById(`${userdata.currentPage}`).classList.add('hidden')
+            document.getElementById(`finPage`).classList.remove('hidden')
+            generateCalendar();
+            fillSavedPackLi();
+        };
+        const dateList = userdata.tripData[recomm].Dates
+        const dateRange = `${dateList[0]} - ${dateList[dateList.length-1]}`
+        box.id= recomm;
+        box.innerHTML = `
+            <p> ${userdata.tripData[recomm].Location}</p> 
+            <p> ${dateRange}</p> 
+        `
         list.append(box);
     }
 }
@@ -452,11 +461,11 @@ function getRecomms(){
             li.id=recomm.ID;
             li.innerHTML = `
                 <button type="button" class='recommPick' id="${recomm.ID}" onclick='toggleRecommPick(this)'>
-                <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
-                <div class="recomm-info">
-                    <strong>${recomm.City}, ${recomm.Country}</strong><br>
-                    <small>${recomm.DateRange}</small>
-                </div>
+                    <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
+                    <div class="recomm-info">
+                        <strong>${recomm.City}, ${recomm.Country}</strong><br>
+                        <small>${recomm.DateRange}</small>
+                    </div>
                 </button>
                 <div>
                     <input type="checkbox" class='recommCheck' id="${recomm.ID}">
@@ -479,78 +488,18 @@ function toggleRecommPick(element){
     userdata.recommId=element.id;
     saveUsrData();
 }
-function getTotalDays(){
-    fetch(`http://localhost:3000/datesToRecomms?Id=${userdata.recommId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-function getDateRange(specId){
-    fetch(`http://localhost:3000/datesToRecomms?Id=${specId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-function getWeatherForDay(){
-    fetch(`http://localhost:3000/weatherInfo?Id=${userdata.recommId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-function getLocation(specId){
-    let URL = null;
-    if(specId){
-        URL = `http://localhost:3000/locationInfo?Id=${specId}`
+function getTripData(ID){
+    const URL = null;
+    if(ID){
+        URL = `http://localhost:3000/datesToRecomms?Id=${ID}`
     }else {
-        URL= `http://localhost:3000/locationInfo?Id=${userdata.recommId}`
+        URL = `http://localhost:3000/datesToRecomms?Id=${userdata.recommId}`
     }
     fetch(URL, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-        },
+        }
     })
     .then(response => {
         if (!response.ok) {
@@ -559,7 +508,18 @@ function getLocation(specId){
         return response.json();
     })
     .then(data => {
-        
+        const dataId = data.id;
+        const alreadySaved = userdata.tripData.some(trip => (trip.id === dataId));
+
+        if (!alreadySaved) {
+            userdata.tripData.push(data);
+            userdata.recommId=dataId;
+            userdata.selectDates = userdata.tripData[dataId].Dates;
+            userdata.months = userdata.tripData[dataId].Months;
+            userdata.savedPackingLists = userdata.tripData[dataId].PackList
+            userdata.savedDayPlanners = userdata.tripData[dataId].DayPLanners
+            saveUsrData();
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -571,7 +531,10 @@ function updatePlanLists(){
         headers: {
             'Content-Type': 'application/json',
         },
-        body: 1
+        body: JSON.stringify({
+            packingList: userdata.savedPackingLists,
+            dayPlanners: userdata.savedDayPlanners,
+        })
     })
     .then(response => {
         if (!response.ok) {
@@ -580,7 +543,7 @@ function updatePlanLists(){
         return response.json();
     })
     .then(data => {
-        
+        return;
     })
     .catch(error => {
         console.error('Error:', error);
@@ -594,8 +557,4 @@ function findCheckedRecomms(){
         }
     })
     saveUsrData();
-    if (userdata.savedRecommIds){
-        return true
-    }
-    return false;
 }
