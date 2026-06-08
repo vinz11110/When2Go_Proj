@@ -1,0 +1,3 @@
+function getClimateData(city, month) {
+    
+}
