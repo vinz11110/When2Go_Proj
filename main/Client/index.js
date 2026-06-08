@@ -417,7 +417,7 @@ function closeDialog(){
     login.close();
     signup.close();
 }
-function toggleRecommsUl(){
+async function toggleRecommsUl(){
     const accountDial = document.getElementById('accountSavedRecoms')
     accountDial.showModal()
     const list = document.getElementById('recommsList')
