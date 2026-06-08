@@ -1,5 +1,35 @@
 const User = require('../models/user');
 
+const generatePackingItems = (type) => {
+
+    const baseItems = ["Toothbrush", "Toothpaste", "Phone Charger", "Passport"];
+    let specificItems= [];
+
+    
+    switch (type.toLowerCase()) {
+        case 'beach':
+            specificItems = ['Bathing Suit', 'Sunscreen', 'Beach Towel', 'Flip Flops', 'Sunglasses'];
+            break;
+        case 'citytrip':
+            specificItems = ['Walking Shoes', 'Backpack', 'Power Bank', 'Umbrella', 'Water Bottle'];
+            break;
+        case 'wellness':
+            specificItems = ['Robe', 'Slippers', 'Bathing Suit', 'Book'];
+            break;
+        case 'adventure':
+            specificItems = ['Hiking Boots', 'Water Bottle', 'First Aid Kit', 'Flaslight', 'Rain Coat', 'Sunscreen'];
+            break;
+        default:
+            specificItems = ['General Travel Gear'];
+    }
+
+    const combinedList = [...baseItems, ...specificItems];
+
+    return combinedList.map(itemName => {
+        return { item: itemName, isPacked: false};
+    });
+};
+
 exports.saveTrip = async (req, res) => {
     try {
         const { destination, startDate, endDate, vacanType} = req.body;
@@ -9,7 +39,16 @@ exports.saveTrip = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found'});
         }
 
-        const newTrip = { destination, startDate, endDate, vacationType};
+        const generatedList = generatePackingItems(vacationType);
+        // attaching list to the newly generated trip
+        const newTrip = {
+            destination,
+            startDate,
+            endDate,
+            vacationType,
+            packingList: generatedList
+        }
+
         user.savedPlans.push(newTrip);
 
         await user.save();
