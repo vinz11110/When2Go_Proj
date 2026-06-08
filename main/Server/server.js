@@ -36,3 +36,6 @@ app.listen(PORT, () => {
 const tripRoutes = require('./routes/tripRoutes');
 app.use('/api/trips', tripRoutes);
 
+const weatherRoutes = require("./weatherRoutes");
+app.use("/api/weather", weatherRoutes);
+
