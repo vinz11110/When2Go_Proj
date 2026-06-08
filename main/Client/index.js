@@ -28,6 +28,11 @@ window.addEventListener('load', () => {
         fillSavedPackLi();
         }
     }
+    if(userdata.currentPage==='chPage3'){
+        if(userdata.recommId){
+        getRecomms();
+        }
+    }
     fillInSaved();
 });
 function checkState(){
@@ -139,12 +144,13 @@ function toggleView(currentPage){
             getRecomms();}
             break;
         case 'recomms':
-            if(document.getElementsByClassName('recommPick selected')){
+            // if(document.getElementsByClassName('recommPick selected').length>0){
             userdata.currentPage='finPage';
             document.getElementById('chPage3').classList.add('hidden');
             document.getElementById('finPage').classList.remove('hidden');
             generateCalendar();
-            fillSavedPackLi();}
+            fillSavedPackLi();
+            // }
             break;
         case 'timeframeBack':
             userdata.currentPage='mainPage';
@@ -205,7 +211,7 @@ function generateCalendar(specMonth) {
         card.innerHTML = `
             <button id='${card.id}' class="calDateBtn" onclick='calBtnToggle(this)'>${i}</button>
         `;
-        if(userdata.selectDates.includes(card.id)){
+        if(userdata.selectDates && userdata.selectDates.includes(card.id)){
             card.classList.add('dateRange')
         }
         container.appendChild(card);
@@ -417,7 +423,9 @@ function toggleRecommsUl(){
     const list = document.getElementById('recommsList')
     list.innerHTML = ``;
     for(const recomm of userdata.savedRecommIds){
-        getTripData(recomm);
+        if (!userdata.tripData[recomm]) {
+            await getTripData(recomm);
+        }
         const box = document.createElement('button')
         box.onclick = () => {
             document.getElementById(`${userdata.currentPage}`).classList.add('hidden')
@@ -488,8 +496,8 @@ function toggleRecommPick(element){
     userdata.recommId=element.id;
     saveUsrData();
 }
-function getTripData(ID){
-    const URL = null;
+async function getTripData(ID){
+    let URL = null;
     if(ID){
         URL = `http://localhost:3000/datesToRecomms?Id=${ID}`
     }else {
@@ -509,10 +517,10 @@ function getTripData(ID){
     })
     .then(data => {
         const dataId = data.id;
-        const alreadySaved = userdata.tripData.some(trip => (trip.id === dataId));
+        const alreadySaved = userdata.tripData[dataId];
 
         if (!alreadySaved) {
-            userdata.tripData.push(data);
+            userdata.tripData[dataId]=data;
             userdata.recommId=dataId;
             userdata.selectDates = userdata.tripData[dataId].Dates;
             userdata.months = userdata.tripData[dataId].Months;
@@ -520,6 +528,7 @@ function getTripData(ID){
             userdata.savedDayPlanners = userdata.tripData[dataId].DayPLanners
             saveUsrData();
         }
+        return true;
     })
     .catch(error => {
         console.error('Error:', error);
@@ -543,7 +552,7 @@ function updatePlanLists(){
         return response.json();
     })
     .then(data => {
-        return;
+        return true;
     })
     .catch(error => {
         console.error('Error:', error);
