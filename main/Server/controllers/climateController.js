@@ -2,13 +2,7 @@ const climateService = require("../services/climateService")
 
 exports.getClimate = async (req, res) => {
     try {
-        const destination = await Destination.findOne({ city: req.params.city});
-        if(!destination){
-            return res.status(404).json({
-                 error: 'Destination not found'
-                });
-        }
-        return destination
+        const destionation = await climateService.getClimateData(req.params.city)
         
     } catch {
         res.status(500).json({
