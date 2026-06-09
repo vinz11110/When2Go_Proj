@@ -14,7 +14,7 @@ router.get("/:city", async(req, res) => {
         res.json(data)
     } catch (err) {
         res.status(500).json({
-            error: "Failed to fetch Weather"
+            error: "Internal Server Error"
         });
     }
 })
