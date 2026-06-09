@@ -1,4 +1,4 @@
-function getForecast(city){
+async function getForecast (city){
     const response = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${process.env.OPENWEATHER_API_KEY}`
     );
@@ -21,4 +21,4 @@ function getForecast(city){
     return { avgTemp, rainProbability, windSpeed};
 }
 
-module.exports = (getForecast);
+module.exports = {getForecast};
