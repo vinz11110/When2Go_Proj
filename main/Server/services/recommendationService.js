@@ -9,24 +9,31 @@ function getDaysUntilTrip(startDate) {
     return daysUntilTrip;
 }
 
-function forecastBasedScore(forecast) {
-    let score = 0;
+function forecastBasedScore(destination) {
+        const preference = vacationPreferences[vacationType];
 
-    score += forecast.avgTemp;
-    score -= forecast.rainProbability *0.5;
-    score -= forecast.windSpeed;
+    let score = 100;
 
+    score -= Math.abs((destination.avgTemp - preference.idealTemp) * temperatureImpact)            
+    score -= Math.abs(destination.rainProbability * vacationPreferences.rainImpact)
+    score -= Math.abs(destination.windSpeed = vacationPreferences.windImpact)
+
+    return score;
+    let score = 100;
     return score;
 }
 
-function climateBasedScore(destination,month) {
-    const climate = destination.monthlyClimate[month];
+function climateBasedScore(destination,vacationType) {
+    const preference = vacationPreferences[vacationType];
 
-    let score = 0;
+    let score = 100;
 
-    score += climate.avgTemp
-    score -= climate.rainProbability * 0.5;
-    score -= climate.windSpeed;
+    score -= Math.abs((destination.temperature - preference.idealTemp) * temperatureImpact)            
+    score -= Math.abs(destination.rainProbability * vacationPreferences.rainImpact)
+    score -= Math.abs(destination.windSpeed = vacationPreferences.windImpact)
+    if(destination.rainProbability > vacationPreferences.maxRainProbability){
+
+    }
 
     return score;
 }
@@ -44,6 +51,14 @@ async function calculateDestinationScore( destination, tripDate, month) {
 
     else return climateBasedScore(destination, month);
 }
+
+const vacationPreferences = {
+    // these values are currently placeholder and to be determined
+    beach:      {idealTemp: 30, temperatureImpact: 1, maxRainProbability: 50, rainImpact: 0.15, windImpact: 1},
+    city:       {idealTemp: 22, temperatureImpact: 1, maxRainProbability: 50, rainImpact: 0.25, windImpact: 1},
+    adventure:  {idealTemp: 18, temperatureImpact: 1, maxRainProbability: 50, rainImpact: 0.25, windImpact: 1},
+    wellness:   {idealTemp: 22, temperatureImpact: 1, maxRainProbability: 50, rainImpact: 0.05, windImpact: 1}
+};
 
 module.exports = {
     getDaysUntilTrip,
