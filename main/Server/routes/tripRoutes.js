@@ -15,18 +15,3 @@ router.get('/all', async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve information: ' + error.message});
     }
 });
-
-router.get(':/city', async (req, res) => {
-    try {
-        const destination = await Destination.findOne({ city: req.params.city});
-        if (!destination) {
-            return res.status(404).json({ error: 'Destination not found'});
-        }
-        const cityData = await response.json();
-        res.json(cityData);
-    }   catch (error) {
-        res.status(500).json({ error: "Internal server error: " + error.message});
-    }
-});
-
-module.exports = router;

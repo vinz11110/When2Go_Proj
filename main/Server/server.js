@@ -20,6 +20,9 @@ app.use('/api/trips', tripRoutes);
 const weatherRoutes = require("./weatherRoutes");
 app.use("/api/weather", weatherRoutes);
 
+const climateRoutes = require("./routes/climateRoutes")
+app.use("/api/climate", climateRoutes)
+
 
 
 mongoose.connect(dbURI)
