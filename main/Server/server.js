@@ -6,6 +6,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/when2go';
 
 app.use(cors());
 app.use(express.json());
@@ -13,9 +14,13 @@ app.use(express.json());
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
+const tripRoutes = require('./routes/tripRoutes');
+app.use('/api/trips', tripRoutes);
+
+const weatherRoutes = require("./weatherRoutes");
+app.use("/api/weather", weatherRoutes);
 
 
-const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/when2go';
 
 mongoose.connect(dbURI)
     .then(() => {
@@ -33,9 +38,5 @@ app.listen(PORT, () => {
     console.log(`When2Go Server is running on http://localhost:${PORT}`);
 });
 
-const tripRoutes = require('./routes/tripRoutes');
-app.use('/api/trips', tripRoutes);
 
-const weatherRoutes = require("./weatherRoutes");
-app.use("/api/weather", weatherRoutes);
 
