@@ -32,7 +32,7 @@ const generatePackingItems = (type) => {
 
 exports.saveTrip = async (req, res) => {
     try {
-        const { destination, startDate, endDate, vacanType} = req.body;
+        const { destination, startDate, endDate, vacationType} = req.body;
 
         const user = await User.findById(req.user);
         if (!user) {
