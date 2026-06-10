@@ -148,6 +148,8 @@ function toggleView(currentPage){
             userdata.currentPage='finPage';
             document.getElementById('chPage3').classList.add('hidden');
             document.getElementById('finPage').classList.remove('hidden');
+            getTripData(userdata.recommId);
+            loadInTripData(userdata.recommId);
             generateCalendar();
             fillSavedPackLi();
             // }
@@ -257,12 +259,22 @@ function dayPLanListElement(text){
     }
     listContain.appendChild(newLi);
 }
-function packListElement(text){
+function packListElement(packObj){
     let listContain = document.getElementById('packListList');
     const newLi= document.createElement("li");
-    newLi.textContent = text
+    newLi.textContent = packObj.text
     newLi.className='packLi'
-    newLi.onclick=function(){
+    if (packObj.checked) {
+        newLi.classList.add('checkedItem');
+    }
+    newLi.onclick = function() {
+        packObj.checked = !packObj.checked;
+        this.classList.toggle('checkedItem');
+        updatePlanLists();
+        saveUsrData();
+    };
+    newLi.ondblclick = function(e) {
+        e.stopPropagation();
         this.classList.toggle('selectedPl');
         checkSelectLi(document.getElementById('deleteBtnPack'))
     }
@@ -315,7 +327,7 @@ function delLi(element){
         else if (e.classList.contains('packLi')) {
             if (userdata.savedPackingLists[currentTrip]) {
                 userdata.savedPackingLists[currentTrip] = userdata.savedPackingLists[currentTrip].filter(
-                    item => item !== textToRemove
+                    item => item.text !== textToRemove
                 );
             }
         }
@@ -383,9 +395,12 @@ function createLi(choice){
                 userdata.savedPackingLists[currentTrip] = [];
             }
             if (textIn.value.trim() !== "") {
-                userdata.savedPackingLists[currentTrip].push(textIn.value);
+                userdata.savedPackingLists[currentTrip].push({
+                    text: textIn.value.trim(),
+                    checked: false
+                })
             }
-            packListElement(textIn.value);
+            fillSavedPackLi();
             break;
         }
     }
@@ -414,34 +429,49 @@ function toggleLoginDialog(){
 function closeDialog(){
   const login=document.getElementById('loginDialog')
   const signup=document.getElementById('signupDialog')   
+  const account=document.getElementById('accountSavedRecoms')   
     login.close();
     signup.close();
+    account.close();
 }
 async function toggleRecommsUl(){
     const accountDial = document.getElementById('accountSavedRecoms')
     accountDial.showModal()
     const list = document.getElementById('recommsList')
-    list.innerHTML = ``;
-    for(const recomm of userdata.savedRecommIds){
-        if (!userdata.tripData[recomm]) {
-            await getTripData(recomm);
+    if(userdata.savedRecommIds){
+        list.innerHTML = '';
+        for(const recomm of userdata.savedRecommIds){
+            if (!userdata.tripData[recomm]) {
+                await getTripData(recomm);
+            }
+            const box = document.createElement('button')
+            box.onclick = () => {
+                document.getElementById(`${userdata.currentPage}`).classList.add('hidden')
+                userdata.currentPage = 'finPage';
+                document.getElementById(`finPage`).classList.remove('hidden')
+                loadInTripData(recomm);
+                generateCalendar();
+                fillSavedPackLi();
+                closeDialog();
+            };
+            const dateList = userdata.tripData[recomm].Dates
+            const dateRange = `${dateList[0]} - ${dateList[dateList.length-1]}`
+            box.id= recomm;
+            box.innerHTML = `
+                <p> ${userdata.tripData[recomm].Location}</p> 
+                <p> ${dateRange}</p> 
+            `
+            list.append(box);
         }
-        const box = document.createElement('button')
-        box.onclick = () => {
-            document.getElementById(`${userdata.currentPage}`).classList.add('hidden')
-            document.getElementById(`finPage`).classList.remove('hidden')
-            generateCalendar();
-            fillSavedPackLi();
-        };
-        const dateList = userdata.tripData[recomm].Dates
-        const dateRange = `${dateList[0]} - ${dateList[dateList.length-1]}`
-        box.id= recomm;
-        box.innerHTML = `
-            <p> ${userdata.tripData[recomm].Location}</p> 
-            <p> ${dateRange}</p> 
-        `
-        list.append(box);
     }
+}
+function loadInTripData(id){
+    userdata.recommId=id;
+    userdata.selectDates = userdata.tripData[id].Dates;
+    userdata.months = userdata.tripData[id].Months;
+    userdata.savedPackingLists = userdata.tripData[id].PackList
+    userdata.savedDayPlanners = userdata.tripData[id].DayPLanners
+    saveUsrData();
 }
 function getRecomms(){
     fetch('http://localhost:3000/recommendations', {
@@ -521,11 +551,6 @@ async function getTripData(ID){
 
         if (!alreadySaved) {
             userdata.tripData[dataId]=data;
-            userdata.recommId=dataId;
-            userdata.selectDates = userdata.tripData[dataId].Dates;
-            userdata.months = userdata.tripData[dataId].Months;
-            userdata.savedPackingLists = userdata.tripData[dataId].PackList
-            userdata.savedDayPlanners = userdata.tripData[dataId].DayPLanners
             saveUsrData();
         }
         return true;

@@ -263,7 +263,12 @@
       </form>
     </dialog>
     <dialog id="accountSavedRecoms" class="dialog">
-          <div id="savedRecommsTitle"><p>Your saved trips</p></div>
+          <div id="savedRecommsTitle">
+               <div id="accountCloseBtn">
+                    <button onclick="closeDialog()">X</button>
+               </div>
+               <p>Your saved trips</p>
+          </div>
       <ul id="recommsList"></ul>
     </dialog>
 </body>
