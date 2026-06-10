@@ -1,3 +1,5 @@
+const { raw } = require("body-parser");
+
 let userdata = {
     days: null,
     months:[],
@@ -444,26 +446,33 @@ async function toggleRecommsUl(){
             if (!userdata.tripData[recomm]) {
                 await getTripData(recomm);
             }
-            const box = document.createElement('button')
-            box.onclick = () => {
-                document.getElementById(`${userdata.currentPage}`).classList.add('hidden')
-                userdata.currentPage = 'finPage';
-                document.getElementById(`finPage`).classList.remove('hidden')
-                loadInTripData(recomm);
-                generateCalendar();
-                fillSavedPackLi();
-                closeDialog();
-            };
+            const box = document.createElement('li')
             const dateList = userdata.tripData[recomm].Dates
             const dateRange = `${dateList[0]} - ${dateList[dateList.length-1]}`
-            box.id= recomm;
+            box.id= `toBeDeleted-${recomm}`;
             box.innerHTML = `
-                <p> ${userdata.tripData[recomm].Location}</p> 
-                <p> ${dateRange}</p> 
+                <div>
+                    <p> ${userdata.tripData[recomm].Location}</p> 
+                    <p> ${dateRange}</p> 
+                </div>
+                <div>
+                    <button onclick='openSavedTrip(this.id)' id = 'open-${recomm}'>Edit</button>
+                    <button onclick='deleteSavedTrip(this.id)' id = 'delete-${recomm}'>Delete</button>
+                </div>
             `
             list.append(box);
         }
     }
+}
+function openSavedTrip(id){
+    const rawId = id.replace('open-', '')
+    loadInTripData(rawId);
+    generateCalendar();
+    fillSavedPackLi();
+    closeDialog();
+    document.getElementById(`${userdata.currentPage}`).classList.add('hidden')
+    userdata.currentPage = 'finPage';
+    document.getElementById(`finPage`).classList.remove('hidden')
 }
 function loadInTripData(id){
     userdata.recommId=id;
@@ -474,7 +483,7 @@ function loadInTripData(id){
     saveUsrData();
 }
 function getRecomms(){
-    fetch('http://localhost:3000/recommendations', {
+    fetch('http://localhost:3000/getTripRecommendations', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -496,7 +505,7 @@ function getRecomms(){
         for(const recomm of data){
             const li = document.createElement('li')
             li.className = "recomm-item";
-            li.id=recomm.ID;
+            li.id=`item-${recomm.id}`;
             li.innerHTML = `
                 <button type="button" class='recommPick' id="${recomm.ID}" onclick='toggleRecommPick(this)'>
                     <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
@@ -506,7 +515,7 @@ function getRecomms(){
                     </div>
                 </button>
                 <div>
-                    <input type="checkbox" class='recommCheck' id="${recomm.ID}">
+                    <input type="checkbox" class='recommCheck' id="check${recomm.ID}">
                 </div>
                 `;
             container.append(li)}
@@ -523,16 +532,11 @@ function toggleRecommPick(element){
         toggleSelected(currentSelect[0]);
         toggleSelected(element)
     }
-    userdata.recommId=element.id;
+    userdata.recommId=element.id.replace('pick-', '');
     saveUsrData();
 }
 async function getTripData(ID){
-    let URL = null;
-    if(ID){
-        URL = `http://localhost:3000/datesToRecomms?Id=${ID}`
-    }else {
-        URL = `http://localhost:3000/datesToRecomms?Id=${userdata.recommId}`
-    }
+    let URL = `http://localhost:3000/getTripData?Id=${ID}`
     fetch(URL, {
         method: 'GET',
         headers: {
@@ -554,6 +558,34 @@ async function getTripData(ID){
             saveUsrData();
         }
         return true;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+async function deleteSavedTrip(ID){
+    const rawId = ID.replace('delete-', '')
+    let URL = `http://localhost:3000/deleteSavedTrip?Id=${rawId}`
+    fetch(URL, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }else if (response.ok) {
+            userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
+            saveUsrData()
+            const deletedElement = document.getElementById(`toBeDeleted-${rawId}`)
+            deletedElement.remove();
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        return;
     })
     .catch(error => {
         console.error('Error:', error);
@@ -583,11 +615,35 @@ function updatePlanLists(){
         console.error('Error:', error);
     });
 }
+function sendSavedTrips(){
+    fetch(`http://localhost:3000/postSavedTrips`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            savedTrips: userdata.savedRecommIds,
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        return true;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 function findCheckedRecomms(){
     const items = document.querySelectorAll('.recommCheck')
     items.forEach(item => {
-        if(item.checked && !userdata.savedRecommIds.includes(item.id)){
-            userdata.savedRecommIds.push(item.id);
+        const rawId = item.id.replace('check-', '');
+        if(item.checked && !userdata.savedRecommIds.includes(rawId.id)){
+            userdata.savedRecommIds.push(rawId.id);
         }
     })
     saveUsrData();
