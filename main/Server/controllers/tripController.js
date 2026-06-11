@@ -32,7 +32,7 @@ const generatePackingItems = (type) => {
 
 exports.saveTrip = async (req, res) => {
     try {
-        const { destination, startDate, endDate, vacationType} = req.body;
+        const { destination, startDate, endDate, vacationType, dayPlanner} = req.body;
 
         const user = await User.findById(req.user);
         if (!user) {
@@ -46,7 +46,8 @@ exports.saveTrip = async (req, res) => {
             startDate,
             endDate,
             vacationType,
-            packingList: generatedList
+            packingList: generatedList,
+            dayPlanner: dayPlanner || {}
         }
 
         user.savedPlans.push(newTrip);
