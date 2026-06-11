@@ -187,10 +187,10 @@
                                              <textarea name="dayPlan" id="dayPlanText" rows="2"></textarea>
                                         </div>
                                         <button type="submit">
-                                             +
+                                             ✏️
                                         </button>
                                         <button type="button" onclick="delLi(this)" id="deleteBtnPl" class="hidden">
-                                             -
+                                             🗑️
                                         </button>
                                    </form>
                               </div>
@@ -208,10 +208,10 @@
                                              <textarea name="packList" id="packText" rows="2"></textarea>
                                         </div>
                                         <button type="submit">
-                                             +
+                                             ✏️
                                         </button>
                                         <button type="button" onclick="delLi(this)" id="deleteBtnPack" class="hidden">
-                                             -
+                                             🗑️
                                         </button>
                                    </form>
                               </div>
@@ -230,36 +230,48 @@
     </footer>
     <dialog id="loginDialog" class="dialog">
       <form id="loginForm" class="logForm">
-          <div>
+          <div class="log-title">
+               <h3>Welcome Back</h3>
+               <p>Sign in to your when2go account</p>
+          </div>
+          <div class="auth-form">
                <label for="username">Username:</label>
-               <input type="text" id="logUsername" name="username" required>
+               <input type="text" id="logUsername" name="username" class="auth-input" placeholder="user@gmail.com" required>
           </div>
-          <div>
+          <div class="input-group">
                <label for="password">Password:</label>
-               <input type="password" id="logPassword" name="password" required>
+               <input type="password" id="logPassword" name="password" class="auth-input" placeholder="••••••••" required>
           </div>
           <div>
-               <button type="submit">Login</button>
-               <button type="button" id="cancelLogin" onclick="closeDialog()">Cancel</button>
+               <button type="submit" class="dialog-btn">Login</button>
           </div>
-          <p>If you are new here, sign up <a onclick="toggleLoginDialog()">here</a></p>
+          <div class="auth-footer">
+               <span>New here? <button type="button" class="auth-secondary-btn" onclick="toggleLoginDialog()">Create account</button></span>
+               <button type="button" id="cancelSign" class="dialog-btn" onclick="closeDialog()">Cancel</button>
       </form>
     </dialog>
     <dialog id="signupDialog" class="dialog">
       <form id="signupForm" class="logForm">
-          <div>
+          <div class="log-title">
+               <h3>Welcome Back</h3>
+               <p>Sign up for your when2go account</p>
+          </div>
+          <div class="auth-form">
                <label for="username">Username:</label>
-               <input type="text" id="signUsername" name="username" required>
+               <input type="text" id="signUsername" name="username" class="auth-input" placeholder="user@gmail.com" required>
           </div>
-          <div>
+          <div class="input-group">
                <label for="password">Password:</label>
-               <input type="password" id="signPassword" name="password" required>
+               <input type="password" id="signPassword" name="password" class="auth-input" placeholder="••••••••" required>
+               <input type="password" id="repeatSignPassword" class="auth-input" placeholder="Repeat password" required>
           </div>
           <div>
-               <button type="submit">Sign up</button>
-               <button type="button" id="cancelSign" onclick="closeDialog()">Cancel</button>
+               <button type="submit" class="dialog-btn">Sign up</button>
           </div>
-          <p>If you already have an account, login <a onclick="toggleLoginDialog()">here</a></p>
+          <div class="auth-footer">
+               <span>Already have an account? <button type="button" class="auth-secondary-btn" onclick="toggleLoginDialog()">Log In</button></span>
+               <button type="button" id="cancelSign" class="dialog-btn" onclick="closeDialog()">Cancel</button>
+          </div>
       </form>
     </dialog>
     <dialog id="accountSavedRecoms" class="dialog">
@@ -270,6 +282,16 @@
                <p>Your saved trips</p>
           </div>
       <ul id="recommsList"></ul>
+    </dialog>
+     <dialog id="loginQuest" class="dialog">
+          <div id="loginQuestContain" class="loginQuest">
+               <div id="questCloseBtn">
+                    <button onclick="closeDialog()">X</button>
+               </div>
+               <p class="titleText">Hey, do you want to save trips to look at later?</p>
+               <button type="button" onclick="toggleLoginDialog()">log in or sign up</button>
+               <p><a onclick="userdata.savedRecommIds=[userdata.recommId]; toggleView('recomms'); closeDialog();">No, i don't want to save any trips. Continue</a></p>
+          </div>
     </dialog>
 </body>
 </html>

@@ -1,26 +1,26 @@
-const { raw } = require("body-parser");
-
 let userdata = {
     days: null,
     months:[],
     categories:[],
     selectDates:[],
     selectCalD:null,
-    session: 'true',
+    session: true,
     recommId:'575647655',
     currentPage:'mainPage',
     startMonth: null,
+    sessionkey : null,
     savedPackingLists: {},
     savedDayPlanners: {},
     savedRecommIds: [],
     tripData: {},
 };
 window.addEventListener('load', () => {
+    getSession();
     let savedData = localStorage.getItem('when2go_data');
     if (savedData) {
         userdata = JSON.parse(savedData);
     }
-    checkState();
+    sessionBtns();
     document.getElementById('mainPage').classList.add('hidden');
     document.getElementById(`${userdata.currentPage}`).classList.remove('hidden');
     userdata.selectCalD=null;
@@ -37,8 +37,8 @@ window.addEventListener('load', () => {
     }
     fillInSaved();
 });
-function checkState(){
-    if (userdata.session === 'true') {
+function sessionBtns(){
+    if (userdata.session === true) {
     document.getElementById('loginBtn').classList.add('hidden');
     document.getElementById('accountBtn').classList.remove('hidden');
     document.getElementById('logoutBtn').classList.remove('hidden');
@@ -76,14 +76,14 @@ function saveUsrData(){
 }
 function logoutUsr(){
     userdata.currentPage='mainPage'
-    userdata.session='false';
+    userdata.session = false;
     userdata.days=0;
     userdata.months=[];
     userdata.categories=[];
     userdata.selectDates=[];
     userdata.selectCalD=0;
     userdata.recommId=[];
-    checkState();
+    sessionBtns();
     saveUsrData();
     window.location.reload();
 }
@@ -123,6 +123,8 @@ function toggleView(currentPage){
     console.log("days"+userdata.days);
     console.log("months"+userdata.months.length);
     console.log("category"+userdata.categories.length);
+    console.log("saved"+userdata.savedRecommIds.length);
+    console.log("session"+userdata.session);
     
     switch(currentPage){
         case 'start':
@@ -143,18 +145,25 @@ function toggleView(currentPage){
                 userdata.currentPage='chPage3';
             document.getElementById('chPage2').classList.add('hidden');
             document.getElementById('chPage3').classList.remove('hidden');
-            getRecomms();}
+            getRecomms();
+        }
             break;
         case 'recomms':
-            // if(document.getElementsByClassName('recommPick selected').length>0){
-            userdata.currentPage='finPage';
-            document.getElementById('chPage3').classList.add('hidden');
-            document.getElementById('finPage').classList.remove('hidden');
-            getTripData(userdata.recommId);
-            loadInTripData(userdata.recommId);
-            generateCalendar();
-            fillSavedPackLi();
-            // }
+            findCheckedRecomms();
+            if(userdata.session || document.getElementById('loginQuest').open){
+                // if(document.getElementsByClassName('recommPick selected').length>0){
+                    userdata.currentPage='finPage';
+                    document.getElementById('chPage3').classList.add('hidden');
+                    document.getElementById('finPage').classList.remove('hidden');
+                    getTripData(userdata.recommId);
+                    loadInTripData(userdata.recommId);
+                    generateCalendar();
+                    fillSavedPackLi();
+                // }
+            }else if (!userdata.session && userdata.savedRecommIds.filter(id => id !== userdata.recommId)) {
+                document.getElementById('loginQuest').showModal();
+            }
+            
             break;
         case 'timeframeBack':
             userdata.currentPage='mainPage';
@@ -416,15 +425,14 @@ function createLi(choice){
 function toggleLoginDialog(){
     const login=document.getElementById('loginDialog')
     const signup=document.getElementById('signupDialog')
+    closeDialog();
     if(!login.open && !signup.open){
         login.showModal()
     }
     else if(login.open && !signup.open){
         signup.showModal();
-        login.close();
     }
     else if(!login.open && signup.open){
-        signup.close();
         login.showModal();
     }
 }
@@ -432,9 +440,11 @@ function closeDialog(){
   const login=document.getElementById('loginDialog')
   const signup=document.getElementById('signupDialog')   
   const account=document.getElementById('accountSavedRecoms')   
+  const logQuest=document.getElementById('loginQuest') 
     login.close();
     signup.close();
     account.close();
+    logQuest.close();
 }
 async function toggleRecommsUl(){
     const accountDial = document.getElementById('accountSavedRecoms')
@@ -443,24 +453,35 @@ async function toggleRecommsUl(){
     if(userdata.savedRecommIds){
         list.innerHTML = '';
         for(const recomm of userdata.savedRecommIds){
-            if (!userdata.tripData[recomm]) {
-                await getTripData(recomm);
+            if(recomm !==userdata.recommId){
+                if (!userdata.tripData[recomm]) {
+                    await getTripData(recomm);
+                }
+                const box = document.createElement('li')
+                const dateList = userdata.tripData[recomm].Dates
+                const dateRange = `${dateList[0]} - ${dateList[dateList.length-1]}`
+                box.id= `toBeDeleted-${recomm}`;
+                box.innerHTML = `
+                    <div class="saved-trip-details">
+                        <div class="saved-location-group">
+                            <span class="location-pin-icon">📍</span>
+                            <p class="saved-trip-location">${userdata.tripData[recomm].Location}</p> 
+                        </div>
+                        <p class="saved-trip-dates">${dateRange}</p> 
+                    </div>
+                    
+                    <div class="saved-trip-actions">
+                        <button onclick="openSavedTrip(this.id)" id="open-${recomm}" class="btn-trip-action btn-edit">
+                            ✏️ Edit
+                        </button>
+                        <button onclick="deleteSavedTrip(this.id)" id="delete-${recomm}" class="btn-trip-action btn-delete">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                `;
+                list.append(box);
             }
-            const box = document.createElement('li')
-            const dateList = userdata.tripData[recomm].Dates
-            const dateRange = `${dateList[0]} - ${dateList[dateList.length-1]}`
-            box.id= `toBeDeleted-${recomm}`;
-            box.innerHTML = `
-                <div>
-                    <p> ${userdata.tripData[recomm].Location}</p> 
-                    <p> ${dateRange}</p> 
-                </div>
-                <div>
-                    <button onclick='openSavedTrip(this.id)' id = 'open-${recomm}'>Edit</button>
-                    <button onclick='deleteSavedTrip(this.id)' id = 'delete-${recomm}'>Delete</button>
-                </div>
-            `
-            list.append(box);
+            
         }
     }
 }
@@ -475,6 +496,9 @@ function openSavedTrip(id){
     document.getElementById(`finPage`).classList.remove('hidden')
 }
 function loadInTripData(id){
+    if(!userdata.savedRecommIds.filter(savedId => savedId===id)){
+        userdata.savedRecommIds.push(id);
+    }
     userdata.recommId=id;
     userdata.selectDates = userdata.tripData[id].Dates;
     userdata.months = userdata.tripData[id].Months;
@@ -483,46 +507,88 @@ function loadInTripData(id){
     saveUsrData();
 }
 function getRecomms(){
-    fetch('http://localhost:3000/getTripRecommendations', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
+    const mockRecommendations = [
+        {
+            "ID": "575647655",
+            "City": "Istanbul",
+            "Country": "Turkey",
+            "Pic": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=300&q=80",
+            "DateRange": "15.07.2026 - 22.07.2026"
         },
-        body: JSON.stringify({
-            tripLength: userdata.days,
-            months: userdata.months,
-            categories: userdata.categories
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        {
+            "ID": "984321554",
+            "City": "Marrakech",
+            "Country": "Morocco",
+            "Pic": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?auto=format&fit=crop&w=300&q=80",
+            "DateRange": "01.08.2026 - 08.08.2026"
+        },
+        {
+            "ID": "223411987",
+            "City": "Casablanca",
+            "Country": "Morocco",
+            "Pic": "https://images.unsplash.com/photo-1559586616-3df185a1e6c2?auto=format&fit=crop&w=300&q=80",
+            "DateRange": "10.08.2026 - 17.08.2026"
         }
-        return response.json();
-    })
-    .then(data => {
-        const container = document.getElementById('recommendsList');
-        for(const recomm of data){
-            const li = document.createElement('li')
-            li.className = "recomm-item";
-            li.id=`item-${recomm.id}`;
-            li.innerHTML = `
-                <button type="button" class='recommPick' id="${recomm.ID}" onclick='toggleRecommPick(this)'>
-                    <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
-                    <div class="recomm-info">
-                        <strong>${recomm.City}, ${recomm.Country}</strong><br>
-                        <small>${recomm.DateRange}</small>
-                    </div>
-                </button>
-                <div>
-                    <input type="checkbox" class='recommCheck' id="check${recomm.ID}">
+    ];
+    const container = document.getElementById('recommendsList');
+    container.innerHTML = "";
+    for(const recomm of mockRecommendations){
+        const li = document.createElement('li')
+        li.className = "recomm-item";
+        li.innerHTML = `
+            <button type="button" class='recommPick' id="pick-${recomm.ID}" onclick='toggleRecommPick(this)'>
+                <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
+                <div class="recomm-info">
+                    <strong>${recomm.City}, ${recomm.Country}</strong><br>
+                    <small>${recomm.DateRange}</small>
                 </div>
-                `;
-            container.append(li)}
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+            </button>
+            <div>
+                <input type="checkbox" class='recommCheck' id="check-${recomm.ID}">
+            </div>
+            `;
+        container.append(li)}
+
+    // fetch('http://localhost:3000/getTripRecommendations', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //         tripLength: userdata.days,
+    //         months: userdata.months,
+    //         categories: userdata.categories
+    //     })
+    // })
+    // .then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    // })
+    // .then(data => {
+    //     const container = document.getElementById('recommendsList');
+    //     container.innerHTML = "";
+    //     for(const recomm of data){
+    //         const li = document.createElement('li')
+    //         li.className = "recomm-item";
+    //         li.innerHTML = `
+    //             <button type="button" class='recommPick' id="pick-${recomm.ID}" onclick='toggleRecommPick(this)'>
+    //                 <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
+    //                 <div class="recomm-info">
+    //                     <strong>${recomm.City}, ${recomm.Country}</strong><br>
+    //                     <small>${recomm.DateRange}</small>
+    //                 </div>
+    //             </button>
+    //             <div>
+    //                 <input type="checkbox" class='recommCheck' id="check-${recomm.ID}">
+    //             </div>
+    //             `;
+    //         container.append(li)}
+    // })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    // });
 }
 function toggleRecommPick(element){
     const currentSelect = document.getElementsByClassName('recommPick selected')
@@ -536,32 +602,59 @@ function toggleRecommPick(element){
     saveUsrData();
 }
 async function getTripData(ID){
-    let URL = `http://localhost:3000/getTripData?Id=${ID}`
-    fetch(URL, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
+    const mockDataPackage = {
+        "id": ID, // Dynamically use whatever ID was requested
+        "Location": "Istanbul, Turkey",
+        "Months": ["Jul"],
+        "Dates": ["15.7", "16.7", "17.7", "18.7", "19.7", "20.7", "21.7", "22.7"],
+        "PackList": {
+            [`${ID}`]: [
+                { "text": "Passport", "checked": true },
+                    { "text": "Sunscreen", "checked": false },
+                    { "text": "Comfortable Walking Shoes", "checked": false }
+                ]
+            },
+        "DayPLanners": {
+            [`${ID}_15.7`]: [
+                "Arrive at Istanbul Airport",
+                "Check into hotel in Beyoğlu",
+                "Dinner near Galata Tower"
+            ],
+            [`${ID}_16.7`]: [
+                "Morning walk through Sultanahmet",
+                "Visit Hagia Sophia",
+                "Bosphorus Sunset Cruise"
+            ]
         }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        const dataId = data.id;
-        const alreadySaved = userdata.tripData[dataId];
+    };
+    userdata.tripData[ID]=mockDataPackage;
+    saveUsrData();
+    // let URL = `http://localhost:3000/getTripData?Id=${ID}`
+    // fetch(URL, {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     }
+    // })
+    // .then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    // })
+    // .then(data => {
+    //     const dataId = data.id;
+    //     const alreadySaved = userdata.tripData[dataId];
 
-        if (!alreadySaved) {
-            userdata.tripData[dataId]=data;
-            saveUsrData();
-        }
-        return true;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    //     if (!alreadySaved) {
+    //         userdata.tripData[dataId]=data;
+    //         saveUsrData();
+    //     }
+    //     return true;
+    // })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    // });
 }
 async function deleteSavedTrip(ID){
     const rawId = ID.replace('delete-', '')
@@ -632,6 +725,35 @@ function sendSavedTrips(){
         return response.json();
     })
     .then(data => {
+        for(const trip of data){
+            userdata.savedRecommIds.push(trip)
+        }
+        return true;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+function getSession(){
+    fetch(`http://localhost:3000/session`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify({
+        //     ,
+        // })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        userdata.sessionkey= data
+        sessionBtns();
         return true;
     })
     .catch(error => {
@@ -642,8 +764,10 @@ function findCheckedRecomms(){
     const items = document.querySelectorAll('.recommCheck')
     items.forEach(item => {
         const rawId = item.id.replace('check-', '');
-        if(item.checked && !userdata.savedRecommIds.includes(rawId.id)){
-            userdata.savedRecommIds.push(rawId.id);
+        if(item.checked && !userdata.savedRecommIds.includes(rawId)){
+            userdata.savedRecommIds.push(rawId);
+        }else if(!item.checked && userdata.savedRecommIds.includes(rawId)){
+            userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId);
         }
     })
     saveUsrData();
