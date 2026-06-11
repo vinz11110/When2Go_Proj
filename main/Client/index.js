@@ -21,13 +21,18 @@ window.addEventListener('load', () => {
         userdata = JSON.parse(savedData);
     }
     sessionBtns();
-    document.getElementById('mainPage').classList.add('hidden');
-    document.getElementById(`${userdata.currentPage}`).classList.remove('hidden');
     userdata.selectCalD=null;
     if(userdata.currentPage==='finPage'){
         if(userdata.recommId){
         generateCalendar();
         fillSavedPackLi();
+        const finPTitle = document.getElementById('finPageTitle');
+        if (finPTitle && userdata.tripData[userdata.recommId]) {
+        finPTitle.textContent = userdata.tripData[userdata.recommId].Location;
+        }
+        }else{
+            userdata.currentPage ='mainPage'
+             window.location.reload();
         }
     }
     if(userdata.currentPage==='chPage3'){
@@ -36,6 +41,8 @@ window.addEventListener('load', () => {
         }
     }
     fillInSaved();
+    document.getElementById('mainPage').classList.add('hidden');
+    document.getElementById(`${userdata.currentPage}`).classList.remove('hidden');
 });
 function sessionBtns(){
     if (userdata.session === true) {
@@ -119,7 +126,7 @@ function toggleSelected(element){
     }
     saveUsrData();
 }
-function toggleView(currentPage){
+async function toggleView(currentPage){
     console.log("days"+userdata.days);
     console.log("months"+userdata.months.length);
     console.log("category"+userdata.categories.length);
@@ -153,12 +160,13 @@ function toggleView(currentPage){
             if(userdata.session || document.getElementById('loginQuest').open){
                 // if(document.getElementsByClassName('recommPick selected').length>0){
                     userdata.currentPage='finPage';
-                    document.getElementById('chPage3').classList.add('hidden');
-                    document.getElementById('finPage').classList.remove('hidden');
-                    getTripData(userdata.recommId);
+                    await getTripData(userdata.recommId);
                     loadInTripData(userdata.recommId);
                     generateCalendar();
                     fillSavedPackLi();
+                    document.getElementById('chPage3').classList.add('hidden');
+                    document.getElementById('finPage').classList.remove('hidden');
+                    sendSavedTrips();
                 // }
             }else if (!userdata.session && userdata.savedRecommIds.filter(id => id !== userdata.recommId)) {
                 document.getElementById('loginQuest').showModal();
@@ -345,6 +353,7 @@ function delLi(element){
         e.remove();
     }
     checkSelectLi(element);
+    updatePlanLists();
     saveUsrData();
 }
 function checkSelectLi(element){
@@ -425,14 +434,16 @@ function createLi(choice){
 function toggleLoginDialog(){
     const login=document.getElementById('loginDialog')
     const signup=document.getElementById('signupDialog')
-    closeDialog();
     if(!login.open && !signup.open){
+        closeDialog();
         login.showModal()
     }
     else if(login.open && !signup.open){
+        closeDialog();
         signup.showModal();
     }
     else if(!login.open && signup.open){
+        closeDialog();
         login.showModal();
     }
 }
@@ -658,31 +669,33 @@ async function getTripData(ID){
 }
 async function deleteSavedTrip(ID){
     const rawId = ID.replace('delete-', '')
-    let URL = `http://localhost:3000/deleteSavedTrip?Id=${rawId}`
-    fetch(URL, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }else if (response.ok) {
-            userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
-            saveUsrData()
-            const deletedElement = document.getElementById(`toBeDeleted-${rawId}`)
-            deletedElement.remove();
-        }
+    userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
+    // const rawId = ID.replace('delete-', '')
+    // let URL = `http://localhost:3000/deleteSavedTrip?Id=${rawId}`
+    // fetch(URL, {
+    //     method: 'DELETE',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     }
+    // })
+    // .then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //     }else if (response.ok) {
+    //         userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
+    //         saveUsrData()
+    //         const deletedElement = document.getElementById(`toBeDeleted-${rawId}`)
+    //         deletedElement.remove();
+    //     }
         
-        return response.json();
-    })
-    .then(data => {
-        return;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    //     return response.json();
+    // })
+    // .then(data => {
+    //     return;
+    // })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    // });
 }
 function updatePlanLists(){
     fetch(`http://localhost:3000/updateLists?Id=${userdata.recommId}`, {
@@ -754,6 +767,7 @@ function getSession(){
     .then(data => {
         userdata.sessionkey= data
         sessionBtns();
+        sendSavedTrips();
         return true;
     })
     .catch(error => {

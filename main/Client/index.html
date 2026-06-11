@@ -155,67 +155,72 @@
           </section>
           <section id="finPage" class="viewF hidden">
                <section id="contentContainF" class="content">
-                    <div class="leftAlign">
-                         <article class="ContainerCal" id="CalenderOutContainer" >
-                              <div id="calTitleNav">
-                                   <button class="calNavBtn" onclick="calChangeMonth('-')">
-                                        last
-                                   </button>
-                                   <h2 id="calTitle">Title</h2>
-                                   <button class="calNavBtn" onclick="calChangeMonth('+')">
-                                        next
-                                   </button>
-                              </div>
-                              <div id="calendarGrid" class="calendarContain">
-                                   
-                              </div>
-                         </article>
-                         <article class="weatherDash">
-                              <h2>Hey</h2>
-                         </article>
+                    <div>
+                         <h1 id="finPageTitle">Destination</h1>
                     </div>
-                    <div class="rightAlign">
-                         <article id="dayPlanContain">
-                              <h2>Dayplanner</h2>
-                              <div class="dayPlanner customList">
-                                   <div id="planListTopContain">
-                                        <ul class="dayPlanList" id="planLiContain"> 
-                                        </ul>
+                    <div id="ccfElements">
+                         <div class="leftAlign">
+                              <article class="ContainerCal" id="CalenderOutContainer" >
+                                   <div id="calTitleNav">
+                                        <button class="calNavBtn" onclick="calChangeMonth('-')">
+                                             last
+                                        </button>
+                                        <h2 id="calTitle">Title</h2>
+                                        <button class="calNavBtn" onclick="calChangeMonth('+')">
+                                             next
+                                        </button>
                                    </div>
-                                   <form onsubmit="createLi('plan'); return false;" id="planForm">
-                                        <div>
-                                             <textarea name="dayPlan" id="dayPlanText" rows="2"></textarea>
-                                        </div>
-                                        <button type="submit">
-                                             ✏️
-                                        </button>
-                                        <button type="button" onclick="delLi(this)" id="deleteBtnPl" class="hidden">
-                                             🗑️
-                                        </button>
-                                   </form>
-                              </div>
-                         </article>
-                         
-                         <article class="packingListContain">
-                              <h2>Packing List</h2>
-                              <div class="packList customList">
-                                   <div id="planListTopContain">
-                                        <ul class="packingListli" id="packListList">
-                                        </ul>
+                                   <div id="calendarGrid" class="calendarContain">
+                                        
                                    </div>
-                                   <form onsubmit="createLi('pack'); return false;" id="packForm">
-                                        <div>
-                                             <textarea name="packList" id="packText" rows="2"></textarea>
+                              </article>
+                              <article class="weatherDash">
+                                   <h2>Hey</h2>
+                              </article>
+                         </div>
+                         <div class="rightAlign">
+                              <article id="dayPlanContain">
+                                   <h2>Dayplanner</h2>
+                                   <div class="dayPlanner customList">
+                                        <div id="planListTopContain">
+                                             <ul class="dayPlanList" id="planLiContain"> 
+                                             </ul>
                                         </div>
-                                        <button type="submit">
-                                             ✏️
-                                        </button>
-                                        <button type="button" onclick="delLi(this)" id="deleteBtnPack" class="hidden">
-                                             🗑️
-                                        </button>
-                                   </form>
-                              </div>
-                         </article>
+                                        <form onsubmit="createLi('plan'); return false;" id="planForm">
+                                             <div>
+                                                  <textarea name="dayPlan" id="dayPlanText" rows="2"></textarea>
+                                             </div>
+                                             <button type="submit">
+                                                  ✏️
+                                             </button>
+                                             <button type="button" onclick="delLi(this)" id="deleteBtnPl" class="hidden">
+                                                  🗑️
+                                             </button>
+                                        </form>
+                                   </div>
+                              </article>
+                              
+                              <article class="packingListContain">
+                                   <h2>Packing List</h2>
+                                   <div class="packList customList">
+                                        <div id="planListTopContain">
+                                             <ul class="packingListli" id="packListList">
+                                             </ul>
+                                        </div>
+                                        <form onsubmit="createLi('pack'); return false;" id="packForm">
+                                             <div>
+                                                  <textarea name="packList" id="packText" rows="2"></textarea>
+                                             </div>
+                                             <button type="submit">
+                                                  ✏️
+                                             </button>
+                                             <button type="button" onclick="delLi(this)" id="deleteBtnPack" class="hidden">
+                                                  🗑️
+                                             </button>
+                                        </form>
+                                   </div>
+                              </article>
+                         </div>
                     </div>
                </section>
                <div class="navButtonContain">

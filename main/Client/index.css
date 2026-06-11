@@ -408,7 +408,7 @@ dialog[open] {
 /* Active background selection layout state overrides */
 .recommPick.selected {
     background-color: #b2e1ed !important; /* Light emerald tint */
-    border: 9px solid #f3f3f3;
+    border: 9px solid #c8c8c8;
 }
 
 .recommPick.selected + div + .recomm-info strong {
@@ -517,10 +517,10 @@ dialog[open] {
 #loginQuestContain > button {
     width: 100%;
     padding: 14px 24px;
-    font-size: 1.05rem;
+    font-size: 1.3rem;
     font-weight: 600;
     color: #ffffff;
-    background-color: #3b82f6; /* Vivid royal blue */
+    background-color: #aacddc; /* Vivid royal blue */
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -531,7 +531,7 @@ dialog[open] {
 }
 
 #loginQuestContain > button:hover {
-    background-color: #2563eb;
+    background-color: #65b0d1d9;
     box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
 }
 
@@ -787,8 +787,20 @@ dialog[open] {
 #contentContainF{
     grid-area: content;
     display: flex;
-    flex-direction: row;
+    flex-direction: column; /* Stacks the Title row *above* the Workspace elements */
+    gap: 20px;              /* Clean separation between your title and workspace grids */
+    padding: 24px;
     height: 100%;
+    box-sizing: border-box;
+}
+#ccfElements{
+    display: flex;
+    flex-direction: row;    /* Restores side-by-side split screen positioning */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 32px;              /* Perfect breathing space between Left & Right workspaces */
+    width: 100%;
+    flex-grow: 1;
 }
 
 .leftAlign{
