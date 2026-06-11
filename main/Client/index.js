@@ -41,7 +41,11 @@ window.addEventListener('load', () => {
         }
     }
     fillInSaved();
-    document.getElementById('mainPage').classList.add('hidden');
+    const views = ['mainPage', 'chPage1', 'chPage2', 'chPage3', 'finPage'];
+    views.forEach(view => {
+        const el = document.getElementById(view);
+        if (el) el.classList.add('hidden');
+    });
     document.getElementById(`${userdata.currentPage}`).classList.remove('hidden');
 });
 function sessionBtns(){
@@ -108,9 +112,9 @@ function multiChoice(choice, element, type){
         data.push(choice)
         toggleSelected(element)
     }else {
-        if(data==userdata.categories){
+        if(data===userdata.categories){
           userdata.categories = data.filter(c => c !== choice)  
-        }else if (data==userdata.months){
+        }else if (data===userdata.months){
           userdata.months = data.filter(c => c !== choice)  
         }
         toggleSelected(element)
