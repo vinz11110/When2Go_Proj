@@ -19,4 +19,6 @@ router.get('/:tripId', auth, tripController.getTripById);
 
 router.put(':/tripId/packinglist', auth, tripController.updatePackingList);
 
+router.delete('/:tripId', auth, tripController.deleteTrip);
+
 module.exports = router;

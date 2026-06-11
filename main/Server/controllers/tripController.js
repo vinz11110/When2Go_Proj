@@ -147,3 +147,28 @@ exports.updatePackingList = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server updating error list'});
     }
 };
+
+exports.deleteTrip = async (req, res) => {
+    try {
+        const {tripId } = req.params;
+
+        const user = await User.findById(req.user);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found'});
+        }
+
+        const trip = user.savedPlans.id(tripId);
+        if (!trip) {
+            return res.status(404).json({ success: false, message: 'Trip not found'});
+        }
+
+        user.savedPlans.pull(tripId);
+
+        await user.save();
+
+        res.status(200).json({ success: true, message: 'Trip deleted successfully'});
+    }   catch (error) {
+        console.error('Trip deletion error: ', error);
+        res.status(500).json({ success: false, message: 'Server error while deleting trip'});
+    }
+};
