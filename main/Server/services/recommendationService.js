@@ -91,7 +91,6 @@ async function getRecommendations(month, vacationType){
 }
 
 module.exports = {
-    getDaysUntilTrip,
     calculateDestinationScore,
     getRecommendations
 };

@@ -11,7 +11,12 @@ exports.getForecast = async(req,res) => {
                 Error: "City not Found"
             });
 
-        res.json(weather);
+        else{
+            res.status(201).json({
+                success: true,
+                message: weather
+        });
+        } 
     } catch (error) {
         res.status(500).json({
             message: "Internal Server Error"
