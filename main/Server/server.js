@@ -17,7 +17,7 @@ app.use('/api/auth', authRoutes);
 const tripRoutes = require('./routes/tripRoutes');
 app.use('/api/trips', tripRoutes);
 
-const weatherRoutes = require("./weatherRoutes");
+const weatherRoutes = require("./routes/weatherRoutes");
 app.use("/api/weather", weatherRoutes);
 
 const climateRoutes = require("./routes/climateRoutes")

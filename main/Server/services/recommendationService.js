@@ -82,7 +82,12 @@ async function getRecommendations(month, vacationType){
         (a,b) => b.score - a.score
     );
 
-    return scored.slice(0,10);
+    return scored.slice(0,10).map(d => ({
+        city: d.city,
+        country: d.country,
+        description: d.description,
+        score: d.score
+    }))
 }
 
 module.exports = {
