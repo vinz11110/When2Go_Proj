@@ -2,11 +2,12 @@ const climateService = require("../services/climateService")
 
 exports.getClimate = async (req, res) => {
     try {
-        const destionation = await climateService.getClimateData(req.params.city)
+        const destination = await climateService.getClimateData(req.params.city)
         
-    } catch {
+        res.json(destination)
+    } catch (error) {
         res.status(500).json({
-            message: "Interal Server Error"
+            error: "Interal Server Error"
         });
     }
 }
