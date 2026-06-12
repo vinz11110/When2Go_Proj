@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const listService = require('../services/listService')
 
 const generatePackingItems = (type) => {
 
@@ -39,7 +40,7 @@ exports.saveTrip = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found'});
         }
 
-        const generatedList = generatePackingItems(vacationType);
+        const generatedList = listService.generatePackingItems(vacationType);
         // attaching list to the newly generated trip
         const newTrip = {
             destination,
