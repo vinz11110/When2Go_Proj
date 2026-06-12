@@ -1,9 +1,7 @@
 const Destination = require("../models/destination");
 const weatherService = require("./weatherService");
-const climateService = require("./climateService");
 const listService = require("./listService");
 const User = require("../models/User")
-const tripService = require("./tripService")
 
 function getDaysUntilTrip(startDate) {
     const today = new Date();
@@ -14,6 +12,53 @@ function getDaysUntilTrip(startDate) {
     const daysUntilTrip = Math.ceil(difference / (1000 * 60 * 60 * 24) );
 
     return daysUntilTrip;
+}
+
+function getBestMonthScore(destination, categories, months){
+    let bestScore = -Infinity;
+    let BestMonth = null;
+
+    for(const month of months){
+        let totalScore = 0;
+
+        for(const category of categories){
+            totalScore += climateBasedScore(destination, category, month);
+        }
+        const score = totalScore / categories.length;
+
+        if(score > bestScore){
+            bestScore = score;
+            BestMonth = month;
+        }
+    }
+
+
+
+    return {
+        score: bestScore,
+        month: BestMonth
+    };
+}
+
+function generateTripDates(month, duration) {
+    const currentYear = new Date().getFullYear();
+
+    const monthIndex = [
+        "january","february","march","april",
+        "may","june","july","august","september",
+        "october","november","december"
+    ].indexOf(month.toLowerCase());
+
+    const startDate = new Date(currentYear, monthIndex, 1);
+
+    const endDate = new Date(startDate)
+
+    endDate.setDate(endDate.getDate() + duration);
+
+    return {
+        startDate,
+        endDate
+    }
 }
 
 
@@ -29,20 +74,20 @@ function forecastBasedScore(destination, vacationType) {
     return score;
 }
 
-function climateBasedScore(destination,vacationType, month) {
+function climateBasedScore(destination,category, month) {
     const weather = destination.weather[month.toLowerCase()]
-    const preference = vacationPreferences[vacationType];
+    const preference = vacationPreferences[category];
 
     let score = 100;
 
     score -= Math.abs((weather.avg_temp - preference.idealTemp) * preference.temperatureImpact)
     score -= Math.abs(weather.rain_probability * preference.rainImpact)
     score -= Math.abs(weather.avg_wind * preference.windImpact)
-    if(destination.rainProbability > preference.maxRainProbability){
+    if(weather.rain_probability > preference.maxRainProbability){
 
     }
 
-    return score;
+    return Math.max(0, score);
 }
 
 
@@ -66,79 +111,89 @@ const vacationPreferences = {
     adventure:  {idealTemp: 18, temperatureImpact: 1, maxRainProbability: 50, rainImpact: 0.25, windImpact: 1},
     wellness:   {idealTemp: 22, temperatureImpact: 1, maxRainProbability: 50, rainImpact: 0.05, windImpact: 1}
 };
-async function createTrips(recommendations, userId, month, vacationType, duration){
+
+
+async function createTrips(recommendations, userId, categories, duration){
     const user = await User.findById(userId)
 
+
+
         const trips = recommendations.map(
-            recommendation => ({
+            recommendation => {
+                const {
+                    startDate,
+                    endDate
+                } = generateTripDates(
+                    recommendation.recommendedMonth, duration
+                );
+
+                return {
                     destination: recommendation.city,
-                    duration,
+                    tripLength: duration,
                     startDate,
                     endDate,
-                    vacationType,
-                    packingList: listService.generatePackingItems(vacationType),
+                    vacationType: categories[0],
+                    packingList:
+                        listService.generatePackingItems(categories[0]),
                     dayPlanner: {},
-                    score: recommendation.score
-                })
-            );
-
-            user.savedPlans.push(...plans);
+                    score: recommendation.score,
+                };
+            }
+        );
+            if(!user){
+                throw new Error("User not found");
+            }
+            user.savedPlans.push(...trips);
 
             await user.save();
 
-            return user.savedPlans;
+            return user.savedPlans.slice(-trips.length);
         }
 
 
-async function getRecommendations(month, vacationType, userId, duration){
-    const destinations = await Destination.find();
+async function getRecommendations(months, categories, userId, tripLength) {
 
+    const destinations =
+        await Destination.find();
 
-    const categoryMatches = destinations.filter(
-        d => d.categories.includes(vacationType)
+    const matchingDestinations =
+        destinations.filter(
+            destination =>
+                categories.some(
+                    category =>
+                        destination.categories.includes(
+                            category
+                        )
+                )
+        );
+
+    const scored = matchingDestinations.map(
+            destination => {
+                const best = getBestMonthScore(destination, categories, months);
+
+                return {
+                    ...destination.toObject(),
+                    score: best.score,
+                    recommendedMonth: best.month
+                };
+            }
+    ); 
+
+    scored.sort(
+        (a, b) => b.score - a.score
     );
 
-    const scored = categoryMatches.map(
-        destination => ({
-            ...destination.toObject(),
-
-            score: climateBasedScore(destination,vacationType,month)
-            
-        })
-    );
-
-    scored.sort( 
-        (a,b) => b.score - a.score
-    );
-
-    const top10 = scored.slice(0,10).map(d => ({
-        city: d.city,
-        country: d.country,
-        description: d.description,
-        score: d.score
-    }));
+    const top10 = scored.slice(0, 10);
 
     return await createTrips(
         top10,
         userId,
-        month,
-        vacationType,
-        duration
-    )
+        categories,
+        tripLength
+    );
 }
 
-function buildTrip(destination, vacationType){
-    return {
-        destination,
-        startDate,
-        endDate,
-        vacationType,
-        packingList:
-            listService.generatePackingItems(vacationType),
-        dayPlanner: {}
-        
-    }
-}
+
 
 module.exports = {
     getDaysUntilTrip,
