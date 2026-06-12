@@ -1,20 +1,19 @@
-const recommendationService = require("../services/recommendationService")
+const recommendationService = require("../services/recommendationService");
+const jwt = require("jsonwebtoken");
 
     exports.getRecomms = async(req, res) => {
         try {
             const {
-                userId,
                 triplength,
-                month,
-                vacationType
+                months,
+                vacationType,
+                token
             } = req.body;
-            if(!month || !vacationType || month == null || vacationType == null){
-                return res.status(400).json({
-                    success: false,
-                    message: "Missing vacation Details"
-                });
-            }
-            const recommendations = await recommendationService.getRecommendations(month, vacationType, userId, triplength);
+
+            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+            const userId = decoded.userId;
+
+            const recommendations = await recommendationService.getRecommendations(months, vacationType, userId, triplength);
 
             res.json(recommendations)
         } catch(error){

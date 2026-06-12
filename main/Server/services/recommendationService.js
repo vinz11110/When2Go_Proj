@@ -70,7 +70,7 @@ async function createTrips(recommendations, userId, month, vacationType, duratio
     const user = await User.findById(userId)
 
         const trips = recommendations.map(
-            async recommendation => ({
+            recommendation => ({
                     destination: recommendation.city,
                     duration,
                     startDate,
@@ -111,12 +111,20 @@ async function getRecommendations(month, vacationType, userId, duration){
         (a,b) => b.score - a.score
     );
 
-    return scored.slice(0,10).map(d => ({
+    const top10 = scored.slice(0,10).map(d => ({
         city: d.city,
         country: d.country,
         description: d.description,
         score: d.score
     }));
+
+    return await createTrips(
+        top10,
+        userId,
+        month,
+        vacationType,
+        duration
+    )
 }
 
 function buildTrip(destination, vacationType){

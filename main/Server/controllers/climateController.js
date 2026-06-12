@@ -1,4 +1,4 @@
-const climateService = require("../services/climateService")
+const climateService = require("../services/climateService");
 
 exports.getClimate = async (req, res) => {
     try {
