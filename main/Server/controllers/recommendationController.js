@@ -3,6 +3,7 @@ const recommendationService = require("../services/recommendationService")
     exports.getRecomms = async(req, res) => {
         try {
             const {
+                userId,
                 triplength,
                 month,
                 vacationType
@@ -13,7 +14,7 @@ const recommendationService = require("../services/recommendationService")
                     message: "Missing vacation Details"
                 });
             }
-            const recommendations = await recommendationService.getRecommendations(month, vacationType);
+            const recommendations = await recommendationService.getRecommendations(month, vacationType, userId, triplength);
 
             res.json(recommendations)
         } catch(error){

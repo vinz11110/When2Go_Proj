@@ -90,7 +90,7 @@ async function createTrips(recommendations, userId, month, vacationType, duratio
         }
 
 
-async function getRecommendations(month, vacationType){
+async function getRecommendations(month, vacationType, userId, duration){
     const destinations = await Destination.find();
 
 
