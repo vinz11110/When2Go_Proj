@@ -836,8 +836,11 @@ async function login(event) {
         });
 
         const data = await response.json();
+        
+        console.log("Error before data.success")
 
         if (data.success) {
+            console.log("Error after data.success")
             alert("Logged in successfully."+ data.token)
             userdata.session = true;
             userdata.sessionToken=data.token; //saving token to browsers local storage

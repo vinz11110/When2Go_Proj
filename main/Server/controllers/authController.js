@@ -41,12 +41,13 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     try {
+        console.log("Error in authController")
         const { email, password } = req.body;
 
         //Finding user in DB
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({sucess: false, message: "Invalid credentials"});
+            return res.status(400).json({success: false, message: "Invalid credentials"});
         }
 
         // Comparing password with hashed password in the DB
