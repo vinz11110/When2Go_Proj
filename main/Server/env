@@ -1,0 +1,4 @@
+PORT=3000
+MONGODB_URI=mongodb+srv://simon-fuer:S1m1vorViet!@cluster0.u7bvusq.mongodb.net/when2go?retryWrites=true&w=majority&appName=Cluster0"
+JWT_SECRET=key_for_when2go_add_later
+OPENWEATHER_API_KEY="f7d7e8fdcbfa13de06dc22e65fcd73d6"

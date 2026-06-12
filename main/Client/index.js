@@ -79,6 +79,10 @@ const monthMap = {
     "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
     "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12
 };
+const monthNameMap = {
+    "Jan": 'January', "Feb": 'February', "Mar": 'March', "Apr": 'April', "May": 'May', "Jun": 'June',
+    "Jul": 'July', "Aug": 'August', "Sep": 'September', "Oct": 'October', "Nov": 'November', "Dec": 'December'
+};
 const reverseMonthMap = Object.fromEntries(
     Object.entries(monthMap).map(([name, num]) => [num, name])
 );
@@ -93,7 +97,13 @@ function logoutUsr(){
     userdata.categories=[];
     userdata.selectDates=[];
     userdata.selectCalD=0;
-    userdata.recommId=[];
+    userdata.recommId=null;
+    userdata.startMonth= null,
+    userdata.sessionToken = null,
+    userdata.savedPackingLists= {},
+    userdata.savedDayPlanners={},
+    userdata.savedRecommIds= [],
+    userdata.tripData={},
     sessionBtns();
     saveUsrData();
     window.location.reload();
@@ -170,7 +180,7 @@ async function toggleView(currentPage){
                     fillSavedPackLi();
                     const finPTitle = document.getElementById('finPageTitle');
                     if (finPTitle && userdata.tripData[userdata.recommId]) {
-                        finPTitle.textContent = userdata.tripData[userdata.recommId].Location;
+                        finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].Location} in ${monthNameMap[userdata.startMonth]}`;
                     }
                     document.getElementById('chPage3').classList.add('hidden');
                     document.getElementById('finPage').classList.remove('hidden');
@@ -767,23 +777,18 @@ function sendSavedTrips(){
 //         method: 'GET',
 //         headers: {
 //             'Content-Type': 'application/json',
-//         },
-//         // body: JSON.stringify({
-//         //     ,
-//         // })
+//         }
 //     })
 //     .then(response => {
 //         if (!response.ok) {
-//             throw new Error('Network response was not ok');
+//             logoutUsr();
+//             return true;
 //         }
-        
+//         else if (response.ok) {
+//             sendSavedTrips();
+//             return true;
+//         }
 //         return response.json();
-//     })
-//     .then(data => {
-//         userdata.sessionToken= data
-//         sessionBtns();
-//         sendSavedTrips();
-//         return true;
 //     })
 //     .catch(error => {
 //         console.error("Failed to connect to the server.", error);
@@ -832,6 +837,7 @@ async function login() {
             sessionBtns();
             closeDialog(); //redirecting user to homepage
             sendSavedTrips();
+            saveUsrData();
         }   else {
             alert("Error: " + data.message);
         }
@@ -876,6 +882,7 @@ async function register() {
             sessionBtns();
             closeDialog(); //redirecting user to homepage
             sendSavedTrips();
+            saveUsrData();
         }   else {
             alert("Error: " + data.message);
         }
