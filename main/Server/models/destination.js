@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
+const monthylWeatherSchema = new mongoose.Schema({
+    avg_temp: { type: Number, required: true},
+    avg_wind: { type: Number, required: true},
+    rain_probability: { type: Number, requireD: true}
+})
+
 const destinationSchema = new mongoose.Schema({
     country: { type: String, required: true},
     city: { type: String, required: true},
@@ -20,11 +26,5 @@ const destinationSchema = new mongoose.Schema({
         december: monthylWeatherSchema
     }
 });
-
-const monthylWeatherSchema = new mongoose.Schema({
-    avg_temp: { type: Number, required: true},
-    avg_wind: { type: Number, required: true},
-    rain_probability: { type: Number, requireD: true}
-})
 
 module.exports = mongoose.model('Destination', destinationSchema);
