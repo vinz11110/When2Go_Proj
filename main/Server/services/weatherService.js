@@ -2,6 +2,7 @@ const Trip = require("../models/trip");
 const Destination = require("../models/destination")
 const recommendationService = require("./recommendationService")
 const climateService = require("./climateService")
+const User = require("../models/User")
 
 async function getForecast (city){
     const response = await fetch(
@@ -26,8 +27,9 @@ async function getForecast (city){
     return { avgTemp, rainProbability, windSpeed};
 }
 
-async function getTripWeather(tripId){
-    const trip = await Trip.findById(tripId);
+async function getTripWeather(userId, tripId){
+    const user = await User.findById(userId)
+    const trip = await User.savedPlans.findById(tripId);
 
     if(!trip){
         throw new Error("Trip not found");

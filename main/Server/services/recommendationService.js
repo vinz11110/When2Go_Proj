@@ -1,6 +1,9 @@
 const Destination = require("../models/destination");
 const weatherService = require("./weatherService");
 const climateService = require("./climateService");
+const listService = require("./listService");
+const User = require("../models/User")
+const tripService = require("./tripService")
 
 function getDaysUntilTrip(startDate) {
     const today = new Date();
@@ -12,6 +15,7 @@ function getDaysUntilTrip(startDate) {
 
     return daysUntilTrip;
 }
+
 
 function forecastBasedScore(destination, vacationType) {
         const preference = vacationPreferences[vacationType];
@@ -62,6 +66,29 @@ const vacationPreferences = {
     adventure:  {idealTemp: 18, temperatureImpact: 1, maxRainProbability: 50, rainImpact: 0.25, windImpact: 1},
     wellness:   {idealTemp: 22, temperatureImpact: 1, maxRainProbability: 50, rainImpact: 0.05, windImpact: 1}
 };
+async function createTrips(recommendations, userId, month, vacationType, duration){
+    const user = await User.findById(userId)
+
+        const trips = recommendations.map(
+            async recommendation => ({
+                    destination: recommendation.city,
+                    duration,
+                    startDate,
+                    endDate,
+                    vacationType,
+                    packingList: listService.generatePackingItems(vacationType),
+                    dayPlanner: {},
+                    score: recommendation.score
+                })
+            );
+
+            user.savedPlans.push(...plans);
+
+            await user.save();
+
+            return user.savedPlans;
+        }
+
 
 async function getRecommendations(month, vacationType){
     const destinations = await Destination.find();
@@ -89,7 +116,20 @@ async function getRecommendations(month, vacationType){
         country: d.country,
         description: d.description,
         score: d.score
-    }))
+    }));
+}
+
+function buildTrip(destination, vacationType){
+    return {
+        destination,
+        startDate,
+        endDate,
+        vacationType,
+        packingList:
+            listService.generatePackingItems(vacationType),
+        dayPlanner: {}
+        
+    }
 }
 
 module.exports = {
