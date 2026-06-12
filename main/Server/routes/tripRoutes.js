@@ -17,7 +17,7 @@ router.post('/save', auth, tripController.saveTrip);
 
 router.get('/:tripId', auth, tripController.getTripById);
 
-router.put(':/tripId/packinglist', auth, tripController.updatePackingList);
+router.put('/:tripId/packingList', auth, tripController.updatePackingList);
 
 router.delete('/:tripId', auth, tripController.deleteTrip);
 

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const monthylWeatherSchema = new mongoose.Schema({
     avg_temp: { type: Number, required: true},
     avg_wind: { type: Number, required: true},
-    rain_probability: { type: Number, requireD: true}
+    rain_probability: { type: Number, required: true}
 })
 
 const destinationSchema = new mongoose.Schema({

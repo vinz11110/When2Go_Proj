@@ -1,4 +1,4 @@
-function getClimateData(city) {
+async function getClimateData(city) {
      const climate = await city.findOne({ city: city});
             if(!climate){
             return res.status(404).json({
