@@ -15,7 +15,7 @@ let userdata = {
     tripData: {},
 };
 window.addEventListener('load', () => {
-    getSession();
+    // getSession();
     let savedData = localStorage.getItem('when2go_data');
     if (savedData) {
         userdata = JSON.parse(savedData);
@@ -762,34 +762,34 @@ function sendSavedTrips(){
         alert("Could not reach the server.");
     });
 }
-function getSession(){
-    fetch(`http://localhost:3000/session`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        // body: JSON.stringify({
-        //     ,
-        // })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+// function getSession(){
+//     fetch(`http://localhost:3000/session`, {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         // body: JSON.stringify({
+//         //     ,
+//         // })
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
         
-        return response.json();
-    })
-    .then(data => {
-        userdata.sessionToken= data
-        sessionBtns();
-        sendSavedTrips();
-        return true;
-    })
-    .catch(error => {
-        console.error("Failed to connect to the server.", error);
-        alert("Could not reach the server.");
-    });
-}
+//         return response.json();
+//     })
+//     .then(data => {
+//         userdata.sessionToken= data
+//         sessionBtns();
+//         sendSavedTrips();
+//         return true;
+//     })
+//     .catch(error => {
+//         console.error("Failed to connect to the server.", error);
+//         alert("Could not reach the server.");
+//     });
+// }
 function findCheckedRecomms(){
     const items = document.querySelectorAll('.recommCheck')
     items.forEach(item => {
@@ -826,7 +826,7 @@ async function login() {
         const data = await response.json();
 
         if (data.success) {
-            alert("Logged in successfully.")
+            alert("Logged in successfully."+ data.token)
             userdata.session = true;
             userdata.sessionToken=data.token; //saving token to browsers local storage
             sessionBtns();
