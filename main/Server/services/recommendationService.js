@@ -1,4 +1,6 @@
 const Destination = require("../models/destination");
+const weatherService = require("./weatherService");
+const climateService = require("./climateService");
 
 function getDaysUntilTrip(startDate) {
     const today = new Date();
@@ -24,7 +26,7 @@ function forecastBasedScore(destination, vacationType) {
 }
 
 function climateBasedScore(destination,vacationType, month) {
-    const weather = destination.weather[month]
+    const weather = destination.weather[month.toLowerCase()]
     const preference = vacationPreferences[vacationType];
 
     let score = 100;
@@ -45,7 +47,7 @@ async function calculateDestinationScore(destination, tripDate, month, vacationT
     const daysUntilTrip = getDaysUntilTrip(tripDate);
 
     if (daysUntilTrip <= 10) {
-        const forecast = await getForecast(destination.name);
+        const forecast = await weatherService.getForecast(destination.name);
 
         return forecastBasedScore(forecast, vacationType, month);
     }
@@ -91,6 +93,7 @@ async function getRecommendations(month, vacationType){
 }
 
 module.exports = {
+    getDaysUntilTrip,
     calculateDestinationScore,
     getRecommendations
 };

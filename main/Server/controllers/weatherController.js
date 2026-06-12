@@ -14,7 +14,8 @@ exports.getForecast = async(req,res) => {
         else{
             res.status(201).json({
                 success: true,
-                message: weather
+                message: "weather Forecast returned Successfully",
+                data: weather
         });
         } 
     } catch (error) {
@@ -23,3 +24,19 @@ exports.getForecast = async(req,res) => {
         });
     }
 };
+
+exports.getTripWeather = async (req, res) => {
+    try {
+        const weather = await weatherService.getTripWeather(req.params.tripId);
+        res.status(200).json({
+            success: true,
+            message: "Trip weather returned Successfully",
+            data: weather
+    });
+    }   catch(error){
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error while returning the weather"
+        })
+}
+} 

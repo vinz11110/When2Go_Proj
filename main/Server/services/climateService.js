@@ -1,9 +1,16 @@
-async function getClimateData(city) {
-     const climate = await city.findOne({ city: city});
-            if(!climate){
-            return res.status(404).json({
-                 error: 'Destination not found'
-                });
+const Destination = require("../models/destination")
+
+async function getClimateData(cityName, month){
+        const climate = await Destination.findOne({
+                city: cityName
+        });
+        if(!climate){
+                throw new Error("Destination not found")
         }
-        return climate
+
+        return climate.weather[month.toLowerCase()];
 }
+
+module.exports = {
+        getClimateData
+};

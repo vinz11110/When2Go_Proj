@@ -6,7 +6,8 @@ exports.getClimate = async (req, res) => {
         
         res.status(201).json({
             success: true,
-            message: destination
+            message: "Historical Weather returned Successfully",
+            data: destination
     });
     } catch (error) {
         res.status(500).json({
