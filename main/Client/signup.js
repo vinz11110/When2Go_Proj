@@ -1,8 +1,8 @@
 async function register() {
     // getting values from inputs
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const passwordRepeat = document.getElementById('password2').value;
+    const email = document.getElementById('signUsername').value;
+    const password = document.getElementById('signPassword').value;
+    const passwordRepeat = document.getElementById('repeatSignPassword').value;
 
     //checking if information is valid
     if (!email || !password) {

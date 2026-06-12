@@ -8,7 +8,7 @@ let userdata = {
     recommId:'575647655',
     currentPage:'mainPage',
     startMonth: null,
-    sessionkey : null,
+    sessionToken : null,
     savedPackingLists: {},
     savedDayPlanners: {},
     savedRecommIds: [],
@@ -161,17 +161,21 @@ async function toggleView(currentPage){
             break;
         case 'recomms':
             findCheckedRecomms();
-            if(userdata.session || document.getElementById('loginQuest').open){
-                // if(document.getElementsByClassName('recommPick selected').length>0){
+            if(userdata.session || document.getElementById('loginQuest').open || !userdata.savedRecommIds.length==1){
+                if(document.getElementsByClassName('recommPick selected').length>0){
                     userdata.currentPage='finPage';
                     await getTripData(userdata.recommId);
                     loadInTripData(userdata.recommId);
                     generateCalendar();
                     fillSavedPackLi();
+                    const finPTitle = document.getElementById('finPageTitle');
+                    if (finPTitle && userdata.tripData[userdata.recommId]) {
+                        finPTitle.textContent = userdata.tripData[userdata.recommId].Location;
+                    }
                     document.getElementById('chPage3').classList.add('hidden');
                     document.getElementById('finPage').classList.remove('hidden');
                     sendSavedTrips();
-                // }
+                }
             }else if (!userdata.session && userdata.savedRecommIds.filter(id => id !== userdata.recommId)) {
                 document.getElementById('loginQuest').showModal();
             }
@@ -194,6 +198,7 @@ async function toggleView(currentPage){
             break;
         case 'finalViewBack':
             userdata.currentPage='chPage3';
+            getRecomms();
             document.getElementById('finPage').classList.add('hidden');
             document.getElementById('chPage3').classList.remove('hidden');
     }
@@ -565,7 +570,7 @@ function getRecomms(){
         container.append(li)}
 
     // fetch('http://localhost:3000/getTripRecommendations', {
-    //     method: 'POST',
+    //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json',
     //     },
@@ -602,7 +607,8 @@ function getRecomms(){
     //         container.append(li)}
     // })
     // .catch(error => {
-    //     console.error('Error:', error);
+        // console.error("Failed to connect to the server.", error);
+        // alert("Could not reach the server.");
     // });
 }
 function toggleRecommPick(element){
@@ -668,7 +674,8 @@ async function getTripData(ID){
     //     return true;
     // })
     // .catch(error => {
-    //     console.error('Error:', error);
+        // console.error("Failed to connect to the server.", error);
+        // alert("Could not reach the server.");
     // });
 }
 async function deleteSavedTrip(ID){
@@ -698,7 +705,8 @@ async function deleteSavedTrip(ID){
     //     return;
     // })
     // .catch(error => {
-    //     console.error('Error:', error);
+        // console.error("Failed to connect to the server.", error);
+        // alert("Could not reach the server.");
     // });
 }
 function updatePlanLists(){
@@ -722,7 +730,8 @@ function updatePlanLists(){
         return true;
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
     });
 }
 function sendSavedTrips(){
@@ -742,13 +751,15 @@ function sendSavedTrips(){
         return response.json();
     })
     .then(data => {
+        userdata.savedRecommIds = []
         for(const trip of data){
             userdata.savedRecommIds.push(trip)
         }
         return true;
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
     });
 }
 function getSession(){
@@ -769,13 +780,14 @@ function getSession(){
         return response.json();
     })
     .then(data => {
-        userdata.sessionkey= data
+        userdata.sessionToken= data
         sessionBtns();
         sendSavedTrips();
         return true;
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
     });
 }
 function findCheckedRecomms(){
@@ -789,4 +801,86 @@ function findCheckedRecomms(){
         }
     })
     saveUsrData();
+}
+async function login() {
+    //getting value from the inputs
+    const email = document.getElementById('logUsername').value;
+    const password = document.getElementById('logPassword').value;
+
+    //checking if data is valid
+    if (!email || !password) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    //sending data to backend
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, password: password})
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("Logged in successfully.")
+            userdata.session = true;
+            userdata.sessionToken=data.token; //saving token to browsers local storage
+            sessionBtns();
+            closeDialog(); //redirecting user to homepage
+            sendSavedTrips();
+        }   else {
+            alert("Error: " + data.message);
+        }
+    } catch (error) {
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
+    }
+}
+async function register() {
+    // getting values from inputs
+    const email = document.getElementById('signUsername').value;
+    const password = document.getElementById('signPassword').value;
+    const passwordRepeat = document.getElementById('repeatSignPassword').value;
+
+    //checking if information is valid
+    if (!email || !password) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    if (password !== passwordRepeat) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    //sending data to backend
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({email: email, password: password})
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("Account created.");
+            userdata.session = true;
+            userdata.sessionToken=data.token; //saving token to browsers local storage
+            sessionBtns();
+            closeDialog(); //redirecting user to homepage
+            sendSavedTrips();
+        }   else {
+            alert("Error: " + data.message);
+        }
+    }   catch (error) {
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
+    }
 }

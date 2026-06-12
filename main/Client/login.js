@@ -1,7 +1,7 @@
 async function login() {
     //getting value from the inputs
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const email = document.getElementById('logUsername').value;
+    const password = document.getElementById('logPassword').value;
 
     //checking if data is valid
     if (!email || !password) {

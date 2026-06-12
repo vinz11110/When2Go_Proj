@@ -240,7 +240,7 @@
                <p>Sign in to your when2go account</p>
           </div>
           <div class="auth-form">
-               <label for="username">Username:</label>
+               <label for="username">Email:</label>
                <input type="text" id="logUsername" name="username" class="auth-input" placeholder="user@gmail.com" required>
           </div>
           <div class="input-group">
@@ -248,7 +248,7 @@
                <input type="password" id="logPassword" name="password" class="auth-input" placeholder="••••••••" required>
           </div>
           <div>
-               <button type="submit" class="dialog-btn">Login</button>
+               <button type="submit" class="dialog-btn" onclick="login()">Login</button>
           </div>
           <div class="auth-footer">
                <span>New here? <button type="button" class="auth-secondary-btn" onclick="toggleLoginDialog()">Create account</button></span>
@@ -262,7 +262,7 @@
                <p>Sign up for your when2go account</p>
           </div>
           <div class="auth-form">
-               <label for="username">Username:</label>
+               <label for="username">Email:</label>
                <input type="text" id="signUsername" name="username" class="auth-input" placeholder="user@gmail.com" required>
           </div>
           <div class="input-group">
@@ -271,7 +271,7 @@
                <input type="password" id="repeatSignPassword" class="auth-input" placeholder="Repeat password" required>
           </div>
           <div>
-               <button type="submit" class="dialog-btn">Sign up</button>
+               <button type="submit" class="dialog-btn" onclick="register()">Sign up</button>
           </div>
           <div class="auth-footer">
                <span>Already have an account? <button type="button" class="auth-secondary-btn" onclick="toggleLoginDialog()">Log In</button></span>
