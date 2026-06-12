@@ -43,7 +43,7 @@ exports.loginUser = async (req, res) => {
     try {
         console.log("Error in authController")
         const { email, password } = req.body;
-
+        console.log("DATA RECEIVED FROM FRONTEND:", req.body);
         //Finding user in DB
         const user = await User.findOne({ email });
         if (!user) {
@@ -63,7 +63,7 @@ exports.loginUser = async (req, res) => {
             { expiresIn: '7d'}
         );
 
-        res.status(200).json({ sucess: true, message: 'Logged in successfully', token});
+        res.status(200).json({ success: true, message: 'Logged in successfully', token});
     }   catch (error) {
         console.error("Login Error: ", error);
         res.status(500).json({ success: false, message: 'Server error during login'});
