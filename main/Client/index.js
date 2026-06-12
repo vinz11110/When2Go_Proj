@@ -660,11 +660,12 @@ async function getTripData(ID){
     };
     userdata.tripData[ID]=mockDataPackage;
     saveUsrData();
-    // let URL = `http://localhost:3000/getTripData?Id=${ID}`
+    // let URL = `http://localhost:3000/api/trips/${ID}`
     // fetch(URL, {
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json',
+    //          'Authorization': `Bearer ${userdata.sessionToken}`
     //     }
     // })
     // .then(response => {
@@ -697,6 +698,7 @@ async function deleteSavedTrip(ID){
     //     method: 'DELETE',
     //     headers: {
     //         'Content-Type': 'application/json',
+    //         'Authorization': `Bearer ${userdata.sessionToken}`
     //     }
     // })
     // .then(response => {
@@ -715,15 +717,16 @@ async function deleteSavedTrip(ID){
     //     return;
     // })
     // .catch(error => {
-        // console.error("Failed to connect to the server.", error);
-        // alert("Could not reach the server.");
+    //     console.error("Failed to connect to the server.", error);
+    //     alert("Could not reach the server.");
     // });
 }
 function updatePlanLists(){
-    fetch(`http://localhost:3000/updateLists?Id=${userdata.recommId}`, {
+    fetch(`http://localhost:3000/api/trips/${userdata.recommId}/packinglist`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userdata.sessionToken}`
         },
         body: JSON.stringify({
             packingList: userdata.savedPackingLists,
@@ -745,10 +748,11 @@ function updatePlanLists(){
     });
 }
 function sendSavedTrips(){
-    fetch(`http://localhost:3000/postSavedTrips`, {
+    fetch(`http://localhost:3000/api/trips/save`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userdata.sessionToken}`
         },
         body: JSON.stringify({
             savedTrips: userdata.savedRecommIds,
