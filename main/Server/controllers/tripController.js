@@ -150,6 +150,7 @@ exports.updatePackingList = async (req, res) => {
     }
 };
 
+
 exports.deleteTrip = async (req, res) => {
     try {
         const {tripId} = req.params;

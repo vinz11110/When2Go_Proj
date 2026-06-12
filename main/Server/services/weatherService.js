@@ -1,4 +1,4 @@
-const Trip = require("../models/trip");
+//const Trip = require("../models/trip");
 const Destination = require("../models/destination")
 const recommendationService = require("./recommendationService")
 const climateService = require("./climateService")
