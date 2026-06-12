@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     },
     savedPlans: [{
         destination: String,
+        tripLength: Number,
         startDate: Date,
         endDate: Date,
         vacationType: String,
@@ -27,7 +28,8 @@ const userSchema = new mongoose.Schema({
             type: Map,
             of: [String], //important for Mongoose so it knows that keys will be array of strings
             default: {}
-        }
+        },
+        score: int
     }],
 }, {
     timestamps: true 

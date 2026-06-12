@@ -776,29 +776,30 @@ function sendSavedTrips(){
         alert("Could not reach the server.");
     });
 }
-// function getSession(){
-//     fetch(`http://localhost:3000/session`, {
-//         method: 'GET',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         }
-//     })
-//     .then(response => {
-//         if (!response.ok) {
-//             logoutUsr();
-//             return true;
-//         }
-//         else if (response.ok) {
-//             sendSavedTrips();
-//             return true;
-//         }
-//         return response.json();
-//     })
-//     .catch(error => {
-//         console.error("Failed to connect to the server.", error);
-//         alert("Could not reach the server.");
-//     });
-// }
+function getSession(){
+    fetch(`http://localhost:3000/session`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userdata.sessionToken}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            logoutUsr();
+            return true;
+        }
+        else if (response.ok) {
+            sendSavedTrips();
+            return true;
+        }
+        return response.json();
+    })
+    .catch(error => {
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
+    });
+}
 function findCheckedRecomms(){
     const items = document.querySelectorAll('.recommCheck')
     items.forEach(item => {
