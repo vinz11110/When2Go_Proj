@@ -155,67 +155,72 @@
           </section>
           <section id="finPage" class="viewF hidden">
                <section id="contentContainF" class="content">
-                    <div class="leftAlign">
-                         <article class="ContainerCal" id="CalenderOutContainer" >
-                              <div id="calTitleNav">
-                                   <button class="calNavBtn" onclick="calChangeMonth('-')">
-                                        last
-                                   </button>
-                                   <h2 id="calTitle">Title</h2>
-                                   <button class="calNavBtn" onclick="calChangeMonth('+')">
-                                        next
-                                   </button>
-                              </div>
-                              <div id="calendarGrid" class="calendarContain">
-                                   
-                              </div>
-                         </article>
-                         <article class="weatherDash">
-                              <h2>Hey</h2>
-                         </article>
+                    <div>
+                         <h1 id="finPageTitle">Destination</h1>
                     </div>
-                    <div class="rightAlign">
-                         <article id="dayPlanContain">
-                              <h2>Dayplanner</h2>
-                              <div class="dayPlanner customList">
-                                   <div id="planListTopContain">
-                                        <ul class="dayPlanList" id="planLiContain"> 
-                                        </ul>
+                    <div id="ccfElements">
+                         <div class="leftAlign">
+                              <article class="ContainerCal" id="CalenderOutContainer" >
+                                   <div id="calTitleNav">
+                                        <button class="calNavBtn" onclick="calChangeMonth('-')">
+                                             last
+                                        </button>
+                                        <h2 id="calTitle">Title</h2>
+                                        <button class="calNavBtn" onclick="calChangeMonth('+')">
+                                             next
+                                        </button>
                                    </div>
-                                   <form onsubmit="createLi('plan'); return false;" id="planForm">
-                                        <div>
-                                             <textarea name="dayPlan" id="dayPlanText" rows="2"></textarea>
-                                        </div>
-                                        <button type="submit">
-                                             +
-                                        </button>
-                                        <button type="button" onclick="delLi(this)" id="deleteBtnPl" class="hidden">
-                                             -
-                                        </button>
-                                   </form>
-                              </div>
-                         </article>
-                         
-                         <article class="packingListContain">
-                              <h2>Packing List</h2>
-                              <div class="packList customList">
-                                   <div id="planListTopContain">
-                                        <ul class="packingListli" id="packListList">
-                                        </ul>
+                                   <div id="calendarGrid" class="calendarContain">
+                                        
                                    </div>
-                                   <form onsubmit="createLi('pack'); return false;" id="packForm">
-                                        <div>
-                                             <textarea name="packList" id="packText" rows="2"></textarea>
+                              </article>
+                              <article class="weatherDash">
+                                   <h2>Hey</h2>
+                              </article>
+                         </div>
+                         <div class="rightAlign">
+                              <article id="dayPlanContain">
+                                   <h2>Dayplanner</h2>
+                                   <div class="dayPlanner customList">
+                                        <div id="planListTopContain">
+                                             <ul class="dayPlanList" id="planLiContain"> 
+                                             </ul>
                                         </div>
-                                        <button type="submit">
-                                             +
-                                        </button>
-                                        <button type="button" onclick="delLi(this)" id="deleteBtnPack" class="hidden">
-                                             -
-                                        </button>
-                                   </form>
-                              </div>
-                         </article>
+                                        <form onsubmit="createLi('plan'); return false;" id="planForm">
+                                             <div>
+                                                  <textarea name="dayPlan" id="dayPlanText" rows="2"></textarea>
+                                             </div>
+                                             <button type="submit">
+                                                  ✏️
+                                             </button>
+                                             <button type="button" onclick="delLi(this)" id="deleteBtnPl" class="hidden">
+                                                  🗑️
+                                             </button>
+                                        </form>
+                                   </div>
+                              </article>
+                              
+                              <article class="packingListContain">
+                                   <h2>Packing List</h2>
+                                   <div class="packList customList">
+                                        <div id="planListTopContain">
+                                             <ul class="packingListli" id="packListList">
+                                             </ul>
+                                        </div>
+                                        <form onsubmit="createLi('pack'); return false;" id="packForm">
+                                             <div>
+                                                  <textarea name="packList" id="packText" rows="2"></textarea>
+                                             </div>
+                                             <button type="submit">
+                                                  ✏️
+                                             </button>
+                                             <button type="button" onclick="delLi(this)" id="deleteBtnPack" class="hidden">
+                                                  🗑️
+                                             </button>
+                                        </form>
+                                   </div>
+                              </article>
+                         </div>
                     </div>
                </section>
                <div class="navButtonContain">
@@ -230,41 +235,68 @@
     </footer>
     <dialog id="loginDialog" class="dialog">
       <form id="loginForm" class="logForm">
-          <div>
+          <div class="log-title">
+               <h3>Welcome Back</h3>
+               <p>Sign in to your when2go account</p>
+          </div>
+          <div class="auth-form">
                <label for="username">Username:</label>
-               <input type="text" id="logUsername" name="username" required>
+               <input type="text" id="logUsername" name="username" class="auth-input" placeholder="user@gmail.com" required>
           </div>
-          <div>
+          <div class="input-group">
                <label for="password">Password:</label>
-               <input type="password" id="logPassword" name="password" required>
+               <input type="password" id="logPassword" name="password" class="auth-input" placeholder="••••••••" required>
           </div>
           <div>
-               <button type="submit">Login</button>
-               <button type="button" id="cancelLogin" onclick="closeDialog()">Cancel</button>
+               <button type="submit" class="dialog-btn">Login</button>
           </div>
-          <p>If you are new here, sign up <a onclick="toggleLoginDialog()">here</a></p>
+          <div class="auth-footer">
+               <span>New here? <button type="button" class="auth-secondary-btn" onclick="toggleLoginDialog()">Create account</button></span>
+               <button type="button" id="cancelSign" class="dialog-btn" onclick="closeDialog()">Cancel</button>
       </form>
     </dialog>
     <dialog id="signupDialog" class="dialog">
       <form id="signupForm" class="logForm">
-          <div>
+          <div class="log-title">
+               <h3>Welcome Back</h3>
+               <p>Sign up for your when2go account</p>
+          </div>
+          <div class="auth-form">
                <label for="username">Username:</label>
-               <input type="text" id="signUsername" name="username" required>
+               <input type="text" id="signUsername" name="username" class="auth-input" placeholder="user@gmail.com" required>
           </div>
-          <div>
+          <div class="input-group">
                <label for="password">Password:</label>
-               <input type="password" id="signPassword" name="password" required>
+               <input type="password" id="signPassword" name="password" class="auth-input" placeholder="••••••••" required>
+               <input type="password" id="repeatSignPassword" class="auth-input" placeholder="Repeat password" required>
           </div>
           <div>
-               <button type="submit">Sign up</button>
-               <button type="button" id="cancelSign" onclick="closeDialog()">Cancel</button>
+               <button type="submit" class="dialog-btn">Sign up</button>
           </div>
-          <p>If you already have an account, login <a onclick="toggleLoginDialog()">here</a></p>
+          <div class="auth-footer">
+               <span>Already have an account? <button type="button" class="auth-secondary-btn" onclick="toggleLoginDialog()">Log In</button></span>
+               <button type="button" id="cancelSign" class="dialog-btn" onclick="closeDialog()">Cancel</button>
+          </div>
       </form>
     </dialog>
     <dialog id="accountSavedRecoms" class="dialog">
-          <div id="savedRecommsTitle"><p>Your saved trips</p></div>
+          <div id="savedRecommsTitle">
+               <div id="accountCloseBtn">
+                    <button onclick="closeDialog()">X</button>
+               </div>
+               <p>Your saved trips</p>
+          </div>
       <ul id="recommsList"></ul>
+    </dialog>
+     <dialog id="loginQuest" class="dialog">
+          <div id="loginQuestContain" class="loginQuest">
+               <div id="questCloseBtn">
+                    <button onclick="closeDialog()">X</button>
+               </div>
+               <p class="titleText">Hey, do you want to save trips to look at later?</p>
+               <button type="button" onclick="toggleLoginDialog()">log in or sign up</button>
+               <p><a onclick="userdata.savedRecommIds=[userdata.recommId]; toggleView('recomms'); closeDialog();">No, i don't want to save any trips. Continue</a></p>
+          </div>
     </dialog>
 </body>
 </html>

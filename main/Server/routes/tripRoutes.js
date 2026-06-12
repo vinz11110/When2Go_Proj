@@ -4,9 +4,6 @@ const tripController = require('../controllers/tripController');
 const auth = require('../middleware/authMiddleware');
 const Destination = require('../models/destination');
 
-router.post('/', auth, tripController.saveTrip);
-router.get('/', auth, tripController.getTrips);
-
 router.get('/all', async (req, res) => {
     try {
         const destination = await Destination.find({});
@@ -15,3 +12,13 @@ router.get('/all', async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve information: ' + error.message});
     }
 });
+
+router.post('/save', auth, tripController.saveTrip);
+
+router.get('/:tripId', auth, tripController.getTripById);
+
+router.put(':/tripId/packinglist', auth, tripController.updatePackingList);
+
+router.delete('/:tripId', auth, tripController.deleteTrip);
+
+module.exports = router;

@@ -1,4 +1,4 @@
-@import url(base.css);
+@import url(base.css);@import url(base.css);
 h1{
     margin: 2rem;
     font-weight: 900;
@@ -9,6 +9,12 @@ h1{
 }
 .hidden{
     display: none !important;
+}
+.checkedItem{
+    text-decoration: line-through;
+    color: rgba(128, 128, 128, 0.5); 
+    opacity: 0.6; 
+    transition: all 0.2s ease;
 }
 .selected{
     background-color: #AACDDC !important;
@@ -21,6 +27,12 @@ h1{
     flex-direction: column;
     align-items: center;
 }
+.log-title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem;
+}
 .dialog{
     margin-left: auto;
     margin-right: 2rem;
@@ -28,11 +40,2914 @@ h1{
     border-radius: 1.5rem; 
     padding: 2rem;
 }
-.savedRecomms{
+#accountCloseBtn{
+    display: flex;
+    justify-content: end;
+    padding-bottom: 1rem;
+}
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. DIALOG MODAL BASE CONTAINER                                            */
+/* -------------------------------------------------------------------------- */
+dialog {
+    border: none;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 400px; /* Perfect, snug mobile-to-desktop form width */
+    background: #ffffff;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+}
+
+/* 🌟 MAGIC PROPERTY: Styles the dim/blur overlay behind the open modal */
+dialog::backdrop {
+    background-color: rgba(15, 23, 42, 0.4); /* Dark slate transparency */
+    backdrop-filter: blur(4px); /* Modern glassmorphism blur effect */
+}
+
+/* Smooth fade-in animation when showModal() is triggered */
+dialog[open] {
+    animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. FORM STRUCTURAL LAYOUT                                                 */
+/* -------------------------------------------------------------------------- */
+.auth-form {
     display: flex;
     flex-direction: column;
-    border: 2px solid #000000;;
+    gap: 20px;
 }
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.auth-header h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.auth-header p {
+    margin: 0;
+    color: #64748b;
+}
+
+/* Grouping labels and inputs together */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: #334155;
+    letter-spacing: 0.2px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. INPUT FIELDS (TEXT, EMAIL, PASSWORD)                                   */
+/* -------------------------------------------------------------------------- */
+.auth-input {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: #0f172a;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+/* Interactive focus highlight accent */
+.auth-input:focus {
+    outline: none;
+    background-color: #ffffff;
+    border-color: #3b82f6; /* Vivid royal blue highlight border */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); /* Soft outer ring */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. BUTTON ACTIONS & TRANSITIONS                                           */
+/* -------------------------------------------------------------------------- */
+.dialog-btn{
+    font-size: 2rem;
+    padding: 1rem 2rem;
+    border-radius: 1.5rem;
+    margin: 1rem;
+    scale: 0.8;
+    background-color: #aacddcd9;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+.auth-submit-btn:hover {
+    background-color: #2563eb; /* Slightly deeper blue on mouse hover */
+}
+
+.auth-submit-btn:active {
+    transform: scale(0.98); /* Tiny physical click compression feedback */
+}
+
+/* Modal close icon or utility footer text button */
+.auth-secondary-btn {
+    background: none;
+    border: none;
+    color: #475569;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    transition: color 0.15s ease;
+}
+.auth-secondary-btn:hover {
+    color: #0f172a;
+}
+.auth-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+    color: #64748b;
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. SAVED LIST CONTAINER                                                   */
+/* -------------------------------------------------------------------------- */
+#recommsList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px; /* Even spacing between saved trip rows */
+    padding: 10px 0;
+    margin: 0;
+    list-style-type: none; /* Strips browser default bullet points */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE SAVED TRIP ROW CARD                                                */
+/* -------------------------------------------------------------------------- */
+.saved-trip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: #f8fafc; /* Ultra-light grey-blue background card */
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hovering over the row subtly sharpens the borders */
+.saved-trip-row:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. LEFT COLUMN: TEXT DETAILS                                              */
+/* -------------------------------------------------------------------------- */
+.saved-trip-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Location Header with Inline Custom Icon Handling */
+.saved-location-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.location-pin-icon {
+    font-size: 1.1rem;
+    color: #64748b;
+}
+
+.saved-trip-location {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0f172a; /* Deep charcoal title */
+}
+
+/* Date Sub-tag styling */
+.saved-trip-dates {
+    margin: 0;
+    font-weight: 500;
+    color: #64748b;
+    padding-left: 24px; /* Perfectly aligns description text under the location text */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. RIGHT COLUMN: WORKSPACE INTERACTION CONTROLS                           */
+/* -------------------------------------------------------------------------- */
+.saved-trip-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Uniform horizontal spacing between buttons */
+}
+
+/* Standard Base Action Button Properties */
+.btn-trip-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+/* Edit Workspace Action configuration */
+.btn-edit {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.btn-edit:hover {
+    background-color: #cbd5e1;
+    color: #0f172a;
+}
+
+/* Delete Destructive Action configuration */
+.btn-delete {
+    background-color: #fee2e2; /* Soft pastel red */
+    color: #ef4444;            /* Sharp crimson alert text */
+    border: 1px solid #fca5a5;
+}
+
+.btn-delete:hover {
+    background-color: #fecaca;
+    border-color: #f87171;
+    transform: scale(1.02); 
+
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. RECOMMENDATIONS GRID CONTAINER                                          */
+/* -------------------------------------------------------------------------- */
+#recommendsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+    gap: 32px; /* Uniformly spaces out cards without messing up margins */
+    padding: 20px;
+    list-style: none;
+    width: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE CARD CONTAINER WRAPPER                                              */
+/* -------------------------------------------------------------------------- */
+.recomm-item {
+    display: flex;
+    flex-direction: column; /* Stacks image top, info middle, actions bottom */
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    align-items: stretch;
+}
+
+/* Subtle interactive card elevation lift on hover */
+.recomm-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. INNER SELECTION BUTTON WRAPPER                                         */
+/* -------------------------------------------------------------------------- */
+.recommPick {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    flex-grow: 1; /* Ensures the button expands to fill container height */
+    align-items: stretch;
+    height: 100%;
+}
+
+/* Image scaling handler */
+.recomm-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Prevents squishing, crops elegantly */
+    border-bottom: 1px solid #e2e8f0;
+    transition: transform 0.5s ease;
+}
+
+.recomm-item:hover .recomm-img {
+    transform: scale(1.03); /* Tiny cinematic zoom on hover */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. TEXT CONTENT GRAPHICS                                                   */
+/* -------------------------------------------------------------------------- */
+.recomm-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Destination Header text style */
+.recomm-info strong {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+/* Date Range Tag styling */
+.recomm-info small {
+    display: inline-block;
+    align-self: flex-start; /* Keeps the background pill bound to text size */    font-weight: 600;
+    color: #475569;
+    background-color: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 9999px; /* Absolute rounded pill look */
+    letter-spacing: 0.2px;
+}
+
+/* Active background selection layout state overrides */
+.recommPick.selected {
+    background-color: #b2e1ed !important; /* Light emerald tint */
+    border: 9px solid #c8c8c8;
+}
+
+.recommPick.selected + div + .recomm-info strong {
+    color: #d6e7dc; /* Text updates to deep green if selected */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. SIDE CONTROL CONTAINER ROW (THE CHECKBOX PANEL)                        */
+/* -------------------------------------------------------------------------- */
+/* Positions the checkbox wrapper inside a clean, interactive absolute badge */
+.recomm-item > div:has(.recommCheck) {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+}
+
+/* Modern styling layout for checkbox component nodes */
+.recommCheck {
+    appearance: none; /* Strips browser default UI graphics */
+    -webkit-appearance: none;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px); /* Glassmorphism background look */
+    border: 2px solid #cbd5e1;
+    border-radius: 50%; /* Circle profile shape */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hovering state changes check circle boundary accent values */
+.recommCheck:hover {
+    transform: scale(1.05);
+    border-color: #94a3b8;
+}
+
+/* Checked styling changes circle fill color asset properties */
+.recommCheck:checked {
+    background-color: #3b82f6; /* Premium vivid royal blue */
+    border-color: #3b82f6;
+}
+
+/* Custom indicator generation element mapping */
+.recommCheck:checked::after {
+    content: "✓";
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. THE MAIN DIALOG WINDOW CONTAINER                                        */
+/* -------------------------------------------------------------------------- */
+#loginQuest {
+    border: none;
+    border-radius: 20px;
+    padding: 0; /* Clear default padding so the gradient can go edge-to-edge */
+    width: 90%;
+    max-width: 440px;
+    background: #ffffff;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#loginQuest::backdrop {
+    background-color: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE INNER CONTENT PANEL                                                */
+/* -------------------------------------------------------------------------- */
+#loginQuestContain {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 32px;
+    box-sizing: border-box;
+    position: relative;
+    /* Soft light neutral gradient from top down */
+    background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 45%); 
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. TYPOGRAPHY & HEADER TEXT                                               */
+/* -------------------------------------------------------------------------- */
+#loginQuestContain .titleText {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.4;
+    margin: 16px 0 24px 0;
+    text-align: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. PRIMARY CALL-TO-ACTION AUTH BUTTON (UPDATED SELECTOR)                   */
+/* -------------------------------------------------------------------------- */
+/* Targets the button directly inside the container */
+#loginQuestContain > button {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #aacddc; /* Vivid royal blue */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    margin-bottom: 24px; /* Creates spacing down to the continue option */
+}
+
+#loginQuestContain > button:hover {
+    background-color: #65b0d1d9;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+}
+
+#loginQuestContain > button:active {
+    transform: scale(0.98);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. GUEST CONTINUATION LINK (THE REJECTION STEP)                           */
+/* -------------------------------------------------------------------------- */
+#loginQuestContain p:last-of-type {
+    margin: 0;
+    text-align: center;
+}
+
+#loginQuestContain p a {
+    display: inline-block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+#loginQuestContain p a:hover {
+    color: #0f172a;
+    background-color: #f1f5f9; /* Subtle pill badge highlight when hovering */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. ABSOLUTE TOP CLOSE BUTTON (X)                                          */
+/* -------------------------------------------------------------------------- */
+#questCloseBtn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 5;
+}
+
+#questCloseBtn button {
+    background: #e2e8f0;
+    color: #64748b;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+#questCloseBtn button:hover {
+    background-color: #cbd5e1;
+    color: #0f172a;
+}
+
+
+
+/*Main Page styling*/
+.viewMain{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 30rem 1fr;
+    grid-template-areas:
+    "section"
+    "searchBox";
+}
+.introContainer{
+    align-items: center;
+    justify-content:end;
+    grid-area: section;
+    flex-direction: column;
+    padding: 2rem ;
+    background-color: rgba(209, 5, 5, 0);
+}
+.inputContain{
+    grid-area: searchBox;
+    background-color: rgba(175, 8, 58, 0);
+    display: flex;
+    align-items:center;
+    justify-content: start;
+    flex-direction: column;
+    margin-bottom: auto;
+}
+
+.inputContain form{
+    display: flex;
+    align-items:start;
+    justify-content: center;
+    flex-direction: row;
+    font-size: 3rem;
+    backdrop-filter: blur(5px);
+    border-radius: 2rem;
+    background-color: rgba(255, 255, 255, 0.13);
+    padding: 4rem;
+}
+.inputContain form input{
+  border-radius: 1rem;
+  font-size: 3rem;
+  padding: 1rem 1.5rem;
+  border: 2px solid #d2c4b462;
+  background-color: rgba(255, 255, 255, 0.646);
+  text-align: center;
+  box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.655);
+}
+.inputContain form button{
+    font-size: 3rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+.mainPText{
+    font-size: 4rem;
+    color: white;
+}
+#mainPage{
+    background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: bottom;
+    flex-direction: column;
+}
+
+/*Choice Page styling*/
+.viewCh{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 6rem 1fr;
+    grid-template-areas:
+    "title"
+    "content"
+    ;
+}
+.choiceHeader{
+    grid-area: title;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    flex-direction: row;
+    font-size: 2rem;
+    background-color: #81A6C6;
+}
+.content{
+    grid-area: content;
+    align-items:center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    background-color: #abe2ff;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+.content button{
+    font-size: 4rem;
+    padding: 1rem 2rem;
+    border-radius: 1.5rem;
+    margin: 4rem;
+    background-color: #aacddcd9;
+}
+#contentContain2{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "city beach adventure wellness"
+    ;
+    background-color: rgb(0, 0, 0);
+}
+.catSect{
+    font-size: 3rem;
+}
+#city{
+    grid-area: city;
+    background-image: url('https://images.unsplash.com/photo-1541336032412-2048a678540d?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#beach{
+    grid-area: beach;
+    background-image: url('https://images.unsplash.com/photo-1534570122623-99e8378a9aa7?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#wellness{
+    grid-area: wellness;
+    background-image: url('https://images.unsplash.com/photo-1538998073820-4dfa76300194?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#adventure{
+    grid-area: adventure;
+    background-image: url('https://images.unsplash.com/photo-1506773090264-ac0b07293a64?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+.catSect:hover{
+  transform: translateY(-10px) translateX(-10px);
+  box-shadow: 2rem 1rem 4rem #D2C4B4;
+  transition: transform 0.4s ease, box-shadow 0.2s ease;
+}
+#contentContain1{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "Spr Sum"
+    "Aut Win"
+    ;
+}
+.ChContain{
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    flex-direction: column;
+}
+.ChContain h2{
+    margin-top: auto;
+    font-size: 5rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8)
+}
+.ChBtn{
+    margin-top: auto;
+}
+#springBtns{
+    background-image: url('https://plus.unsplash.com/premium_photo-1711217237364-827b31b57e92?q=80&w=1768&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') ;
+    grid-area: Spr;
+}
+#summerBtns{
+    grid-area: Sum;
+    background-image: url('https://plus.unsplash.com/premium_photo-1677494867836-3f56b1261bc5?q=80&w=1708&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+#fallBtns{
+    grid-area: Aut;
+    background-image: url('https://images.unsplash.com/photo-1507371341162-763b5e419408?q=80&w=1339&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+#winterBtns{
+    grid-area: Win;
+    background-image: url('https://plus.unsplash.com/premium_photo-1669990950563-8b31d8ed237b?q=80&w=1550&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+
+/*Final Page styling*/
+.viewF{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 6rem 1fr;
+    grid-template-areas:
+    "next"
+    "content"
+    ;
+}
+#contentContainF{
+    grid-area: content;
+    display: flex;
+    flex-direction: column; /* Stacks the Title row *above* the Workspace elements */
+    gap: 20px;              /* Clean separation between your title and workspace grids */
+    padding: 24px;
+    height: 100%;
+    box-sizing: border-box;
+}
+#ccfElements{
+    display: flex;
+    flex-direction: row;    /* Restores side-by-side split screen positioning */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 32px;              /* Perfect breathing space between Left & Right workspaces */
+    width: 100%;
+    flex-grow: 1;
+}
+
+.leftAlign{
+    display: flex;
+    flex-direction: row;
+}
+#calTitleNav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 8rem;
+}
+.ContainerCal{
+    background-color: rgb(247, 247, 247);
+    border-radius: 5%;
+    padding: 1rem;
+    margin: 3rem;
+    display: flex;
+    flex-direction: column;
+    max-width: 50rem;
+    height: 48rem;
+}
+.calendarContain {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 0px;
+    width: 100%;
+}
+.calDay-card {
+    background-color: rgba(230, 230, 230, 0);
+    border-radius: 0px;
+    min-width: 60px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    padding: 0.5rem;
+
+} 
+#calendarGrid .calDateBtn {
+    color: #2b2d42;
+    width: 100%;
+    height: 100%;
+    font-size: 2rem;
+    padding: 1rem 1rem;
+    border-radius: 1rem;
+    background-color: rgb(159, 159, 159);
+    box-shadow: 1rem 10px 20px rgba(0,0,0,0.1);
+    margin: 0;
+}
+#calTitleNav .calNavBtn {
+    font-size: 2rem;
+    padding: 1rem 3rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+}
+.dateRange{
+    background-color: #ff1919;
+}
+.customList{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    border: #2b2d42;
+    margin-right: 1rem;
+    border-radius: 10px;
+}
+.customList button{
+    font-size: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+    margin: 0;
+}
+.customList form{
+    display: flex;
+    flex-direction: row;
+    margin: 1rem;
+}
+.customList ul{
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    
+}
+.customList ul li{
+    border: 2px solid #2b2d42;
+    border-radius: 1rem;
+    padding:1rem 5rem;
+    padding-left: 0.5rem;
+    width: 100%
+}
+#planListTopContain{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 20rem;
+}
+.selectedPl{
+    background-color: rgb(255, 164, 29);
+    color: white !important;
+    border: 2px solid #edf2f4;
+    transform: scale(1.05);
+}
+.weatherDash{
+    background-color: rgb(187, 65, 65);
+}
+
+/*Nav Button Styling*/
+.navButton{
+  font-size: 1.5rem;
+  padding: 1rem 1rem;
+  border-radius: 1.5rem;
+  margin-right: 3rem;
+}
+
+/*Mobile View Styling*/
+@media (max-width: 30rem) {
+
+}@import url(base.css);
+h1{
+    margin: 2rem;
+    font-weight: 900;
+}
+.mainPText p{
+    font-weight: 600;
+    margin: 2rem;
+}
+.hidden{
+    display: none !important;
+}
+.checkedItem{
+    text-decoration: line-through;
+    color: rgba(128, 128, 128, 0.5); 
+    opacity: 0.6; 
+    transition: all 0.2s ease;
+}
+.selected{
+    background-color: #AACDDC !important;
+    color: rgb(255, 255, 255) !important;
+    border: 2px solid #b9ebff;
+    transform: scale(1.05);
+}
+.logForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.log-title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem;
+}
+.dialog{
+    margin-left: auto;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    border-radius: 1.5rem; 
+    padding: 2rem;
+}
+#accountCloseBtn{
+    display: flex;
+    justify-content: end;
+    padding-bottom: 1rem;
+}
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. DIALOG MODAL BASE CONTAINER                                            */
+/* -------------------------------------------------------------------------- */
+dialog {
+    border: none;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 400px; /* Perfect, snug mobile-to-desktop form width */
+    background: #ffffff;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+}
+
+/* 🌟 MAGIC PROPERTY: Styles the dim/blur overlay behind the open modal */
+dialog::backdrop {
+    background-color: rgba(15, 23, 42, 0.4); /* Dark slate transparency */
+    backdrop-filter: blur(4px); /* Modern glassmorphism blur effect */
+}
+
+/* Smooth fade-in animation when showModal() is triggered */
+dialog[open] {
+    animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. FORM STRUCTURAL LAYOUT                                                 */
+/* -------------------------------------------------------------------------- */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.auth-header h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.auth-header p {
+    margin: 0;
+    color: #64748b;
+}
+
+/* Grouping labels and inputs together */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: #334155;
+    letter-spacing: 0.2px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. INPUT FIELDS (TEXT, EMAIL, PASSWORD)                                   */
+/* -------------------------------------------------------------------------- */
+.auth-input {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: #0f172a;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+/* Interactive focus highlight accent */
+.auth-input:focus {
+    outline: none;
+    background-color: #ffffff;
+    border-color: #3b82f6; /* Vivid royal blue highlight border */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); /* Soft outer ring */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. BUTTON ACTIONS & TRANSITIONS                                           */
+/* -------------------------------------------------------------------------- */
+
+.auth-submit-btn:hover {
+    background-color: #2563eb; /* Slightly deeper blue on mouse hover */
+}
+
+.auth-submit-btn:active {
+    transform: scale(0.98); /* Tiny physical click compression feedback */
+}
+
+/* Modal close icon or utility footer text button */
+.auth-secondary-btn {
+    background: none;
+    border: none;
+    color: #475569;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    transition: color 0.15s ease;
+}
+
+.auth-secondary-btn:hover {
+    color: #0f172a;
+}
+
+.auth-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+    color: #64748b;
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. SAVED LIST CONTAINER                                                   */
+/* -------------------------------------------------------------------------- */
+#recommsList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px; /* Even spacing between saved trip rows */
+    padding: 10px 0;
+    margin: 0;
+    list-style-type: none; /* Strips browser default bullet points */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE SAVED TRIP ROW CARD                                                */
+/* -------------------------------------------------------------------------- */
+.saved-trip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: #f8fafc; /* Ultra-light grey-blue background card */
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hovering over the row subtly sharpens the borders */
+.saved-trip-row:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. LEFT COLUMN: TEXT DETAILS                                              */
+/* -------------------------------------------------------------------------- */
+.saved-trip-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Location Header with Inline Custom Icon Handling */
+.saved-location-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.location-pin-icon {
+    font-size: 1.1rem;
+    color: #64748b;
+}
+
+.saved-trip-location {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0f172a; /* Deep charcoal title */
+}
+
+/* Date Sub-tag styling */
+.saved-trip-dates {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #64748b;
+    padding-left: 24px; /* Perfectly aligns description text under the location text */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. RIGHT COLUMN: WORKSPACE INTERACTION CONTROLS                           */
+/* -------------------------------------------------------------------------- */
+.saved-trip-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Uniform horizontal spacing between buttons */
+}
+
+/* Standard Base Action Button Properties */
+.btn-trip-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+/* Edit Workspace Action configuration */
+.btn-edit {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.btn-edit:hover {
+    background-color: #cbd5e1;
+    color: #0f172a;
+}
+
+/* Delete Destructive Action configuration */
+.btn-delete {
+    background-color: #fee2e2; /* Soft pastel red */
+    color: #ef4444;            /* Sharp crimson alert text */
+    border: 1px solid #fca5a5;
+}
+
+.btn-delete:hover {
+    background-color: #fecaca;
+    border-color: #f87171;
+    transform: scale(1.02); 
+
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. RECOMMENDATIONS GRID CONTAINER                                          */
+/* -------------------------------------------------------------------------- */
+#recommendsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+    gap: 32px; /* Uniformly spaces out cards without messing up margins */
+    padding: 20px;
+    list-style: none;
+    width: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE CARD CONTAINER WRAPPER                                              */
+/* -------------------------------------------------------------------------- */
+.recomm-item {
+    display: flex;
+    flex-direction: column; /* Stacks image top, info middle, actions bottom */
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    align-items: stretch;
+}
+
+/* Subtle interactive card elevation lift on hover */
+.recomm-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. INNER SELECTION BUTTON WRAPPER                                         */
+/* -------------------------------------------------------------------------- */
+.recommPick {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    flex-grow: 1; /* Ensures the button expands to fill container height */
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+/* Image scaling handler */
+.recomm-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Prevents squishing, crops elegantly */
+    border-bottom: 1px solid #e2e8f0;
+    transition: transform 0.5s ease;
+}
+
+.recomm-item:hover .recomm-img {
+    transform: scale(1.03); /* Tiny cinematic zoom on hover */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. TEXT CONTENT GRAPHICS                                                   */
+/* -------------------------------------------------------------------------- */
+.recomm-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Destination Header text style */
+.recomm-info strong {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+/* Date Range Tag styling */
+.recomm-info small {
+    display: inline-block;
+    align-self: flex-start; /* Keeps the background pill bound to text size */
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    background-color: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 9999px; /* Absolute rounded pill look */
+    letter-spacing: 0.2px;
+}
+
+/* Active background selection layout state overrides */
+.recommPick.selected {
+    background-color: #f0fdf4; /* Light emerald tint */
+}
+
+.recommPick.selected + div + .recomm-info strong {
+    color: #d6e7dc; /* Text updates to deep green if selected */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. SIDE CONTROL CONTAINER ROW (THE CHECKBOX PANEL)                        */
+/* -------------------------------------------------------------------------- */
+/* Positions the checkbox wrapper inside a clean, interactive absolute badge */
+.recomm-item > div:has(.recommCheck) {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+}
+
+/* Modern styling layout for checkbox component nodes */
+.recommCheck {
+    appearance: none; /* Strips browser default UI graphics */
+    -webkit-appearance: none;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px); /* Glassmorphism background look */
+    border: 2px solid #cbd5e1;
+    border-radius: 50%; /* Circle profile shape */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hovering state changes check circle boundary accent values */
+.recommCheck:hover {
+    transform: scale(1.05);
+    border-color: #94a3b8;
+}
+
+/* Checked styling changes circle fill color asset properties */
+.recommCheck:checked {
+    background-color: #3b82f6; /* Premium vivid royal blue */
+    border-color: #3b82f6;
+}
+
+/* Custom indicator generation element mapping */
+.recommCheck:checked::after {
+    content: "✓";
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+
+/*Main Page styling*/
+.viewMain{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 30rem 1fr;
+    grid-template-areas:
+    "section"
+    "searchBox";
+}
+.introContainer{
+    align-items: center;
+    justify-content:end;
+    grid-area: section;
+    flex-direction: column;
+    padding: 2rem ;
+    background-color: rgba(209, 5, 5, 0);
+}
+.inputContain{
+    grid-area: searchBox;
+    background-color: rgba(175, 8, 58, 0);
+    display: flex;
+    align-items:center;
+    justify-content: start;
+    flex-direction: column;
+    margin-bottom: auto;
+}
+
+.inputContain form{
+    display: flex;
+    align-items:start;
+    justify-content: center;
+    flex-direction: row;
+    font-size: 3rem;
+    backdrop-filter: blur(5px);
+    border-radius: 2rem;
+    background-color: rgba(255, 255, 255, 0.13);
+    padding: 4rem;
+}
+.inputContain form input{
+  border-radius: 1rem;
+  font-size: 3rem;
+  padding: 1rem 1.5rem;
+  border: 2px solid #d2c4b462;
+  background-color: rgba(255, 255, 255, 0.646);
+  text-align: center;
+  box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.655);
+}
+.inputContain form button{
+    font-size: 3rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+.mainPText{
+    font-size: 4rem;
+    color: white;
+}
+#mainPage{
+    background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: bottom;
+    flex-direction: column;
+}
+
+/*Choice Page styling*/
+.viewCh{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 6rem 1fr;
+    grid-template-areas:
+    "title"
+    "content"
+    ;
+}
+.choiceHeader{
+    grid-area: title;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    flex-direction: row;
+    font-size: 2rem;
+    background-color: #81A6C6;
+}
+.content{
+    grid-area: content;
+    align-items:center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    background-color: #abe2ff;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+.content button{
+    font-size: 4rem;
+    padding: 1rem 2rem;
+    border-radius: 1.5rem;
+    margin: 4rem;
+    background-color: #aacddcd9;
+}
+#contentContain2{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "city beach adventure wellness"
+    ;
+    background-color: rgb(0, 0, 0);
+}
+.catSect{
+    font-size: 3rem;
+}
+#city{
+    grid-area: city;
+    background-image: url('https://images.unsplash.com/photo-1541336032412-2048a678540d?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#beach{
+    grid-area: beach;
+    background-image: url('https://images.unsplash.com/photo-1534570122623-99e8378a9aa7?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#wellness{
+    grid-area: wellness;
+    background-image: url('https://images.unsplash.com/photo-1538998073820-4dfa76300194?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#adventure{
+    grid-area: adventure;
+    background-image: url('https://images.unsplash.com/photo-1506773090264-ac0b07293a64?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+.catSect:hover{
+  transform: translateY(-10px) translateX(-10px);
+  box-shadow: 2rem 1rem 4rem #D2C4B4;
+  transition: transform 0.4s ease, box-shadow 0.2s ease;
+}
+#contentContain1{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "Spr Sum"
+    "Aut Win"
+    ;
+}
+.ChContain{
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    flex-direction: column;
+}
+.ChContain h2{
+    margin-top: auto;
+    font-size: 5rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8)
+}
+.ChBtn{
+    margin-top: auto;
+}
+#springBtns{
+    background-image: url('https://plus.unsplash.com/premium_photo-1711217237364-827b31b57e92?q=80&w=1768&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') ;
+    grid-area: Spr;
+}
+#summerBtns{
+    grid-area: Sum;
+    background-image: url('https://plus.unsplash.com/premium_photo-1677494867836-3f56b1261bc5?q=80&w=1708&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+#fallBtns{
+    grid-area: Aut;
+    background-image: url('https://images.unsplash.com/photo-1507371341162-763b5e419408?q=80&w=1339&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+#winterBtns{
+    grid-area: Win;
+    background-image: url('https://plus.unsplash.com/premium_photo-1669990950563-8b31d8ed237b?q=80&w=1550&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+
+/*Final Page styling*/
+.viewF{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 6rem 1fr;
+    grid-template-areas:
+    "next"
+    "content"
+    ;
+}
+#contentContainF{
+    grid-area: content;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.leftAlign{
+    display: flex;
+    flex-direction: row;
+}
+#calTitleNav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 8rem;
+}
+.ContainerCal{
+    background-color: rgb(247, 247, 247);
+    border-radius: 5%;
+    padding: 1rem;
+    margin: 3rem;
+    display: flex;
+    flex-direction: column;
+    max-width: 50rem;
+    height: 48rem;
+}
+.calendarContain {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 0px;
+    width: 100%;
+}
+.calDay-card {
+    background-color: rgba(230, 230, 230, 0);
+    border-radius: 0px;
+    min-width: 60px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    padding: 0.5rem;
+
+} 
+#calendarGrid .calDateBtn {
+    color: #2b2d42;
+    width: 100%;
+    height: 100%;
+    font-size: 2rem;
+    padding: 1rem 1rem;
+    border-radius: 1rem;
+    background-color: rgb(159, 159, 159);
+    box-shadow: 1rem 10px 20px rgba(0,0,0,0.1);
+    margin: 0;
+}
+#calTitleNav .calNavBtn {
+    font-size: 2rem;
+    padding: 1rem 3rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+}
+.dateRange{
+    background-color: #ff1919;
+}
+.customList{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    border: #2b2d42;
+    margin-right: 1rem;
+    border-radius: 10px;
+}
+.customList button{
+    font-size: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+    margin: 0;
+}
+.customList form{
+    display: flex;
+    flex-direction: row;
+    margin: 1rem;
+}
+.customList ul{
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    
+}
+.customList ul li{
+    border: 2px solid #2b2d42;
+    border-radius: 1rem;
+    padding:1rem 5rem;
+    padding-left: 0.5rem;
+    width: 100%
+}
+#planListTopContain{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 20rem;
+}
+.selectedPl{
+    background-color: rgb(255, 164, 29);
+    color: white !important;
+    border: 2px solid #edf2f4;
+    transform: scale(1.05);
+}
+.weatherDash{
+    background-color: rgb(187, 65, 65);
+}
+
+/*Nav Button Styling*/
+.navButton{
+  font-size: 1.5rem;
+  padding: 1rem 1rem;
+  border-radius: 1.5rem;
+  margin-right: 3rem;
+}
+
+/*Mobile View Styling*/
+@media (max-width: 30rem) {
+
+}@import url(base.css);
+h1{
+    margin: 2rem;
+    font-weight: 900;
+}
+.mainPText p{
+    font-weight: 600;
+    margin: 2rem;
+}
+.hidden{
+    display: none !important;
+}
+.checkedItem{
+    text-decoration: line-through;
+    color: rgba(128, 128, 128, 0.5); 
+    opacity: 0.6; 
+    transition: all 0.2s ease;
+}
+.selected{
+    background-color: #AACDDC !important;
+    color: rgb(255, 255, 255) !important;
+    border: 2px solid #b9ebff;
+    transform: scale(1.05);
+}
+.logForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.log-title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem;
+}
+.dialog{
+    margin-left: auto;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    border-radius: 1.5rem; 
+    padding: 2rem;
+}
+#accountCloseBtn{
+    display: flex;
+    justify-content: end;
+    padding-bottom: 1rem;
+}
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. DIALOG MODAL BASE CONTAINER                                            */
+/* -------------------------------------------------------------------------- */
+dialog {
+    border: none;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 400px; /* Perfect, snug mobile-to-desktop form width */
+    background: #ffffff;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+}
+
+/* 🌟 MAGIC PROPERTY: Styles the dim/blur overlay behind the open modal */
+dialog::backdrop {
+    background-color: rgba(15, 23, 42, 0.4); /* Dark slate transparency */
+    backdrop-filter: blur(4px); /* Modern glassmorphism blur effect */
+}
+
+/* Smooth fade-in animation when showModal() is triggered */
+dialog[open] {
+    animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. FORM STRUCTURAL LAYOUT                                                 */
+/* -------------------------------------------------------------------------- */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.auth-header h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.auth-header p {
+    margin: 0;
+    color: #64748b;
+}
+
+/* Grouping labels and inputs together */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: #334155;
+    letter-spacing: 0.2px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. INPUT FIELDS (TEXT, EMAIL, PASSWORD)                                   */
+/* -------------------------------------------------------------------------- */
+.auth-input {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: #0f172a;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+/* Interactive focus highlight accent */
+.auth-input:focus {
+    outline: none;
+    background-color: #ffffff;
+    border-color: #3b82f6; /* Vivid royal blue highlight border */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); /* Soft outer ring */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. BUTTON ACTIONS & TRANSITIONS                                           */
+/* -------------------------------------------------------------------------- */
+
+.auth-submit-btn:hover {
+    background-color: #2563eb; /* Slightly deeper blue on mouse hover */
+}
+
+.auth-submit-btn:active {
+    transform: scale(0.98); /* Tiny physical click compression feedback */
+}
+
+/* Modal close icon or utility footer text button */
+.auth-secondary-btn {
+    background: none;
+    border: none;
+    color: #475569;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    transition: color 0.15s ease;
+}
+
+.auth-secondary-btn:hover {
+    color: #0f172a;
+}
+
+.auth-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+    color: #64748b;
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. SAVED LIST CONTAINER                                                   */
+/* -------------------------------------------------------------------------- */
+#recommsList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px; /* Even spacing between saved trip rows */
+    padding: 10px 0;
+    margin: 0;
+    list-style-type: none; /* Strips browser default bullet points */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE SAVED TRIP ROW CARD                                                */
+/* -------------------------------------------------------------------------- */
+.saved-trip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: #f8fafc; /* Ultra-light grey-blue background card */
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hovering over the row subtly sharpens the borders */
+.saved-trip-row:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. LEFT COLUMN: TEXT DETAILS                                              */
+/* -------------------------------------------------------------------------- */
+.saved-trip-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Location Header with Inline Custom Icon Handling */
+.saved-location-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.location-pin-icon {
+    font-size: 1.1rem;
+    color: #64748b;
+}
+
+.saved-trip-location {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0f172a; /* Deep charcoal title */
+}
+
+/* Date Sub-tag styling */
+.saved-trip-dates {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #64748b;
+    padding-left: 24px; /* Perfectly aligns description text under the location text */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. RIGHT COLUMN: WORKSPACE INTERACTION CONTROLS                           */
+/* -------------------------------------------------------------------------- */
+.saved-trip-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Uniform horizontal spacing between buttons */
+}
+
+/* Standard Base Action Button Properties */
+.btn-trip-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+/* Edit Workspace Action configuration */
+.btn-edit {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.btn-edit:hover {
+    background-color: #cbd5e1;
+    color: #0f172a;
+}
+
+/* Delete Destructive Action configuration */
+.btn-delete {
+    background-color: #fee2e2; /* Soft pastel red */
+    color: #ef4444;            /* Sharp crimson alert text */
+    border: 1px solid #fca5a5;
+}
+
+.btn-delete:hover {
+    background-color: #fecaca;
+    border-color: #f87171;
+    transform: scale(1.02); 
+
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. RECOMMENDATIONS GRID CONTAINER                                          */
+/* -------------------------------------------------------------------------- */
+#recommendsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+    gap: 32px; /* Uniformly spaces out cards without messing up margins */
+    padding: 20px;
+    list-style: none;
+    width: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE CARD CONTAINER WRAPPER                                              */
+/* -------------------------------------------------------------------------- */
+.recomm-item {
+    display: flex;
+    flex-direction: column; /* Stacks image top, info middle, actions bottom */
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    align-items: stretch;
+}
+
+/* Subtle interactive card elevation lift on hover */
+.recomm-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. INNER SELECTION BUTTON WRAPPER                                         */
+/* -------------------------------------------------------------------------- */
+.recommPick {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    flex-grow: 1; /* Ensures the button expands to fill container height */
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+/* Image scaling handler */
+.recomm-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Prevents squishing, crops elegantly */
+    border-bottom: 1px solid #e2e8f0;
+    transition: transform 0.5s ease;
+}
+
+.recomm-item:hover .recomm-img {
+    transform: scale(1.03); /* Tiny cinematic zoom on hover */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. TEXT CONTENT GRAPHICS                                                   */
+/* -------------------------------------------------------------------------- */
+.recomm-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Destination Header text style */
+.recomm-info strong {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+/* Date Range Tag styling */
+.recomm-info small {
+    display: inline-block;
+    align-self: flex-start; /* Keeps the background pill bound to text size */
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    background-color: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 9999px; /* Absolute rounded pill look */
+    letter-spacing: 0.2px;
+}
+
+/* Active background selection layout state overrides */
+.recommPick.selected {
+    background-color: #f0fdf4; /* Light emerald tint */
+}
+
+.recommPick.selected + div + .recomm-info strong {
+    color: #d6e7dc; /* Text updates to deep green if selected */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. SIDE CONTROL CONTAINER ROW (THE CHECKBOX PANEL)                        */
+/* -------------------------------------------------------------------------- */
+/* Positions the checkbox wrapper inside a clean, interactive absolute badge */
+.recomm-item > div:has(.recommCheck) {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+}
+
+/* Modern styling layout for checkbox component nodes */
+.recommCheck {
+    appearance: none; /* Strips browser default UI graphics */
+    -webkit-appearance: none;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px); /* Glassmorphism background look */
+    border: 2px solid #cbd5e1;
+    border-radius: 50%; /* Circle profile shape */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hovering state changes check circle boundary accent values */
+.recommCheck:hover {
+    transform: scale(1.05);
+    border-color: #94a3b8;
+}
+
+/* Checked styling changes circle fill color asset properties */
+.recommCheck:checked {
+    background-color: #3b82f6; /* Premium vivid royal blue */
+    border-color: #3b82f6;
+}
+
+/* Custom indicator generation element mapping */
+.recommCheck:checked::after {
+    content: "✓";
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+
+/*Main Page styling*/
+.viewMain{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 30rem 1fr;
+    grid-template-areas:
+    "section"
+    "searchBox";
+}
+.introContainer{
+    align-items: center;
+    justify-content:end;
+    grid-area: section;
+    flex-direction: column;
+    padding: 2rem ;
+    background-color: rgba(209, 5, 5, 0);
+}
+.inputContain{
+    grid-area: searchBox;
+    background-color: rgba(175, 8, 58, 0);
+    display: flex;
+    align-items:center;
+    justify-content: start;
+    flex-direction: column;
+    margin-bottom: auto;
+}
+
+.inputContain form{
+    display: flex;
+    align-items:start;
+    justify-content: center;
+    flex-direction: row;
+    font-size: 3rem;
+    backdrop-filter: blur(5px);
+    border-radius: 2rem;
+    background-color: rgba(255, 255, 255, 0.13);
+    padding: 4rem;
+}
+.inputContain form input{
+  border-radius: 1rem;
+  font-size: 3rem;
+  padding: 1rem 1.5rem;
+  border: 2px solid #d2c4b462;
+  background-color: rgba(255, 255, 255, 0.646);
+  text-align: center;
+  box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.655);
+}
+.inputContain form button{
+    font-size: 3rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+.mainPText{
+    font-size: 4rem;
+    color: white;
+}
+#mainPage{
+    background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: bottom;
+    flex-direction: column;
+}
+
+/*Choice Page styling*/
+.viewCh{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 6rem 1fr;
+    grid-template-areas:
+    "title"
+    "content"
+    ;
+}
+.choiceHeader{
+    grid-area: title;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    flex-direction: row;
+    font-size: 2rem;
+    background-color: #81A6C6;
+}
+.content{
+    grid-area: content;
+    align-items:center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    background-color: #abe2ff;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+.content button{
+    font-size: 4rem;
+    padding: 1rem 2rem;
+    border-radius: 1.5rem;
+    margin: 4rem;
+    background-color: #aacddcd9;
+}
+#contentContain2{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "city beach adventure wellness"
+    ;
+    background-color: rgb(0, 0, 0);
+}
+.catSect{
+    font-size: 3rem;
+}
+#city{
+    grid-area: city;
+    background-image: url('https://images.unsplash.com/photo-1541336032412-2048a678540d?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#beach{
+    grid-area: beach;
+    background-image: url('https://images.unsplash.com/photo-1534570122623-99e8378a9aa7?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#wellness{
+    grid-area: wellness;
+    background-image: url('https://images.unsplash.com/photo-1538998073820-4dfa76300194?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+#adventure{
+    grid-area: adventure;
+    background-image: url('https://images.unsplash.com/photo-1506773090264-ac0b07293a64?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+.catSect:hover{
+  transform: translateY(-10px) translateX(-10px);
+  box-shadow: 2rem 1rem 4rem #D2C4B4;
+  transition: transform 0.4s ease, box-shadow 0.2s ease;
+}
+#contentContain1{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "Spr Sum"
+    "Aut Win"
+    ;
+}
+.ChContain{
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    flex-direction: column;
+}
+.ChContain h2{
+    margin-top: auto;
+    font-size: 5rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8)
+}
+.ChBtn{
+    margin-top: auto;
+}
+#springBtns{
+    background-image: url('https://plus.unsplash.com/premium_photo-1711217237364-827b31b57e92?q=80&w=1768&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') ;
+    grid-area: Spr;
+}
+#summerBtns{
+    grid-area: Sum;
+    background-image: url('https://plus.unsplash.com/premium_photo-1677494867836-3f56b1261bc5?q=80&w=1708&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+#fallBtns{
+    grid-area: Aut;
+    background-image: url('https://images.unsplash.com/photo-1507371341162-763b5e419408?q=80&w=1339&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+#winterBtns{
+    grid-area: Win;
+    background-image: url('https://plus.unsplash.com/premium_photo-1669990950563-8b31d8ed237b?q=80&w=1550&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+
+/*Final Page styling*/
+.viewF{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 6rem 1fr;
+    grid-template-areas:
+    "next"
+    "content"
+    ;
+}
+#contentContainF{
+    grid-area: content;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.leftAlign{
+    display: flex;
+    flex-direction: row;
+}
+#calTitleNav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 8rem;
+}
+.ContainerCal{
+    background-color: rgb(247, 247, 247);
+    border-radius: 5%;
+    padding: 1rem;
+    margin: 3rem;
+    display: flex;
+    flex-direction: column;
+    max-width: 50rem;
+    height: 48rem;
+}
+.calendarContain {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 0px;
+    width: 100%;
+}
+.calDay-card {
+    background-color: rgba(230, 230, 230, 0);
+    border-radius: 0px;
+    min-width: 60px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    padding: 0.5rem;
+
+} 
+#calendarGrid .calDateBtn {
+    color: #2b2d42;
+    width: 100%;
+    height: 100%;
+    font-size: 2rem;
+    padding: 1rem 1rem;
+    border-radius: 1rem;
+    background-color: rgb(159, 159, 159);
+    box-shadow: 1rem 10px 20px rgba(0,0,0,0.1);
+    margin: 0;
+}
+#calTitleNav .calNavBtn {
+    font-size: 2rem;
+    padding: 1rem 3rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+}
+.dateRange{
+    background-color: #ff1919;
+}
+.customList{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    border: #2b2d42;
+    margin-right: 1rem;
+    border-radius: 10px;
+}
+.customList button{
+    font-size: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 1.5rem;
+    background-color: rgb(159, 159, 159);
+    margin: 0;
+}
+.customList form{
+    display: flex;
+    flex-direction: row;
+    margin: 1rem;
+}
+.customList ul{
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    
+}
+.customList ul li{
+    border: 2px solid #2b2d42;
+    border-radius: 1rem;
+    padding:1rem 5rem;
+    padding-left: 0.5rem;
+    width: 100%
+}
+#planListTopContain{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 20rem;
+}
+.selectedPl{
+    background-color: rgb(255, 164, 29);
+    color: white !important;
+    border: 2px solid #edf2f4;
+    transform: scale(1.05);
+}
+.weatherDash{
+    background-color: rgb(187, 65, 65);
+}
+
+/*Nav Button Styling*/
+.navButton{
+  font-size: 1.5rem;
+  padding: 1rem 1rem;
+  border-radius: 1.5rem;
+  margin-right: 3rem;
+}
+
+/*Mobile View Styling*/
+@media (max-width: 30rem) {
+
+}
+.mainPText p{
+    font-weight: 600;
+    margin: 2rem;
+}
+.hidden{
+    display: none !important;
+}
+.checkedItem{
+    text-decoration: line-through;
+    color: rgba(128, 128, 128, 0.5); 
+    opacity: 0.6; 
+    transition: all 0.2s ease;
+}
+.selected{
+    background-color: #AACDDC !important;
+    color: rgb(255, 255, 255) !important;
+    border: 2px solid #b9ebff;
+    transform: scale(1.05);
+}
+.logForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.log-title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem;
+}
+.dialog{
+    margin-left: auto;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    border-radius: 1.5rem; 
+    padding: 2rem;
+}
+#accountCloseBtn{
+    display: flex;
+    justify-content: end;
+    padding-bottom: 1rem;
+}
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. DIALOG MODAL BASE CONTAINER                                            */
+/* -------------------------------------------------------------------------- */
+dialog {
+    border: none;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 400px; /* Perfect, snug mobile-to-desktop form width */
+    background: #ffffff;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+}
+
+/* 🌟 MAGIC PROPERTY: Styles the dim/blur overlay behind the open modal */
+dialog::backdrop {
+    background-color: rgba(15, 23, 42, 0.4); /* Dark slate transparency */
+    backdrop-filter: blur(4px); /* Modern glassmorphism blur effect */
+}
+
+/* Smooth fade-in animation when showModal() is triggered */
+dialog[open] {
+    animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. FORM STRUCTURAL LAYOUT                                                 */
+/* -------------------------------------------------------------------------- */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.auth-header h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.auth-header p {
+    margin: 0;
+    color: #64748b;
+}
+
+/* Grouping labels and inputs together */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: #334155;
+    letter-spacing: 0.2px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. INPUT FIELDS (TEXT, EMAIL, PASSWORD)                                   */
+/* -------------------------------------------------------------------------- */
+.auth-input {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: #0f172a;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+/* Interactive focus highlight accent */
+.auth-input:focus {
+    outline: none;
+    background-color: #ffffff;
+    border-color: #3b82f6; /* Vivid royal blue highlight border */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); /* Soft outer ring */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. BUTTON ACTIONS & TRANSITIONS                                           */
+/* -------------------------------------------------------------------------- */
+
+.auth-submit-btn:hover {
+    background-color: #2563eb; /* Slightly deeper blue on mouse hover */
+}
+
+.auth-submit-btn:active {
+    transform: scale(0.98); /* Tiny physical click compression feedback */
+}
+
+/* Modal close icon or utility footer text button */
+.auth-secondary-btn {
+    background: none;
+    border: none;
+    color: #475569;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    transition: color 0.15s ease;
+}
+
+.auth-secondary-btn:hover {
+    color: #0f172a;
+}
+
+.auth-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+    color: #64748b;
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. SAVED LIST CONTAINER                                                   */
+/* -------------------------------------------------------------------------- */
+#recommsList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px; /* Even spacing between saved trip rows */
+    padding: 10px 0;
+    margin: 0;
+    list-style-type: none; /* Strips browser default bullet points */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE SAVED TRIP ROW CARD                                                */
+/* -------------------------------------------------------------------------- */
+.saved-trip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: #f8fafc; /* Ultra-light grey-blue background card */
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hovering over the row subtly sharpens the borders */
+.saved-trip-row:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. LEFT COLUMN: TEXT DETAILS                                              */
+/* -------------------------------------------------------------------------- */
+.saved-trip-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Location Header with Inline Custom Icon Handling */
+.saved-location-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.location-pin-icon {
+    font-size: 1.1rem;
+    color: #64748b;
+}
+
+.saved-trip-location {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0f172a; /* Deep charcoal title */
+}
+
+/* Date Sub-tag styling */
+.saved-trip-dates {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #64748b;
+    padding-left: 24px; /* Perfectly aligns description text under the location text */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. RIGHT COLUMN: WORKSPACE INTERACTION CONTROLS                           */
+/* -------------------------------------------------------------------------- */
+.saved-trip-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Uniform horizontal spacing between buttons */
+}
+
+/* Standard Base Action Button Properties */
+.btn-trip-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+/* Edit Workspace Action configuration */
+.btn-edit {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.btn-edit:hover {
+    background-color: #cbd5e1;
+    color: #0f172a;
+}
+
+/* Delete Destructive Action configuration */
+.btn-delete {
+    background-color: #fee2e2; /* Soft pastel red */
+    color: #ef4444;            /* Sharp crimson alert text */
+    border: 1px solid #fca5a5;
+}
+
+.btn-delete:hover {
+    background-color: #fecaca;
+    border-color: #f87171;
+    transform: scale(1.02); 
+
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 1. RECOMMENDATIONS GRID CONTAINER                                          */
+/* -------------------------------------------------------------------------- */
+#recommendsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+    gap: 32px; /* Uniformly spaces out cards without messing up margins */
+    padding: 20px;
+    list-style: none;
+    width: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. THE CARD CONTAINER WRAPPER                                              */
+/* -------------------------------------------------------------------------- */
+.recomm-item {
+    display: flex;
+    flex-direction: column; /* Stacks image top, info middle, actions bottom */
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    align-items: stretch;
+}
+
+/* Subtle interactive card elevation lift on hover */
+.recomm-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. INNER SELECTION BUTTON WRAPPER                                         */
+/* -------------------------------------------------------------------------- */
+.recommPick {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    flex-grow: 1; /* Ensures the button expands to fill container height */
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+/* Image scaling handler */
+.recomm-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Prevents squishing, crops elegantly */
+    border-bottom: 1px solid #e2e8f0;
+    transition: transform 0.5s ease;
+}
+
+.recomm-item:hover .recomm-img {
+    transform: scale(1.03); /* Tiny cinematic zoom on hover */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. TEXT CONTENT GRAPHICS                                                   */
+/* -------------------------------------------------------------------------- */
+.recomm-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Destination Header text style */
+.recomm-info strong {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+/* Date Range Tag styling */
+.recomm-info small {
+    display: inline-block;
+    align-self: flex-start; /* Keeps the background pill bound to text size */
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    background-color: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 9999px; /* Absolute rounded pill look */
+    letter-spacing: 0.2px;
+}
+
+/* Active background selection layout state overrides */
+.recommPick.selected {
+    background-color: #f0fdf4; /* Light emerald tint */
+}
+
+.recommPick.selected + div + .recomm-info strong {
+    color: #d6e7dc; /* Text updates to deep green if selected */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. SIDE CONTROL CONTAINER ROW (THE CHECKBOX PANEL)                        */
+/* -------------------------------------------------------------------------- */
+/* Positions the checkbox wrapper inside a clean, interactive absolute badge */
+.recomm-item > div:has(.recommCheck) {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+}
+
+/* Modern styling layout for checkbox component nodes */
+.recommCheck {
+    appearance: none; /* Strips browser default UI graphics */
+    -webkit-appearance: none;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px); /* Glassmorphism background look */
+    border: 2px solid #cbd5e1;
+    border-radius: 50%; /* Circle profile shape */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hovering state changes check circle boundary accent values */
+.recommCheck:hover {
+    transform: scale(1.05);
+    border-color: #94a3b8;
+}
+
+/* Checked styling changes circle fill color asset properties */
+.recommCheck:checked {
+    background-color: #3b82f6; /* Premium vivid royal blue */
+    border-color: #3b82f6;
+}
+
+/* Custom indicator generation element mapping */
+.recommCheck:checked::after {
+    content: "✓";
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+
 /*Main Page styling*/
 .viewMain{
     display: grid;

@@ -23,6 +23,9 @@ app.use("/api/weather", weatherRoutes);
 const climateRoutes = require("./routes/climateRoutes")
 app.use("/api/climate", climateRoutes)
 
+const recommendationRoutes = require('./routes/recommendationRoutes');
+app.use('/api/recommendations', recommendationRoutes);
+
 
 
 mongoose.connect(dbURI)

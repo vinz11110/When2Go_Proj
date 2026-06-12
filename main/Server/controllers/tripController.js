@@ -32,7 +32,7 @@ const generatePackingItems = (type) => {
 
 exports.saveTrip = async (req, res) => {
     try {
-        const { destination, startDate, endDate, vacanType} = req.body;
+        const { destination, startDate, endDate, vacationType, dayPlanner} = req.body;
 
         const user = await User.findById(req.user);
         if (!user) {
@@ -46,7 +46,8 @@ exports.saveTrip = async (req, res) => {
             startDate,
             endDate,
             vacationType,
-            packingList: generatedList
+            packingList: generatedList,
+            dayPlanner: dayPlanner || {}
         }
 
         user.savedPlans.push(newTrip);
@@ -71,5 +72,104 @@ exports.getTrips = async (req, res) => {
     }   catch (error) {
         console.error("Get Trips Error: ", error);
         res.status(500).json({ success: false, message: 'Server  error while fetching saved trips'});
+    }
+};
+
+exports.getTripById = async (req, res) => {
+    try {
+        const tripId = req.params.tripId;
+        const user = await User.findById(req.user);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found'});
+        }
+
+        const trip = user.savedPlans.id(tripId);
+
+        if (!trip) {
+            return res.status(404).json({ success: false, message: 'Trip not found'});
+        }
+
+        res.status(200).json({ success: true, data: trip});
+    }   catch (error) {
+        console.error('Get trip by ID error: ', error);
+        res.status(500).json({ success: false, message: 'Server error trying to retrieve trip'});
+    }
+};
+
+exports.updatePackingList = async (req, res) => {
+    try {
+        const { tripId } = req.params;
+        const { action, itemName, itemId} = req.body;
+
+        const user = await User.findById(req.user);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found'});
+        }
+
+        const trip = user.savedPlans.id(tripId);
+        if (!trip) {
+            return res.status(404).json({ success: false, message: 'Trip not found'});        
+        }
+
+        if (action === 'add') {
+            if (!itemName) {
+                return res.status(400).json({ success: false, message: 'Item name is required'});
+            }
+            trip.packingList.push({ item: itemName, isPacked: false});
+        }
+        else if (action === 'remove') {
+            if (!itemId) {
+                return res.status(400).json({ success: false, message: 'Item ID required to remove'});
+            }
+            trip.packingList = trip.packingList.filter(item => item._id.toString() !== itemId);
+        }
+        else if (action === 'toggle') {
+            if (!itemId) {
+                return res.status(400).json({ success: false, message: 'Item ID required to toggle'});
+            }
+            const itemToToggle = trip.packingList.id(itemId);
+
+            if (itemToToggle) {
+                itemToToggle.isPacked = !itemToToggle.isPacked;
+            }   else {
+                return res.status(404).json({ success: false, message: 'Item not found in packing list'});
+            }
+        }
+        else {
+            return res.status(400).json({ success: false, message: 'Invalid action'});
+        }
+
+        await user.save();
+    
+        res.status(200).json({ success: true, message: 'Packing list updated', data: trip.packingList});
+    } catch (error) {
+        console.error('Update Packing List Error: ', error);
+        res.status(500).json({ success: false, message: 'Server updating error list'});
+    }
+};
+
+exports.deleteTrip = async (req, res) => {
+    try {
+        const {tripId } = req.params;
+
+        const user = await User.findById(req.user);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found'});
+        }
+
+        const trip = user.savedPlans.id(tripId);
+        if (!trip) {
+            return res.status(404).json({ success: false, message: 'Trip not found'});
+        }
+
+        user.savedPlans.pull(tripId);
+
+        await user.save();
+
+        res.status(200).json({ success: true, message: 'Trip deleted successfully'});
+    }   catch (error) {
+        console.error('Trip deletion error: ', error);
+        res.status(500).json({ success: false, message: 'Server error while deleting trip'});
     }
 };

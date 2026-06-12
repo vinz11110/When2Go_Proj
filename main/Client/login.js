@@ -28,7 +28,7 @@ async function login() {
         }   else {
             alert("Error: " + data.message);
         }
-    } catch {
+    } catch (error) {
         console.error("Failed to connect to the server.", error);
         alert("Could not reach the server.");
     }

@@ -22,7 +22,12 @@ const userSchema = new mongoose.Schema({
                 type: Boolean,
                 default: false
             }
-        }]
+        }],
+        dayPlanner: {
+            type: Map,
+            of: [String], //important for Mongoose so it knows that keys will be array of strings
+            default: {}
+        }
     }],
 }, {
     timestamps: true 
