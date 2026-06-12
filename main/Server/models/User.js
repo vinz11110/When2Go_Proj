@@ -36,4 +36,4 @@ const userSchema = new mongoose.Schema({
 });
 
 //exporting user model so controller can use it
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.models.User || mongoose.model('User', userSchema)

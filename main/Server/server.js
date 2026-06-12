@@ -20,9 +20,6 @@ app.use('/api/trips', tripRoutes);
 const weatherRoutes = require("./routes/weatherRoutes");
 app.use("/api/weather", weatherRoutes);
 
-const climateRoutes = require("./routes/climateRoutes")
-app.use("/api/climate", climateRoutes)
-
 const recommendationRoutes = require('./routes/recommendationRoutes');
 app.use('/api/recommendations', recommendationRoutes);
 

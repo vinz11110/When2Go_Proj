@@ -52,5 +52,5 @@ async function updateLists(getTripById, updateData) {
 
 module.exports = {
     generatePackingItems,
-    updateTripLists
+    updateLists
 };

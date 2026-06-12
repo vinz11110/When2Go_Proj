@@ -1,4 +1,4 @@
-const User = require("../models/User")
+const User = require("../models/user")
 const listService = require("../services/listService")
 
 exports.updateLists = async (req, res) => {
