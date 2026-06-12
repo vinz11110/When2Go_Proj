@@ -5,7 +5,7 @@ const User = require('../models/user');
 exports.registerUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-
+        console.log("DATA RECEIVED FROM FRONTEND:", req.body);
         //checking if user already exists in Databse
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -13,13 +13,13 @@ exports.registerUser = async (req, res) => {
         }
 
         // Hashing the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // const salt = await bcrypt.genSalt(10);
+        // const hashedPassword = await bcrypt.hash(password, salt);
 
         // Creating and saving the new user
         const newUser = new User({
             email,
-            password: hashedPassword
+            password: password
         });
         await newUser.save();
 
@@ -51,7 +51,7 @@ exports.loginUser = async (req, res) => {
         }
 
         // Comparing password with hashed password in the DB
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = user.password === password;
         if (!isMatch) {
             return res.status(400).json({ success: false, message: 'Invalid credentials'});
         }
