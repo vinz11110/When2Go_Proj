@@ -1,6 +1,7 @@
+const { updateLists } = require('../controllers/listController');
+const Trip = require('../models/trip')
 
-
-exports.generatePackingItems = (type) => {
+generatePackingItems = (type) => {
 
     const baseItems = ["Toothbrush", "Toothpaste", "Phone Charger", "Passport"];
     let specificItems= [];
@@ -28,4 +29,28 @@ exports.generatePackingItems = (type) => {
     return combinedList.map(itemName => {
         return { item: itemName, isPacked: false};
     });
+};
+
+async function updateLists(getTripById, updateData) {
+    const trip = await Trip.findById(tripId);
+
+    if(!trip){
+        throw new Error("Trip not Found")
+    };
+
+    if(updateData.packingList){
+        trip.packingList = updateData.packingList
+    }
+    if(updateData.dayPlanner){
+        trip.dayPlanner = updateData.dayPlanner
+    }
+
+    await trip.save()
+
+    return trip;
+}
+
+module.exports = {
+    generatePackingItems,
+    updateTripLists
 };
