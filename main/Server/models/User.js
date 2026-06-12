@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
             of: [String], //important for Mongoose so it knows that keys will be array of strings
             default: {}
         },
-        score: int
+        score: Number
     }],
 }, {
     timestamps: true 

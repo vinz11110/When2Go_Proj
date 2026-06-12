@@ -1,4 +1,4 @@
-const { updateLists } = require('../controllers/listController');
+const listController = require('../controllers/listController');
 const Trip = require('../models/trip')
 
 generatePackingItems = (type) => {
