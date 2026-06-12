@@ -4,7 +4,7 @@ let userdata = {
     categories:[],
     selectDates:[],
     selectCalD:null,
-    session: true,
+    session: false,
     recommId:'575647655',
     currentPage:'mainPage',
     startMonth: null,
@@ -812,7 +812,9 @@ function findCheckedRecomms(){
     })
     saveUsrData();
 }
-async function login() {
+async function login(event) {
+    if (event) event.preventDefault();
+    console.log('login')
     //getting value from the inputs
     const email = document.getElementById('logUsername').value;
     const password = document.getElementById('logPassword').value;
