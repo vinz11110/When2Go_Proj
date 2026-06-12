@@ -682,7 +682,7 @@ async function deleteSavedTrip(ID){
     const rawId = ID.replace('delete-', '')
     userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
     // const rawId = ID.replace('delete-', '')
-    // let URL = `http://localhost:3000/deleteSavedTrip?Id=${rawId}`
+    // let URL = `http://localhost:3000/api/trips/${rawId}`
     // fetch(URL, {
     //     method: 'DELETE',
     //     headers: {
