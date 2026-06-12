@@ -1,3 +1,5 @@
+const user = require("../Server/models/user");
+
 let userdata = {
     days: null,
     months:[],
@@ -537,89 +539,90 @@ function loadInTripData(id){
     saveUsrData();
 }
 function getRecomms(){
-    const mockRecommendations = [
-        {
-            "ID": "575647655",
-            "City": "Istanbul",
-            "Country": "Turkey",
-            "Pic": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=300&q=80",
-            "DateRange": "15.07.2026 - 22.07.2026"
-        },
-        {
-            "ID": "984321554",
-            "City": "Marrakech",
-            "Country": "Morocco",
-            "Pic": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?auto=format&fit=crop&w=300&q=80",
-            "DateRange": "01.08.2026 - 08.08.2026"
-        },
-        {
-            "ID": "223411987",
-            "City": "Casablanca",
-            "Country": "Morocco",
-            "Pic": "https://images.unsplash.com/photo-1559586616-3df185a1e6c2?auto=format&fit=crop&w=300&q=80",
-            "DateRange": "10.08.2026 - 17.08.2026"
-        }
-    ];
-    const container = document.getElementById('recommendsList');
-    container.innerHTML = "";
-    for(const recomm of mockRecommendations){
-        const li = document.createElement('li')
-        li.className = "recomm-item";
-        li.innerHTML = `
-            <button type="button" class='recommPick' id="pick-${recomm.ID}" onclick='toggleRecommPick(this)'>
-                <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
-                <div class="recomm-info">
-                    <strong>${recomm.City}, ${recomm.Country}</strong><br>
-                    <small>${recomm.DateRange}</small>
-                </div>
-            </button>
-            <div>
-                <input type="checkbox" class='recommCheck' id="check-${recomm.ID}">
-            </div>
-            `;
-        container.append(li)}
-
-    // fetch('http://localhost:3000/getTripRecommendations', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json',
+    // const mockRecommendations = [
+    //     {
+    //         "ID": "575647655",
+    //         "City": "Istanbul",
+    //         "Country": "Turkey",
+    //         "Pic": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=300&q=80",
+    //         "DateRange": "15.07.2026 - 22.07.2026"
     //     },
-    //     body: JSON.stringify({
-    //         tripLength: userdata.days,
-    //         months: userdata.months,
-    //         categories: userdata.categories
-    //     })
-    // })
-    // .then(response => {
-    //     if (!response.ok) {
-    //         throw new Error('Network response was not ok');
+    //     {
+    //         "ID": "984321554",
+    //         "City": "Marrakech",
+    //         "Country": "Morocco",
+    //         "Pic": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?auto=format&fit=crop&w=300&q=80",
+    //         "DateRange": "01.08.2026 - 08.08.2026"
+    //     },
+    //     {
+    //         "ID": "223411987",
+    //         "City": "Casablanca",
+    //         "Country": "Morocco",
+    //         "Pic": "https://images.unsplash.com/photo-1559586616-3df185a1e6c2?auto=format&fit=crop&w=300&q=80",
+    //         "DateRange": "10.08.2026 - 17.08.2026"
     //     }
-    //     return response.json();
-    // })
-    // .then(data => {
-    //     const container = document.getElementById('recommendsList');
-    //     container.innerHTML = "";
-    //     for(const recomm of data){
-    //         const li = document.createElement('li')
-    //         li.className = "recomm-item";
-    //         li.innerHTML = `
-    //             <button type="button" class='recommPick' id="pick-${recomm.ID}" onclick='toggleRecommPick(this)'>
-    //                 <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
-    //                 <div class="recomm-info">
-    //                     <strong>${recomm.City}, ${recomm.Country}</strong><br>
-    //                     <small>${recomm.DateRange}</small>
-    //                 </div>
-    //             </button>
-    //             <div>
-    //                 <input type="checkbox" class='recommCheck' id="check-${recomm.ID}">
+    // ];
+    // const container = document.getElementById('recommendsList');
+    // container.innerHTML = "";
+    // for(const recomm of mockRecommendations){
+    //     const li = document.createElement('li')
+    //     li.className = "recomm-item";
+    //     li.innerHTML = `
+    //         <button type="button" class='recommPick' id="pick-${recomm.ID}" onclick='toggleRecommPick(this)'>
+    //             <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
+    //             <div class="recomm-info">
+    //                 <strong>${recomm.City}, ${recomm.Country}</strong><br>
+    //                 <small>${recomm.DateRange}</small>
     //             </div>
-    //             `;
-    //         container.append(li)}
-    // })
-    // .catch(error => {
-        // console.error("Failed to connect to the server.", error);
-        // alert("Could not reach the server.");
-    // });
+    //         </button>
+    //         <div>
+    //             <input type="checkbox" class='recommCheck' id="check-${recomm.ID}">
+    //         </div>
+    //         `;
+    //     container.append(li)}
+
+    fetch('http://localhost:3000/api/recommendations/getTripRecommendations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            tripLength: userdata.days,
+            months: userdata.months,
+            categories: userdata.categories,
+            token: userdata.sessionToken
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const container = document.getElementById('recommendsList');
+        container.innerHTML = "";
+        for(const recomm of data){
+            const li = document.createElement('li')
+            li.className = "recomm-item";
+            li.innerHTML = `
+                <button type="button" class='recommPick' id="pick-${recomm.ID}" onclick='toggleRecommPick(this)'>
+                    <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
+                    <div class="recomm-info">
+                        <strong>${recomm.City}, ${recomm.Country}</strong><br>
+                        <small>${recomm.DateRange}</small>
+                    </div>
+                </button>
+                <div>
+                    <input type="checkbox" class='recommCheck' id="check-${recomm.ID}">
+                </div>
+                `;
+            container.append(li)}
+    })
+    .catch(error => {
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
+    });
 }
 function toggleRecommPick(element){
     const currentSelect = document.getElementsByClassName('recommPick selected')
@@ -633,93 +636,93 @@ function toggleRecommPick(element){
     saveUsrData();
 }
 async function getTripData(ID){
-    const mockDataPackage = {
-        "id": ID, // Dynamically use whatever ID was requested
-        "Location": "Istanbul, Turkey",
-        "Months": ["Jul"],
-        "Dates": ["15.7", "16.7", "17.7", "18.7", "19.7", "20.7", "21.7", "22.7"],
-        "PackList": {
-            [`${ID}`]: [
-                { "text": "Passport", "checked": true },
-                    { "text": "Sunscreen", "checked": false },
-                    { "text": "Comfortable Walking Shoes", "checked": false }
-                ]
-            },
-        "DayPLanners": {
-            [`${ID}_15.7`]: [
-                "Arrive at Istanbul Airport",
-                "Check into hotel in Beyoğlu",
-                "Dinner near Galata Tower"
-            ],
-            [`${ID}_16.7`]: [
-                "Morning walk through Sultanahmet",
-                "Visit Hagia Sophia",
-                "Bosphorus Sunset Cruise"
-            ]
+    // const mockDataPackage = {
+    //     "id": ID, // Dynamically use whatever ID was requested
+    //     "Location": "Istanbul, Turkey",
+    //     "Months": ["Jul"],
+    //     "Dates": ["15.7", "16.7", "17.7", "18.7", "19.7", "20.7", "21.7", "22.7"],
+    //     "PackList": {
+    //         [`${ID}`]: [
+    //             { "text": "Passport", "checked": true },
+    //                 { "text": "Sunscreen", "checked": false },
+    //                 { "text": "Comfortable Walking Shoes", "checked": false }
+    //             ]
+    //         },
+    //     "DayPLanners": {
+    //         [`${ID}_15.7`]: [
+    //             "Arrive at Istanbul Airport",
+    //             "Check into hotel in Beyoğlu",
+    //             "Dinner near Galata Tower"
+    //         ],
+    //         [`${ID}_16.7`]: [
+    //             "Morning walk through Sultanahmet",
+    //             "Visit Hagia Sophia",
+    //             "Bosphorus Sunset Cruise"
+    //         ]
+    //     }
+    // };
+    // userdata.tripData[ID]=mockDataPackage;
+    // saveUsrData();
+    let URL = `http://localhost:3000/api/trips/${ID}`
+    fetch(URL, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+             'Authorization': `Bearer ${userdata.sessionToken}`
         }
-    };
-    userdata.tripData[ID]=mockDataPackage;
-    saveUsrData();
-    // let URL = `http://localhost:3000/api/trips/${ID}`
-    // fetch(URL, {
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //          'Authorization': `Bearer ${userdata.sessionToken}`
-    //     }
-    // })
-    // .then(response => {
-    //     if (!response.ok) {
-    //         throw new Error('Network response was not ok');
-    //     }
-    //     return response.json();
-    // })
-    // .then(data => {
-    //     const dataId = data.id;
-    //     const alreadySaved = userdata.tripData[dataId];
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const dataId = data.id;
+        const alreadySaved = userdata.tripData[dataId];
 
-    //     if (!alreadySaved) {
-    //         userdata.tripData[dataId]=data;
-    //         saveUsrData();
-    //     }
-    //     return true;
-    // })
-    // .catch(error => {
-        // console.error("Failed to connect to the server.", error);
-        // alert("Could not reach the server.");
-    // });
+        if (!alreadySaved) {
+            userdata.tripData[dataId]=data;
+            saveUsrData();
+        }
+        return true;
+    })
+    .catch(error => {
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
+    });
 }
 async function deleteSavedTrip(ID){
-    const rawId = ID.replace('delete-', '')
-    userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
     // const rawId = ID.replace('delete-', '')
-    // let URL = `http://localhost:3000/api/trips/${rawId}`
-    // fetch(URL, {
-    //     method: 'DELETE',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${userdata.sessionToken}`
-    //     }
-    // })
-    // .then(response => {
-    //     if (!response.ok) {
-    //         throw new Error('Network response was not ok');
-    //     }else if (response.ok) {
-    //         userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
-    //         saveUsrData()
-    //         const deletedElement = document.getElementById(`toBeDeleted-${rawId}`)
-    //         deletedElement.remove();
-    //     }
+    // userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
+    const rawId = ID.replace('delete-', '')
+    let URL = `http://localhost:3000/api/trips/${rawId}`
+    fetch(URL, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userdata.sessionToken}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }else if (response.ok) {
+            userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
+            saveUsrData()
+            const deletedElement = document.getElementById(`toBeDeleted-${rawId}`)
+            deletedElement.remove();
+        }
         
-    //     return response.json();
-    // })
-    // .then(data => {
-    //     return;
-    // })
-    // .catch(error => {
-    //     console.error("Failed to connect to the server.", error);
-    //     alert("Could not reach the server.");
-    // });
+        return response.json();
+    })
+    .then(data => {
+        return;
+    })
+    .catch(error => {
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
+    });
 }
 function updatePlanLists(){
     fetch(`http://localhost:3000/api/trips/${userdata.recommId}/packinglist`, {
