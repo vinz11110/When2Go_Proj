@@ -17,13 +17,15 @@ router.post('/save', auth, tripController.saveTrip);
 
 router.delete('/deleteTrips', auth, tripController.deleteTrips);
 
+router.get('/getTrips/:userId', auth, tripController.getTrips);
+
 router.delete('/:tripId', auth, tripController.deleteTrip);
 
 router.get('/:tripId', auth, tripController.getTripById);
 
 router.put('/:tripId/packinglist', auth, tripController.updatePackingList);
 
-router.get('/getTrips/:userId', auth, tripController.getTrips);
+
 
 
 
