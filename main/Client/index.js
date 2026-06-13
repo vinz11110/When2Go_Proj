@@ -479,17 +479,22 @@ function closeDialog(){
 async function toggleRecommsUl(){
     const accountDial = document.getElementById('accountSavedRecoms')
     accountDial.showModal()
+    console.log('savedlist1')
     const list = document.getElementById('recommsList')
     if(userdata.savedRecommIds){
         list.innerHTML = '';
         for(const recomm of userdata.savedRecommIds){
             if(recomm !==userdata.recommId){
                 if (!userdata.tripData[recomm]) {
+                    console.log('savedlist2')
                     await getTripData(recomm);
                 }
+                console.log('savedlist3')
                 const box = document.createElement('li')
-                const dateList = userdata.tripData[recomm].Dates
-                const dateRange = `${dateList[0]} - ${dateList[dateList.length-1]}`
+                const tripData = userdata.tripData[recomm]
+                const startDate = convertDate(tripData.startDate)
+                const endDate = convertDate(tripData.endDate)
+                const dateRange = `${startDate} - ${endDate}`
                 box.id= `toBeDeleted-${recomm}`;
                 box.innerHTML = `
                     <div class="saved-trip-details">
@@ -831,10 +836,7 @@ function sendSavedTrips(){
         return response.json();
     })
     .then(data => {
-        userdata.savedRecommIds = []
-        for(const trip of data){
-            userdata.savedRecommIds.push(trip)
-        }
+        userdata.savedRecommIds = data.trips
         return true;
     })
     .catch(error => {
