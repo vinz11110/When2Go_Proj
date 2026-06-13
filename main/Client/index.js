@@ -249,7 +249,7 @@ function generateCalendar(specMonth) {
     for (let i = 1; i <= getDaysForSelectedMonths(month); i++) {
         const card = document.createElement('div');
         card.className = 'calDay-card';
-        card.id=`${i}.${monthMap[month]}`
+        card.id=`${i}/${monthMap[month]}`
         card.innerHTML = `
             <button id='${card.id}' class="calDateBtn" onclick='calBtnToggle(this)'>${i}</button>
         `;
@@ -566,7 +566,7 @@ function createDateList(startDateString, endDateString){
         const month = current.getUTCMonth() + 1; // Months are 0-indexed
         
         // 3. Format to "DD.M." and push to array
-        dates.push(`${day}.${month}`);
+        dates.push(`${day}/${month}`);
 
         // 4. Move to the next day
         current.setUTCDate(current.getUTCDate() + 1);
@@ -671,7 +671,7 @@ function convertDate(dateString){
     const day = date.getUTCDate();       // Returns 15 (as a number)
     const month = date.getUTCMonth() + 1; // Returns 2 (months are 0-indexed in JS, so +1)
 
-    const formattedDate = `${day}.${month}.`;
+    const formattedDate = `${day}/${month}.`;
 
     return formattedDate;
 }
