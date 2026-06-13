@@ -12,6 +12,7 @@ let userdata = {
     savedPackingLists: {},
     savedDayPlanners: {},
     savedRecommIds: [],
+    deleteSavedId: [],
     tripData: {},
 };
 window.addEventListener('load', () => {
@@ -789,14 +790,14 @@ function updatePlanLists(){
     });
 }
 function sendSavedTrips(){
-    fetch(`http://localhost:3000/api/trips/save`, {
-        method: 'POST',
+    fetch(`http://localhost:3000/api/trips/${userdata.sessionToken}/getTrips`, {
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userdata.sessionToken}`
         },
         body: JSON.stringify({
-            savedTrips: userdata.savedRecommIds,
+            deleteTrips: userdata.deleteSavedId,
         })
     })
     .then(response => {
@@ -847,8 +848,13 @@ function findCheckedRecomms(){
         const rawId = item.id.replace('check-', '');
         if(item.checked && !userdata.savedRecommIds.includes(rawId)){
             userdata.savedRecommIds.push(rawId);
-        }else if(!item.checked && userdata.savedRecommIds.includes(rawId)){
+            userdata.deleteSavedId = userdata.deleteSavedId.filter(id => id !== rawId);
+        } 
+        else if(!item.checked && userdata.savedRecommIds.includes(rawId)){
             userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId);
+            if (rawId !== userdata.recommId && !userdata.deleteSavedId.includes(rawId)) {
+                userdata.deleteSavedId.push(rawId);
+            }
         }
     })
     saveUsrData();
