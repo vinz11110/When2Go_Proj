@@ -73,7 +73,7 @@ exports.getTrips = async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found'});
         }
-        res.status(200).json({ success: true, data: user.savedPlans});
+        res.json(user.savedPlans)
     }   catch (error) {
         console.error("Get Trips Error: ", error);
         res.status(500).json({ success: false, message: 'Server  error while fetching saved trips'});
