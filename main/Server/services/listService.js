@@ -39,11 +39,11 @@ async function updateLists(userId, tripId, updateData) {
         throw new Error("Trip not Found")
     };
 
-    if(updateData.packList){
-        trip.packList = updateData.packList
+    if(updateData.packingList){
+        trip.packingList = updateData.packingList
     }
     if(updateData.dayPlanner){
-        trip.dayPlanner = updateData.dayPlanner
+        trip.dayPlanner = updateData.dayPlanner;
     }
 
     await trip.save()
