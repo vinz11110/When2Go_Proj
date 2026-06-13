@@ -677,7 +677,25 @@ function toggleRecommPick(element){
         toggleSelected(currentSelect[0]);
         toggleSelected(element)
     }
-    userdata.recommId=element.id.replace('pick-', '');
+    const newRecommId = element.id.replace('pick-', '');
+
+    // 2. Clear out the OLD active recommendation ID from your saved array
+    if (userdata.recommId) {
+        userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== userdata.recommId);
+    }
+
+    // 3. Assign the new ID to your global active state tracker
+    userdata.recommId = newRecommId;
+
+    // 4. Push the new ID into your arrays safely without duplicates
+    if (!userdata.savedRecommIds.includes(newRecommId)) {
+        userdata.savedRecommIds.push(newRecommId);
+    }
+
+    // 5. Explicitly clear it from your deletion list so it doesn't get sent to the DELETE endpoint!
+    if (userdata.deleteSavedId && Array.isArray(userdata.deleteSavedId)) {
+        userdata.deleteSavedId = userdata.deleteSavedId.filter(id => id !== newRecommId);
+    }
     saveUsrData();
 }
 async function getTripData(ID){
@@ -846,13 +864,18 @@ function getSession(){
 }
 function findCheckedRecomms(){
     const items = document.querySelectorAll('.recommCheck')
+    if (!userdata.deleteSavedId || !Array.isArray(userdata.deleteSavedId)) userdata.deleteSavedId = [];
+    if (!userdata.savedRecommIds || !Array.isArray(userdata.savedRecommIds)) userdata.savedRecommIds = [];
+
     items.forEach(item => {
         const rawId = item.id.replace('check-', '');
-        if(item.checked && !userdata.savedRecommIds.includes(rawId)){
-            userdata.savedRecommIds.push(rawId);
+        if (item.checked) {
+            if (!userdata.savedRecommIds.includes(rawId)) {
+                userdata.savedRecommIds.push(rawId);
+            }
             userdata.deleteSavedId = userdata.deleteSavedId.filter(id => id !== rawId);
-        } 
-        else if(!item.checked && userdata.savedRecommIds.includes(rawId)){
+        }
+        else {
             userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId);
             if (rawId !== userdata.recommId && !userdata.deleteSavedId.includes(rawId)) {
                 userdata.deleteSavedId.push(rawId);
