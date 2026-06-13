@@ -784,6 +784,10 @@ async function deleteSavedTrip(ID){
     });
 }
 function updatePlanLists(){
+    let packListItems = [];
+    for(const item of userdata.savedPackingLists)[
+        packListItems.push(item)
+    ]
     fetch(`http://localhost:3000/api/trips/${userdata.recommId}/packinglist`, {
         method: 'PUT',
         headers: {
@@ -791,7 +795,7 @@ function updatePlanLists(){
             'Authorization': `Bearer ${userdata.sessionToken}`
         },
         body: JSON.stringify({
-            packingList: userdata.savedPackingLists,
+            packingList: packListItems,
             dayPlanners: userdata.savedDayPlanners,
         })
     })
