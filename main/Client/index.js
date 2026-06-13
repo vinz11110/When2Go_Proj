@@ -883,9 +883,12 @@ async function getTrips(){
         return response.json();
     })
     .then(data => {
-        for (const trip of data.data.savedPlans){
-            userdata.savedRecommIds[trip._id]=trip;
-        }
+        data.forEach(trip => {
+            const tripId = trip._id;
+            userdata.savedRecommIds.push(tripId)
+            userdata.tripData[tripId] = trip;
+        });
+        saveUsrData();
 
         return true;
     })
