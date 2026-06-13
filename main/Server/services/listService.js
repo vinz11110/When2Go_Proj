@@ -34,7 +34,7 @@ async function updateLists(userId, tripId, updateData) {
     const user = await User.findById(userId)
 
     const trip = user.savedPlans.id(tripId)
-
+    console.log("trip.dayPlanner Before:", updateData.dayPlanner);
     if(!trip){
         throw new Error("Trip not Found")
     };
@@ -42,9 +42,11 @@ async function updateLists(userId, tripId, updateData) {
     if(updateData.packingList){
         trip.packingList = updateData.packingList
     }
-    if(updateData.dayPlanner){
-        trip.dayPlanner = updateData.dayPlanner;
+    trip.dayPlanner.clear();
+    for(const [key, value] of Object.entries(updateData.dayPlanner)) {
+        trip.dayPlanner.set(key, value);
     }
+    console.log("trip.dayPlanner After:", trip.dayPlanner)
 
     user.markModified("savedPlans")
 

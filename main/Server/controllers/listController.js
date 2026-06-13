@@ -5,6 +5,7 @@ const listService = require("../services/listService")
 exports.updateLists = async (req, res) => {
     try {
         console.log(listService);
+        console.log("request body:", req.body)
         const updatedTrip = await listService.updateLists(req.user, req.body.tripId, req.body);
         
         res.status(200).json({
