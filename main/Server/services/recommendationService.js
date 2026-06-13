@@ -15,6 +15,7 @@ function getDaysUntilTrip(startDate) {
 }
 
 function getBestMonthScore(destination, categories, months){
+    console.log("inside getBestMonthScore")
     let bestScore = -Infinity;
     let BestMonth = null;
 
@@ -41,13 +42,14 @@ function getBestMonthScore(destination, categories, months){
 }
 
 function generateTripDates(month, duration) {
+    console.log("inside generateTripDates")
     const currentYear = new Date().getFullYear();
 
     const monthIndex = [
-        "january","february","march","april",
-        "may","june","july","august","september",
-        "october","november","december"
-    ].indexOf(month.toLowerCase());
+        "Jan","Feb","Mar","Apr",
+        "May","Jun","Jul","Aug","Sep",
+        "Oct","Nov","Dec"
+    ].indexOf(month);
 
     const startDate = new Date(currentYear, monthIndex, 1);
 
@@ -62,7 +64,7 @@ function generateTripDates(month, duration) {
 }
 
 
-function forecastBasedScore(destination, vacationType) {
+function forecastBasedScore(destination, vacationType,) {
         const preference = vacationPreferences[vacationType];
 
     let score = 100;
@@ -98,7 +100,7 @@ async function calculateDestinationScore(destination, tripDate, month, vacationT
     if (daysUntilTrip <= 10) {
         const forecast = await weatherService.getForecast(destination.name);
 
-        return forecastBasedScore(forecast, vacationType, month);
+        return forecastBasedScore(forecast, vacationType);
     }
 
     else return climateBasedScore(destination, vacationType, month);
@@ -114,6 +116,7 @@ const vacationPreferences = {
 
 
 async function createTrips(recommendations, userId, categories, duration){
+    console.log("inside createTrips")
     const user = await User.findById(userId)
 
 
@@ -147,12 +150,12 @@ async function createTrips(recommendations, userId, categories, duration){
 
             await user.save();
 
-            return user.savedPlans.slice(-trips.length);
+            return user.savedPlans
         }
 
 
 async function getRecommendations(months, categories, userId, tripLength) {
-
+    console.log("inside getRecommendations")
     const destinations =
         await Destination.find();
 
@@ -161,8 +164,8 @@ async function getRecommendations(months, categories, userId, tripLength) {
             destination =>
                 categories.some(
                     category =>
-                        destination.categories.includes(
-                            category
+                        destination.categories.some(
+                            c => c.toLowerCase() === category.toLowerCase()
                         )
                 )
         );

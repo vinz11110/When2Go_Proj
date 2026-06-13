@@ -1,5 +1,3 @@
-const user = require("../Server/models/user");
-
 let userdata = {
     days: null,
     months:[],
