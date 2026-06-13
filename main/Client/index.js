@@ -181,7 +181,7 @@ async function toggleView(currentPage){
                     fillSavedPackLi();
                     const finPTitle = document.getElementById('finPageTitle');
                     if (finPTitle && userdata.tripData[userdata.recommId]) {
-                        finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].Location} in ${monthNameMap[userdata.startMonth]}`;
+                        finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].destination} in ${monthNameMap[userdata.startMonth]}`;
                     }
                     document.getElementById('chPage3').classList.add('hidden');
                     document.getElementById('finPage').classList.remove('hidden');
@@ -498,7 +498,7 @@ async function toggleRecommsUl(){
                     <div class="saved-trip-details">
                         <div class="saved-location-group">
                             <span class="location-pin-icon">📍</span>
-                            <p class="saved-trip-location">${userdata.tripData[recomm].Location}</p> 
+                            <p class="saved-trip-location">${userdata.tripData[recomm].destination}</p> 
                         </div>
                         <p class="saved-trip-dates">${dateRange}</p> 
                     </div>
@@ -855,9 +855,9 @@ async function getWeather(){
         return response.json();
     })
     .then(data => {
-        document.getElementById('weather-temp').textContent = `${Math.round(data.avgTemp)}°C`;
-        document.getElementById('weather-rain').textContent = `${data.rainProbability}%`;
-        document.getElementById('weather-wind').textContent = `${data.windSpeed} km/h`;
+        document.getElementById('weather-temp').textContent = `${Math.round(data.data.avg_temp)}°C`;
+        document.getElementById('weather-rain').textContent = `${data.data.rain_probability}%`;
+        document.getElementById('weather-wind').textContent = `${data.data.avg_wind} km/h`;
         return true;
     })
     .catch(error => {
