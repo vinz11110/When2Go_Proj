@@ -18,3 +18,7 @@ async function deleteTrips(userId, tripIds) {
 
     return user.savedPlans
 }
+
+module.exports = {
+    deleteTrips
+}

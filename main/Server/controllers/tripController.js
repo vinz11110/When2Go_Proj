@@ -187,7 +187,7 @@ exports.deleteTrips = async(req, res) => {
         const { deleteTrips } = req.body;
         console.log("req.user:", req.user);
         console.log("tripIds:", deleteTrips);
-        const remainingTrips = await tripService.deleteTrips(req.user, tripIds);
+        const remainingTrips = await tripService.deleteTrips(req.user, deleteTrips);
                 res.status(201).json({
         success: true,
         trips: remainingTrips
@@ -195,9 +195,7 @@ exports.deleteTrips = async(req, res) => {
     } catch(error){
         res.status(500).json({
             success: false,
-            message: "Error while only keeping trips to save"
+            message: error.message
         })
     }
-
-
 }
