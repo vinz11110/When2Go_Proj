@@ -155,6 +155,8 @@ async function createTrips(recommendations, userId, categories, duration){
 
         const trips = recommendations.map(
             recommendation => {
+                console.log("Processing destination: ", recommendation.city);
+                console.log("Check if image url", recommendation.imageUrl);
                 const {
                     startDate,
                     endDate
@@ -164,6 +166,7 @@ async function createTrips(recommendations, userId, categories, duration){
 
                 return {
                     destination: recommendation.city,
+                    imageUrl: recommendation.imageUrl,
                     tripLength: duration,
                     startDate,
                     endDate,

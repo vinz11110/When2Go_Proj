@@ -637,10 +637,12 @@ function getRecomms(){
         return response.json();
     })
     .then(data => {
+        console.log("Data returned from backend: ", data); //remove later
         const container = document.getElementById('recommendsList');
         container.innerHTML = "";
         for(const recomm of data){
             const li = document.createElement('li')
+            const safeImage = recomm.imageUrl ? recomm.imageUrl: "https://via.placeholder.com/300x200?text=No+Image+Found"; // remove later
             li.className = "recomm-item";
             li.innerHTML = `
                 <button type="button" class='recommPick' id="pick-${recomm._id}" onclick='toggleRecommPick(this)'>
