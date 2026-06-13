@@ -35,7 +35,7 @@ const generatePackingItems = (type) => {
 exports.saveTrip = async (req, res) => {
     console.log('savetrip');
     try {
-        const { tripLength, destination, startDate, endDate, vacationType, dayPlanner } = req.body;
+        const { tripLength, destination, imageUrl, startDate, endDate, vacationType, dayPlanner } = req.body;
 
         const user = await User.findById(req.user);
         if (!user) {
@@ -46,6 +46,7 @@ exports.saveTrip = async (req, res) => {
         // attaching list to the newly generated trip
         const newTrip = {
             destination,
+            imageUrl,
             startDate,
             endDate,
             vacationType,
