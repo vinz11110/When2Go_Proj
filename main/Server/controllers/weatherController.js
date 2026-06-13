@@ -1,4 +1,5 @@
 const weatherService = require("../services/weatherService");
+const User = require('../models/User')
 
 
 exports.getForecast = async(req,res) => {
@@ -36,7 +37,7 @@ exports.getTripWeather = async (req, res) => {
     }   catch(error){
         res.status(500).json({
             success: false,
-            message: "Internal Server Error while returning the weather"
-        })
+            message: error.message
+        });
 }
 } 

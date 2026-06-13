@@ -32,7 +32,10 @@ async function getTripWeather(userId, tripId){
     if(!user){
         throw new Error("User not Found");
     }
-    const trip = await User.savedPlans.id(tripId);
+    console.log("userId:", userId);
+    console.log("tripId:", tripId);
+    console.log("savedPlans:", user.savedPlans.length);
+    const trip = await user.savedPlans.id(tripId);
 
     if(!trip){
         throw new Error("Trip not found");
