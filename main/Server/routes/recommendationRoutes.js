@@ -4,5 +4,5 @@ const recommendationController = require('../controllers/recommendationControlle
 const auth = require('../middleware/authMiddleware');
 
 
-router.post('/getTripRecommendations', recommendationController.getRecomms);
+router.post('/getTripRecommendations', auth, recommendationController.getRecomms);
 module.exports = router;

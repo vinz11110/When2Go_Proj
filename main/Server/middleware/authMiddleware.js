@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
     const authHeader = req.header('Authorization');
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ sucess: false, message: 'No token recognized, connection denied'});
+        return res.status(401).json({ success: false, message: 'No token recognized, connection denied'});
     }
 
     const token = authHeader.split(' ')[1];
@@ -15,6 +15,7 @@ module.exports = (req, res, next) => {
         req.user = decoded.userId;
         next();
     }   catch (error) {
+        console.log("JWT Error:", error.message);
         res.status(401).json({ success: false, message: 'Token is not valid'});
     }
 };
