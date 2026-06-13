@@ -26,6 +26,9 @@ const recommendationRoutes = require('./routes/recommendationRoutes');
 app.use('/api/recommendations', recommendationRoutes);
 
 
+const listRoutes = require('./routes/listRoutes')
+app.use('/api/lists', listRoutes)
+
 
 mongoose.connect(dbURI)
     .then(() => {

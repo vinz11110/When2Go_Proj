@@ -38,8 +38,8 @@ async function updateLists(getTripById, updateData) {
         throw new Error("Trip not Found")
     };
 
-    if(updateData.packingList){
-        trip.packingList = updateData.packingList
+    if(updateData.packList){
+        trip.packList = updateData.packingList
     }
     if(updateData.dayPlanner){
         trip.dayPlanner = updateData.dayPlanner
