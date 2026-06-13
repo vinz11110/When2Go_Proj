@@ -219,9 +219,8 @@ async function toggleView(currentPage){
 function generateCalendar(specMonth) {
     let month=null;
     if(!specMonth){
-        userdata.startMonth = userdata.months.sort((a, b) => {
-        return monthMap[a] - monthMap[b]; 
-        })[0]
+        userdata.startMonth = userdata.months
+        
         month = userdata.startMonth
     }else {
         month=specMonth;
@@ -300,13 +299,13 @@ function dayPLanListElement(text){
 function packListElement(packObj){
     let listContain = document.getElementById('packListList');
     const newLi= document.createElement("li");
-    newLi.textContent = packObj.text
+    newLi.textContent = packObj.item
     newLi.className='packLi'
-    if (packObj.checked) {
+    if (packObj.isPacked) {
         newLi.classList.add('checkedItem');
     }
     newLi.onclick = function() {
-        packObj.checked = !packObj.checked;
+        packObj.isPacked = !packObj.isPacked;
         this.classList.toggle('checkedItem');
         updatePlanLists();
         saveUsrData();
@@ -435,8 +434,8 @@ function createLi(choice){
             }
             if (textIn.value.trim() !== "") {
                 userdata.savedPackingLists[currentTrip].push({
-                    text: textIn.value.trim(),
-                    checked: false
+                    item: textIn.value.trim(),
+                    isPacked: false
                 })
             }
             fillSavedPackLi();
@@ -529,12 +528,45 @@ function loadInTripData(id){
     if(!userdata.savedRecommIds.filter(savedId => savedId===id)){
         userdata.savedRecommIds.push(id);
     }
+    const tripData = userdata.tripData[id]
+    const startDate = convertDate(tripData.startDate)
+    const endDate = convertDate(tripData.endDate)
+    const Dates = createDateList(tripData.startDate, tripData.endDate)
+
     userdata.recommId=id;
-    userdata.selectDates = userdata.tripData[id].Dates;
-    userdata.months = userdata.tripData[id].Months;
-    userdata.savedPackingLists = userdata.tripData[id].PackList
-    userdata.savedDayPlanners = userdata.tripData[id].DayPLanners
+    userdata.selectDates = Dates;
+    userdata.months = reverseMonthMap[getMonthFromCustomStyle(Dates[0])];
+    userdata.savedPackingLists[id] = tripData.packingList
+    userdata.savedDayPlanners = tripData.dayPlanner
     saveUsrData();
+}
+function getMonthFromCustomStyle(customDateString) {
+    // If the input is "15.2.", splitting by '.' gives you ["15", "2", ""]
+    const parts = customDateString.split('.');
+    
+    // The month number is at index 1
+    const monthNumber = parseInt(parts[1], 10);
+    
+    return monthNumber;
+}
+function createDateList(startDateString, endDateString){
+    const dates = [];
+    // 1. Convert inputs to Date objects
+    const current = new Date(startDateString);
+    const end = new Date(endDateString);
+
+    // 2. Loop until the current date passes the end date
+    while (current <= end) {
+        const day = current.getUTCDate();
+        const month = current.getUTCMonth() + 1; // Months are 0-indexed
+        
+        // 3. Format to "DD.M." and push to array
+        dates.push(`${day}.${month}.`);
+
+        // 4. Move to the next day
+        current.setUTCDate(current.getUTCDate() + 1);
+    }
+    return dates;
 }
 function getRecomms(){
     // const mockRecommendations = [
@@ -674,11 +706,11 @@ async function getTripData(ID){
     // userdata.tripData[ID]=mockDataPackage;
     // saveUsrData();
     let URL = `http://localhost:3000/api/trips/${ID}`
-    fetch(URL, {
+    return fetch(URL, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-             'Authorization': `Bearer ${userdata.sessionToken}`
+            'Authorization': `Bearer ${userdata.sessionToken}`
         }
     })
     .then(response => {
@@ -688,13 +720,9 @@ async function getTripData(ID){
         return response.json();
     })
     .then(data => {
-        const dataId = data.id;
-        const alreadySaved = userdata.tripData[dataId];
-
-        if (!alreadySaved) {
-            userdata.tripData[dataId]=data;
-            saveUsrData();
-        }
+        const dataId = data.data._id;
+        userdata.tripData[dataId]=data.data;
+        saveUsrData();
         return true;
     })
     .catch(error => {
