@@ -45,11 +45,21 @@ function generateTripDates(month, duration) {
     console.log("inside generateTripDates")
     const currentYear = new Date().getFullYear();
 
-    const monthIndex = [
-        "Jan","Feb","Mar","Apr",
-        "May","Jun","Jul","Aug","Sep",
-        "Oct","Nov","Dec"
-    ].indexOf(month);
+    const monthIndexMap = {
+        Jan: 1,
+        Feb: 2,
+        Mar: 3,
+        Apr: 4,
+        May: 5,
+        Jun: 6,
+        Jul: 7,
+        Aug: 8,
+        Sep: 9,
+        Oct: 10,
+        Nov: 11,
+        Dec: 12
+    }
+    const monthIndex = monthIndexMap[month];
 
     const startDate = new Date(currentYear, monthIndex, 1);
 
@@ -77,8 +87,30 @@ function forecastBasedScore(destination, vacationType,) {
 }
 
 function climateBasedScore(destination,category, month) {
-    const weather = destination.weather[month.toLowerCase()]
+    const monthMap = {
+    Jan: "january",
+    Feb: "february",
+    Mar: "march",
+    Apr: "april",
+    May: "may",
+    Jun: "june",
+    Jul: "july",
+    Aug: "august",
+    Sep: "september",
+    Oct: "october",
+    Nov: "november",
+    Dec: "december"
+    };
+    const weather = destination.weather[monthMap[month]]
     const preference = vacationPreferences[category];
+    if (!weather) {
+    console.log(
+        "Missing weather data:",
+        destination.city,
+        month
+    );
+    return 0;
+    }
 
     let score = 100;
 
@@ -88,6 +120,8 @@ function climateBasedScore(destination,category, month) {
     if(weather.rain_probability > preference.maxRainProbability){
 
     }
+    console.log("Month:", month);
+    console.log("Weather:", weather);
 
     return Math.max(0, score);
 }
@@ -118,7 +152,11 @@ const vacationPreferences = {
 async function createTrips(recommendations, userId, categories, duration){
     console.log("inside createTrips")
     const user = await User.findById(userId)
-
+    console.log(
+    "userId:", userId,
+    "categories:", categories,
+    "duration:", duration
+    )
 
 
         const trips = recommendations.map(
@@ -156,9 +194,22 @@ async function createTrips(recommendations, userId, categories, duration){
 
 async function getRecommendations(months, categories, userId, tripLength) {
     console.log("inside getRecommendations")
+    console.log(
+    "Destination count:",
+    await Destination.countDocuments()
+);
     const destinations =
         await Destination.find();
 
+    console.log("Categories:", categories);
+    console.log("Destinations found:", destinations.length);
+
+    for (const destination of destinations) {
+        console.log(
+            destination.city,
+            destination.categories
+        );
+    }    
     const matchingDestinations =
         destinations.filter(
             destination =>
@@ -169,6 +220,10 @@ async function getRecommendations(months, categories, userId, tripLength) {
                         )
                 )
         );
+        console.log(
+        "Matching destinations:",
+        matchingDestinations.length
+    );
 
     const scored = matchingDestinations.map(
             destination => {
@@ -187,7 +242,7 @@ async function getRecommendations(months, categories, userId, tripLength) {
     );
 
     const top10 = scored.slice(0, 10);
-
+    console.log("Top10:", top10);
     return await createTrips(
         top10,
         userId,

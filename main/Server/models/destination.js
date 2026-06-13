@@ -24,7 +24,12 @@ const destinationSchema = new mongoose.Schema({
         october: monthylWeatherSchema,
         november: monthylWeatherSchema,
         december: monthylWeatherSchema
-    }
-});
+    },
+
+
+},
+    {
+        collection: "tripCollection"
+    });
 
 module.exports = mongoose.model('Destination', destinationSchema);
