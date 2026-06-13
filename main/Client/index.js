@@ -187,9 +187,9 @@ async function toggleView(currentPage){
                 if (finPTitle && userdata.tripData[userdata.recommId]) {
                     finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].destination} in ${monthNameMap[userdata.startMonth]}`;
                 }
-                await getWeather();
                 document.getElementById('chPage3').classList.add('hidden');
                 document.getElementById('finPage').classList.remove('hidden');
+                await getWeather();
                 sendSavedTrips();
 
             }
@@ -524,7 +524,6 @@ function openSavedTrip(id){
     generateCalendar();
     fillSavedPackLi();
     closeDialog();
-    getWeather();
     document.getElementById('planLiContain').innerHTML ='';
     const finPTitle = document.getElementById('finPageTitle');
         if (finPTitle && userdata.tripData[userdata.recommId]) {
@@ -533,6 +532,7 @@ function openSavedTrip(id){
     document.getElementById(`${userdata.currentPage}`).classList.add('hidden')
     userdata.currentPage = 'finPage';
     document.getElementById(`finPage`).classList.remove('hidden')
+    getWeather();
 }
 function loadInTripData(id){
     if(!userdata.savedRecommIds.filter(savedId => savedId===id)){
