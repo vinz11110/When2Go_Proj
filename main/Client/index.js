@@ -536,7 +536,7 @@ function loadInTripData(id){
 
     userdata.recommId=id;
     userdata.selectDates = Dates;
-    userdata.months = reverseMonthMap[getMonthFromCustomStyle(Dates[0])];
+    userdata.months = [reverseMonthMap[getMonthFromCustomStyle(Dates[0])]];
     userdata.savedPackingLists[id] = tripData.packingList
     userdata.savedDayPlanners = tripData.dayPlanner
     saveUsrData();
