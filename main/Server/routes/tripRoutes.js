@@ -23,4 +23,6 @@ router.get('/:userId/getTrips', auth, tripController.getTrips);
 
 router.delete('/:tripId', auth, tripController.deleteTrip);
 
+router.delete('/deleteRecomms, auth, tripController.deleteTrips');
+
 module.exports = router;

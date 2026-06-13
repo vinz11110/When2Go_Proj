@@ -35,3 +35,9 @@ const jwt = require("jsonwebtoken");
             });
         }
     };
+
+    exports.deleteUnwantedRecommendations = async(req, res) => {
+        try {
+            const { tripIds } = req.body;
+        }
+    }

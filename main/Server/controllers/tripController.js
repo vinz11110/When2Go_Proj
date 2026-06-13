@@ -175,3 +175,21 @@ exports.deleteTrip = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error while deleting trip'});
     }
 };
+    exports.deleteTrips = async(req, res) => {
+        try {
+            const { tripIds } = req.body;
+
+            const remainingTrips = await tripService.deleteTrips(req.user.userId, tripIds);
+                    res.status(201).json({
+            success: true,
+            trips: remainingTrips
+        });
+        } catch(error){
+            res.status(500).json({
+                success: false,
+                message: "Error while only keeping trips to save"
+            })
+        }
+
+
+    }
