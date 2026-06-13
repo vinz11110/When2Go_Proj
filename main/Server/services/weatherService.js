@@ -28,8 +28,11 @@ async function getForecast (city){
 }
 
 async function getTripWeather(userId, tripId){
-    const user = await User.findById(userId)
-    const trip = await User.savedPlans.findById(tripId);
+    const user = await User.findById(userId);
+    if(!user){
+        throw new Error("User not Found");
+    }
+    const trip = await User.savedPlans.id(tripId);
 
     if(!trip){
         throw new Error("Trip not found");
