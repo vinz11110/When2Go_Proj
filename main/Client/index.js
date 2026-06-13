@@ -523,6 +523,8 @@ function openSavedTrip(id){
     generateCalendar();
     fillSavedPackLi();
     closeDialog();
+    getWeather();
+    document.getElementById('planLiContain').innerHTML ='';
     const finPTitle = document.getElementById('finPageTitle');
         if (finPTitle && userdata.tripData[userdata.recommId]) {
             finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].destination} in ${monthNameMap[userdata.startMonth]}`;
