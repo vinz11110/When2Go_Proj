@@ -186,6 +186,7 @@ async function toggleView(currentPage){
                     document.getElementById('chPage3').classList.add('hidden');
                     document.getElementById('finPage').classList.remove('hidden');
                     sendSavedTrips();
+                    getWeather();
                 }
             }else if (!userdata.session && userdata.savedRecommIds.filter(id => id !== userdata.recommId)) {
                 document.getElementById('loginQuest').showModal();
@@ -796,7 +797,7 @@ function updatePlanLists(){
         body: JSON.stringify({
             tripId: userdata.recommId,
             packingList: packListItems,
-            dayPlanners: userdata.savedDayPlanners,
+            dayPlanner: userdata.savedDayPlanners,
         })
     })
     .then(response => {
@@ -832,6 +833,31 @@ function sendSavedTrips(){
     })
     .then(data => {
         userdata.savedRecommIds = data.trips
+        return true;
+    })
+    .catch(error => {
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
+    });
+}
+async function getWeather(){
+    return fetch(`http://localhost:3000/api/weather/getTripWeather/${userdata.recommId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userdata.sessionToken}`
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('weather-temp').textContent = `${Math.round(data.avgTemp)}°C`;
+        document.getElementById('weather-rain').textContent = `${data.rainProbability}%`;
+        document.getElementById('weather-wind').textContent = `${data.windSpeed} km/h`;
         return true;
     })
     .catch(error => {
