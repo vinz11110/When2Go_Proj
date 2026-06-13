@@ -604,15 +604,15 @@ function getRecomms(){
             const li = document.createElement('li')
             li.className = "recomm-item";
             li.innerHTML = `
-                <button type="button" class='recommPick' id="pick-${recomm.ID}" onclick='toggleRecommPick(this)'>
-                    <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
+                <button type="button" class='recommPick' id="pick-${recomm._id}" onclick='toggleRecommPick(this)'>
+                    <img src="${recomm.Pic}" alt="${recomm.destination}" class="recomm-img">
                     <div class="recomm-info">
-                        <strong>${recomm.City}, ${recomm.Country}</strong><br>
-                        <small>${recomm.DateRange}</small>
+                        <strong>${recomm.destination}</strong><br>
+                        <small>${convertDate(recomm.startDate)} - ${convertDate(recomm.endDate)}</small>
                     </div>
                 </button>
                 <div>
-                    <input type="checkbox" class='recommCheck' id="check-${recomm.ID}">
+                    <input type="checkbox" class='recommCheck' id="check-${recomm._id}">
                 </div>
                 `;
             container.append(li)}
@@ -621,6 +621,18 @@ function getRecomms(){
         console.error("Failed to connect to the server.", error);
         alert("Could not reach the server.");
     });
+}
+function convertDate(dateString){
+    const isoString =dateString;
+    const date = new Date(isoString);
+
+    // Use UTC methods to keep the original date intact
+    const day = date.getUTCDate();       // Returns 15 (as a number)
+    const month = date.getUTCMonth() + 1; // Returns 2 (months are 0-indexed in JS, so +1)
+
+    const formattedDate = `${day}.${month}.`;
+
+    return formattedDate;
 }
 function toggleRecommPick(element){
     const currentSelect = document.getElementsByClassName('recommPick selected')
