@@ -868,6 +868,32 @@ async function getWeather(){
         alert("Could not reach the server.");
     });
 }
+async function getTrips(){
+    return fetch(`http://localhost:3000/api/trips/getTrips/${userdata.recommId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userdata.sessionToken}`
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        for (const trip of data.data.savedPlans){
+            userdata.savedRecommIds[trip._id]=trip;
+        }
+
+        return true;
+    })
+    .catch(error => {
+        console.error("Failed to connect to the server.", error);
+        alert("Could not reach the server.");
+    });
+}
 function getSession(){
     fetch(`http://localhost:3000/session`, {
         method: 'GET',
@@ -882,7 +908,7 @@ function getSession(){
             return true;
         }
         else if (response.ok) {
-            sendSavedTrips();
+            getTrips();
             return true;
         }
         return response.json();
@@ -945,7 +971,7 @@ async function login(event) {
             userdata.sessionToken=data.token; //saving token to browsers local storage
             sessionBtns();
             closeDialog(); //redirecting user to homepage
-            sendSavedTrips();
+            getTrips();
             saveUsrData();
         }   else {
             alert("Error: " + data.message);
@@ -990,8 +1016,7 @@ async function register(event) {
             userdata.session = true;
             userdata.sessionToken=data.token; //saving token to browsers local storage
             sessionBtns();
-            closeDialog(); //redirecting user to homepage
-            sendSavedTrips();
+            closeDialog(); //redirecting user to homepag
             saveUsrData();
         }   else {
             alert("Error: " + data.message);
