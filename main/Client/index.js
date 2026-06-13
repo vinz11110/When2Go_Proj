@@ -479,22 +479,17 @@ function closeDialog(){
 async function toggleRecommsUl(){
     const accountDial = document.getElementById('accountSavedRecoms')
     accountDial.showModal()
-    console.log('savedlist1')
     const list = document.getElementById('recommsList')
     if(userdata.savedRecommIds){
         list.innerHTML = '';
         for(const recomm of userdata.savedRecommIds){
             if(recomm !==userdata.recommId){
                 if (!userdata.tripData[recomm]) {
-                    console.log('savedlist2')
                     await getTripData(recomm);
                 }
-                console.log('savedlist3')
                 const box = document.createElement('li')
-                const tripData = userdata.tripData[recomm]
-                const startDate = convertDate(tripData.startDate)
-                const endDate = convertDate(tripData.endDate)
-                const dateRange = `${startDate} - ${endDate}`
+                const dateList = userdata.tripData[recomm].Dates
+                const dateRange = `${dateList[0]} - ${dateList[dateList.length-1]}`
                 box.id= `toBeDeleted-${recomm}`;
                 box.innerHTML = `
                     <div class="saved-trip-details">
@@ -793,13 +788,14 @@ function updatePlanLists(){
     for(const item of userdata.savedPackingLists)[
         packListItems.push(item)
     ]
-    fetch(`http://localhost:3000/api/trips/${userdata.recommId}/packinglist`, {
+    fetch(`http://localhost:3000/api/lists/packingList`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${userdata.sessionToken}`
         },
         body: JSON.stringify({
+            tripId: userdata.recommId,
             packingList: packListItems,
             dayPlanners: userdata.savedDayPlanners,
         })
@@ -836,7 +832,10 @@ function sendSavedTrips(){
         return response.json();
     })
     .then(data => {
-        userdata.savedRecommIds = data.trips
+        userdata.savedRecommIds = []
+        for(const trip of data){
+            userdata.savedRecommIds.push(trip)
+        }
         return true;
     })
     .catch(error => {
