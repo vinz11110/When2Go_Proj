@@ -187,10 +187,11 @@ async function toggleView(currentPage){
                 if (finPTitle && userdata.tripData[userdata.recommId]) {
                     finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].destination} in ${monthNameMap[userdata.startMonth]}`;
                 }
+                await getWeather();
                 document.getElementById('chPage3').classList.add('hidden');
                 document.getElementById('finPage').classList.remove('hidden');
                 sendSavedTrips();
-                getWeather();
+
             }
             
             break;
