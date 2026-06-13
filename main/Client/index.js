@@ -163,33 +163,34 @@ async function toggleView(currentPage){
             document.getElementById('chPage2').classList.remove('hidden');}
             break;
         case 'vacType':
-            if(userdata.categories.length!==0){
-                userdata.currentPage='chPage3';
-            document.getElementById('chPage2').classList.add('hidden');
-            document.getElementById('chPage3').classList.remove('hidden');
-            getRecomms();
-        }
+            if(userdata.session){
+                if(userdata.categories.length!==0){
+                    userdata.currentPage='chPage3';
+                document.getElementById('chPage2').classList.add('hidden');
+                document.getElementById('chPage3').classList.remove('hidden');
+                getRecomms();
+                }
+            }else if (!userdata.session) {
+                document.getElementById('loginQuest').showModal();
+            }
             break;
         case 'recomms':
             findCheckedRecomms();
-            if(userdata.session || document.getElementById('loginQuest').open || !userdata.savedRecommIds.length==1){
-                if(document.getElementsByClassName('recommPick selected').length>0){
-                    userdata.currentPage='finPage';
-                    await getTripData(userdata.recommId);
-                    loadInTripData(userdata.recommId);
-                    generateCalendar();
-                    fillSavedPackLi();
-                    const finPTitle = document.getElementById('finPageTitle');
-                    if (finPTitle && userdata.tripData[userdata.recommId]) {
-                        finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].destination} in ${monthNameMap[userdata.startMonth]}`;
-                    }
-                    document.getElementById('chPage3').classList.add('hidden');
-                    document.getElementById('finPage').classList.remove('hidden');
-                    sendSavedTrips();
-                    getWeather();
+           
+            if(document.getElementsByClassName('recommPick selected').length>0){
+                userdata.currentPage='finPage';
+                await getTripData(userdata.recommId);
+                loadInTripData(userdata.recommId);
+                generateCalendar();
+                fillSavedPackLi();
+                const finPTitle = document.getElementById('finPageTitle');
+                if (finPTitle && userdata.tripData[userdata.recommId]) {
+                    finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].destination} in ${monthNameMap[userdata.startMonth]}`;
                 }
-            }else if (!userdata.session && userdata.savedRecommIds.filter(id => id !== userdata.recommId)) {
-                document.getElementById('loginQuest').showModal();
+                document.getElementById('chPage3').classList.add('hidden');
+                document.getElementById('finPage').classList.remove('hidden');
+                sendSavedTrips();
+                getWeather();
             }
             
             break;
@@ -366,7 +367,7 @@ function delLi(element){
         else if (e.classList.contains('packLi')) {
             if (userdata.savedPackingLists[currentTrip]) {
                 userdata.savedPackingLists[currentTrip] = userdata.savedPackingLists[currentTrip].filter(
-                    item => item.text !== textToRemove
+                    item => item.item !== textToRemove
                 );
             }
         }
