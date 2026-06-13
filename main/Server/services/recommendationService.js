@@ -182,7 +182,7 @@ async function createTrips(recommendations, userId, categories, duration){
 
             await user.save();
 
-            return trips;
+            return user.savedPlans;
         }
 
 
