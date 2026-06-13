@@ -547,7 +547,7 @@ function loadInTripData(id){
 }
 function getMonthFromCustomStyle(customDateString) {
     // If the input is "15.2.", splitting by '.' gives you ["15", "2", ""]
-    const parts = customDateString.split('.');
+    const parts = customDateString.split('/');
     
     // The month number is at index 1
     const monthNumber = parseInt(parts[1], 10);
