@@ -27,7 +27,7 @@ exports.getForecast = async(req,res) => {
 
 exports.getTripWeather = async (req, res) => {
     try {
-        const weather = await weatherService.getTripWeather(req.params.tripId);
+        const weather = await weatherService.getTripWeather(req.userId, req.params.tripId);
         res.status(200).json({
             success: true,
             message: "Trip weather returned Successfully",
