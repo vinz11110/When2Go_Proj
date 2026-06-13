@@ -486,9 +486,7 @@ async function toggleRecommsUl(){
         list.innerHTML = '';
         for(const recomm of userdata.savedRecommIds){
             if(recomm !==userdata.recommId){
-                if (!userdata.tripData[recomm]) {
-                    await getTripData(recomm);
-                }
+                await getTripData(recomm);
                 const box = document.createElement('li')
                 const tripData = userdata.tripData[recomm]
                 const startDate = convertDate(tripData.startDate)
@@ -525,6 +523,10 @@ function openSavedTrip(id){
     generateCalendar();
     fillSavedPackLi();
     closeDialog();
+    const finPTitle = document.getElementById('finPageTitle');
+        if (finPTitle && userdata.tripData[userdata.recommId]) {
+            finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].destination} in ${monthNameMap[userdata.startMonth]}`;
+        }
     document.getElementById(`${userdata.currentPage}`).classList.add('hidden')
     userdata.currentPage = 'finPage';
     document.getElementById(`finPage`).classList.remove('hidden')
