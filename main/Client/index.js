@@ -564,7 +564,7 @@ function createDateList(startDateString, endDateString){
         const month = current.getUTCMonth() + 1; // Months are 0-indexed
         
         // 3. Format to "DD.M." and push to array
-        dates.push(`${day}.${month}.`);
+        dates.push(`${day}.${month}`);
 
         // 4. Move to the next day
         current.setUTCDate(current.getUTCDate() + 1);
