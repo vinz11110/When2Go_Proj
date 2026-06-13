@@ -786,10 +786,7 @@ async function deleteSavedTrip(ID){
     });
 }
 function updatePlanLists(){
-    let packListItems = [];
-    for(const item of userdata.savedPackingLists)[
-        packListItems.push(item)
-    ]
+    const packListItems = userdata.savedPackingLists[userdata.recommId] || [];
     fetch(`http://localhost:3000/api/lists/packingList`, {
         method: 'PUT',
         headers: {

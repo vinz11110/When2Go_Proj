@@ -1,5 +1,4 @@
-const listController = require('../controllers/listController');
-const Trip = require('../models/trip')
+const User = require('../models/User')
 
 generatePackingItems = (type) => {
 
@@ -31,15 +30,17 @@ generatePackingItems = (type) => {
     });
 };
 
-async function updateLists(getTripById, updateData) {
-    const trip = await Trip.findById(tripId);
+async function updateLists(userId, tripId, updateData) {
+    const user = await User.findById(userId)
+
+    const trip = user.savedPlans.id(tripId)
 
     if(!trip){
         throw new Error("Trip not Found")
     };
 
     if(updateData.packList){
-        trip.packList = updateData.packingList
+        trip.packList = updateData.packList
     }
     if(updateData.dayPlanner){
         trip.dayPlanner = updateData.dayPlanner

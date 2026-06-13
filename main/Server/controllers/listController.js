@@ -1,9 +1,11 @@
 const User = require("../models/user")
 const listService = require("../services/listService")
 
+
 exports.updateLists = async (req, res) => {
     try {
-        const updatedTrip = await listService.updateTripLists(req.params.tripId, req.body);
+        console.log(listService);
+        const updatedTrip = await listService.updateLists(req.user, req.body.tripId, req.body);
         
         res.status(200).json({
             success: true,
