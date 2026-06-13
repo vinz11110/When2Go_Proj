@@ -25,7 +25,7 @@ const destinationSchema = new mongoose.Schema({
         november: monthylWeatherSchema,
         december: monthylWeatherSchema
     },
-
+    imageUrl: {type: String, required: false}
 
 },
     {

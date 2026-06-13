@@ -638,7 +638,7 @@ function getRecomms(){
             li.className = "recomm-item";
             li.innerHTML = `
                 <button type="button" class='recommPick' id="pick-${recomm._id}" onclick='toggleRecommPick(this)'>
-                    <img src="${recomm.Pic}" alt="${recomm.destination}" class="recomm-img">
+                    <img src="${recomm.imageUrl}" alt="${recomm.destination}" class="recomm-img">
                     <div class="recomm-info">
                         <strong>${recomm.destination}</strong><br>
                         <small>${convertDate(recomm.startDate)} - ${convertDate(recomm.endDate)}</small>
