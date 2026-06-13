@@ -19,7 +19,7 @@ router.get('/:tripId', auth, tripController.getTripById);
 
 router.put('/:tripId/packinglist', auth, tripController.updatePackingList);
 
-router.get('/:tripId/getTrips', auth, tripController.getTrips)
+router.get('/:userId/getTrips', auth, tripController.getTrips);
 
 router.delete('/:tripId', auth, tripController.deleteTrip);
 
