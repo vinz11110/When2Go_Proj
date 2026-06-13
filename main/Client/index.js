@@ -862,9 +862,9 @@ async function getWeather(){
         return response.json();
     })
     .then(data => {
-        document.getElementById('weather-temp').textContent = `${Math.round(data.data.avg_temp)}°C`;
-        document.getElementById('weather-rain').textContent = `${data.data.rain_probability}%`;
-        document.getElementById('weather-wind').textContent = `${data.data.avg_wind} km/h`;
+        document.getElementById('weather-temp').textContent = `${Math.round(data.data.avgTemp)}°C`;
+        document.getElementById('weather-rain').textContent = `${data.data.rainProbability}%`;
+        document.getElementById('weather-wind').textContent = `${data.data.windSpeed} km/h`;
         return true;
     })
     .catch(error => {
