@@ -46,7 +46,9 @@ async function updateLists(userId, tripId, updateData) {
         trip.dayPlanner = updateData.dayPlanner;
     }
 
-    await trip.save()
+    user.markModified("savedPlans")
+
+    await user.save()
 
     return trip;
 }
