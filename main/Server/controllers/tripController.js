@@ -33,6 +33,7 @@ const generatePackingItems = (type) => {
 };
 
 exports.saveTrip = async (req, res) => {
+    console.log('savetrip');
     try {
         const { tripLength, destination, startDate, endDate, vacationType, dayPlanner } = req.body;
 
@@ -65,6 +66,7 @@ exports.saveTrip = async (req, res) => {
 
 
 exports.getTrips = async (req, res) => {
+    console.log('gettrips');
     try {
         const user = await User.findById(req.user);
         if (!user) {
@@ -78,6 +80,7 @@ exports.getTrips = async (req, res) => {
 };
 
 exports.getTripById = async (req, res) => {
+    console.log('gettripbyid');
     try {
         const tripId = req.params.tripId;
         const user = await User.findById(req.user);
@@ -100,6 +103,7 @@ exports.getTripById = async (req, res) => {
 };
 
 exports.updatePackingList = async (req, res) => {
+    console.log('updatepacking');
     try {
         const { tripId } = req.params;
         const { action, itemName, itemId} = req.body;
@@ -153,6 +157,7 @@ exports.updatePackingList = async (req, res) => {
 
 
 exports.deleteTrip = async (req, res) => {
+    console.log('deletetrip');
     try {
         const {tripId} = req.params;
 
@@ -176,21 +181,21 @@ exports.deleteTrip = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error while deleting trip'});
     }
 };
-    exports.deleteTrips = async(req, res) => {
-        try {
-            const { tripIds } = req.body;
+exports.deleteTrips = async(req, res) => {
+    try {
+        const { tripIds } = req.body;
 
-            const remainingTrips = await tripService.deleteTrips(req.user.userId, tripIds);
-                    res.status(201).json({
-            success: true,
-            trips: remainingTrips
-        });
-        } catch(error){
-            res.status(500).json({
-                success: false,
-                message: "Error while only keeping trips to save"
-            })
-        }
-
-
+        const remainingTrips = await tripService.deleteTrips(req.user.userId, tripIds);
+                res.status(201).json({
+        success: true,
+        trips: remainingTrips
+    });
+    } catch(error){
+        res.status(500).json({
+            success: false,
+            message: "Error while only keeping trips to save"
+        })
     }
+
+
+}
