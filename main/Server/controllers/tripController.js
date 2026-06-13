@@ -1,5 +1,6 @@
 const User = require('../models/user');
-const listService = require('../services/listService')
+const listService = require('../services/listService');
+const tripService = require('../services/tripService');
 
 const generatePackingItems = (type) => {
 
