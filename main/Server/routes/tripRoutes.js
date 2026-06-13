@@ -17,12 +17,14 @@ router.post('/save', auth, tripController.saveTrip);
 
 router.delete('/deleteTrips', auth, tripController.deleteTrips);
 
+router.delete('/:tripId', auth, tripController.deleteTrip);
+
 router.get('/:tripId', auth, tripController.getTripById);
 
 router.put('/:tripId/packinglist', auth, tripController.updatePackingList);
 
 router.get('/:userId/getTrips', auth, tripController.getTrips);
 
-router.delete('/:tripId', auth, tripController.deleteTrip);
+
 
 module.exports = router;

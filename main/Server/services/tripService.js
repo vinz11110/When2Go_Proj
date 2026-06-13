@@ -16,7 +16,9 @@ async function deleteTrips(userId, tripIds) {
 
     await user.save();
 
-    return user.savedPlans
+    return user.savedPlans.map(
+        trip => trip._id.toString()
+    );
 }
 
 module.exports = {
