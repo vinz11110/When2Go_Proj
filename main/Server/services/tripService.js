@@ -1,7 +1,8 @@
 const User = require('../models/User');
 
-
 async function deleteTrips(userId, tripIds) {
+    console.log("req.user:", userId);
+    console.log("tripIds:", tripIds);
     const user = await User.findById(userId);
 
     if(!user) {

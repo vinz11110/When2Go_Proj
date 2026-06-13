@@ -183,9 +183,11 @@ exports.deleteTrip = async (req, res) => {
 };
 exports.deleteTrips = async(req, res) => {
     try {
-        const { tripIds } = req.body;
-
-        const remainingTrips = await tripService.deleteTrips(req.user.userId, tripIds);
+        
+        const { deleteTrips } = req.body;
+        console.log("req.user:", req.user);
+        console.log("tripIds:", deleteTrips);
+        const remainingTrips = await tripService.deleteTrips(req.user, tripIds);
                 res.status(201).json({
         success: true,
         trips: remainingTrips
