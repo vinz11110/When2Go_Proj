@@ -790,7 +790,7 @@ function updatePlanLists(){
     });
 }
 function sendSavedTrips(){
-    fetch(`http://localhost:3000/api/trips/${userdata.sessionToken}/getTrips`, {
+    fetch(`http://localhost:3000/api/trips/deleteRecomms`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
