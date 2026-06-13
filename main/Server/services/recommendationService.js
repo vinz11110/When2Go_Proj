@@ -42,7 +42,6 @@ function getBestMonthScore(destination, categories, months){
 }
 
 function generateTripDates(month, duration) {
-    console.log("inside generateTripDates")
     const currentYear = new Date().getFullYear();
 
     const monthIndexMap = {
@@ -152,11 +151,6 @@ const vacationPreferences = {
 async function createTrips(recommendations, userId, categories, duration){
     console.log("inside createTrips")
     const user = await User.findById(userId)
-    console.log(
-    "userId:", userId,
-    "categories:", categories,
-    "duration:", duration
-    )
 
 
         const trips = recommendations.map(
@@ -184,11 +178,11 @@ async function createTrips(recommendations, userId, categories, duration){
             if(!user){
                 throw new Error("User not found");
             }
-            user.savedPlans.push(...trips);
+            user.savedPlans = trips
 
             await user.save();
 
-            return user.savedPlans
+            return trips;
         }
 
 
@@ -241,10 +235,10 @@ async function getRecommendations(months, categories, userId, tripLength) {
         (a, b) => b.score - a.score
     );
 
-    const top10 = scored.slice(0, 10);
-    console.log("Top10:", top10);
+    const top4 = scored.slice(0, 4);
+    console.log("top4:", top4);
     return await createTrips(
-        top10,
+        top4,
         userId,
         categories,
         tripLength
