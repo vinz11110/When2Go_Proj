@@ -616,6 +616,8 @@ function getRecomms(){
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userdata.sessionToken}`
+
         },
         body: JSON.stringify({
             tripLength: userdata.days,
@@ -790,7 +792,7 @@ function updatePlanLists(){
     });
 }
 function sendSavedTrips(){
-    fetch(`http://localhost:3000/api/trips/deleteRecomms`, {
+    fetch(`http://localhost:3000/api/trips/deleteTrips`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

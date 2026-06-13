@@ -15,6 +15,8 @@ router.get('/all', async (req, res) => {
 
 router.post('/save', auth, tripController.saveTrip);
 
+router.delete('/deleteTrips', auth, tripController.deleteTrips);
+
 router.get('/:tripId', auth, tripController.getTripById);
 
 router.put('/:tripId/packinglist', auth, tripController.updatePackingList);
@@ -22,7 +24,5 @@ router.put('/:tripId/packinglist', auth, tripController.updatePackingList);
 router.get('/:userId/getTrips', auth, tripController.getTrips);
 
 router.delete('/:tripId', auth, tripController.deleteTrip);
-
-router.delete('/deleteTrips', auth, tripController.deleteTrips);
 
 module.exports = router;
