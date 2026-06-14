@@ -613,6 +613,7 @@ function getRecomms(){
                     <img src="${recomm.imageUrl}" alt="${recomm.destination}" class="recomm-img">
                     <div class="recomm-info">
                         <strong>${recomm.destination}</strong><br>
+                        <p class="recommDescription">${recomm.description}</p><br>
                         <small>${convertDate(recomm.startDate)} - ${convertDate(recomm.endDate)}</small>
                     </div>
                 </button>

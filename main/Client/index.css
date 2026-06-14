@@ -463,7 +463,12 @@ dialog[open] {
     color: #0f172a;
     line-height: 1.2;
 }
-
+.recommDescription{
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #0f172a;
+    line-height: 1.2;
+}
 /* Date Range Tag styling */
 .recomm-info small {
     display: inline-block;
