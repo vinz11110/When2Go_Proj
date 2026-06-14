@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     },
     savedPlans: [{
         destination: String,
+        description: String,
         imageUrl: String,
         tripLength: Number,
         startDate: Date,

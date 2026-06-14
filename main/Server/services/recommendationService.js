@@ -165,9 +165,10 @@ async function createTrips(recommendations, userId, categories, duration){
                 } = generateTripDates(
                     recommendation.recommendedMonth, duration
                 );
-
+                console.log(recommendation.description)
                 return {
                     destination: recommendation.city,
+                    description: recommendation.description,
                     imageUrl: recommendation.imageUrl,
                     tripLength: duration,
                     startDate,
