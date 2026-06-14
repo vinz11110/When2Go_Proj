@@ -635,7 +635,7 @@ function convertDate(dateString){
     const day = date.getUTCDate();       // Returns 15 (as a number)
     const month = date.getUTCMonth() + 1; // Returns 2 (months are 0-indexed in JS, so +1)
 
-    const formattedDate = `${day}/${month}.`;
+    const formattedDate = `${day}/${month}`;
 
     return formattedDate;
 }
