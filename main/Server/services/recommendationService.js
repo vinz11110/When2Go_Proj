@@ -43,10 +43,11 @@ function getBestMonthScore(destination, categories, months){
 
 function generateTripDates(month, duration) {
     const currentYear = new Date().getFullYear();
+    const targetYear = 2026;
 
     const monthIndexMap = {
-        Jan: 0,
-        Feb: 1,
+        Jan: 0, January: 0,
+        Feb: 1, February: 0,
         Mar: 2,
         Apr: 3,
         May: 4,
@@ -58,15 +59,38 @@ function generateTripDates(month, duration) {
         Nov: 10,
         Dec: 11
     }
-    const monthIndex = monthIndexMap[month];
+    const safeMonth = month.charAt(0).toUpperCase() + month.slice(1).toLowerCase();
+    const monthIndex = monthIndexMap[safeMonth];
 
-    const startDate = new Date(currentYear, monthIndex, 1);
-    console.log(startDate)
+    const tripDays = Number(duration) || 1;
+    const daysInMonth = new Date(targetYear, monthIndex + 1, 0).getDate();
+    const latestStartDay = daysInMonth - tripDays + 1;
 
-    const endDate = new Date(startDate)
+    const randomStartDay = Math.floor(Math.random() * latestStartDay) + 1;
+    const startDate = new Date(targetYear, monthIndex, randomStartDay);
 
+    const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + Number(duration));
-    console.log(endDate)
+    // const monthIndex = monthIndexMap[month]; zzz
+
+    // const tripDays = Number(duration) || 1;
+
+    // const daysInMonth = new Date(targetYear, monthIndex + 1, 0,).getDate();
+
+    // const latestStartDay = daysInMonth - tripDays + 1;
+
+    // const randomStartDay = Math.floor(Math.random() * latestStartDay) + 1;
+
+    // const startDate = new Date(targetYear, monthIndex, randomStartDay);
+
+    // const endDate = new Date(startDate);
+    // endDate.setDate(endDate.getDate() + Number(duration)); zzz
+    // console.log(startDate)
+
+    // const endDate = new Date(startDate)
+
+    // endDate.setDate(endDate.getDate() + Number(duration));
+    // console.log(endDate)
 
     return {
         startDate,
@@ -157,8 +181,6 @@ async function createTrips(recommendations, userId, categories, duration){
 
         const trips = recommendations.map(
             recommendation => {
-                console.log("Processing destination: ", recommendation.city);
-                console.log("Check if image url", recommendation.imageUrl);
                 const {
                     startDate,
                     endDate

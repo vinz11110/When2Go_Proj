@@ -601,7 +601,6 @@ function getRecomms(){
         return response.json();
     })
     .then(data => {
-        console.log("Data returned from backend: ", data); //remove later
         const container = document.getElementById('recommendsList');
         container.innerHTML = "";
         for(const recomm of data){
