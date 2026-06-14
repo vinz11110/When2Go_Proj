@@ -15,8 +15,10 @@ let userdata = {
     deleteSavedId: [],
     tripData: {},
 };
-window.addEventListener('load', () => {
-    getSession();
+window.addEventListener('load', async () => {
+    if(userdata.sessionToken){
+        await getSession();
+    }
     let savedData = localStorage.getItem('when2go_data');
     if (savedData) {
         userdata = JSON.parse(savedData);
@@ -29,7 +31,7 @@ window.addEventListener('load', () => {
         fillSavedPackLi();
         const finPTitle = document.getElementById('finPageTitle');
         if (finPTitle && userdata.tripData[userdata.recommId]) {
-        finPTitle.textContent = userdata.tripData[userdata.recommId].Location;
+            finPTitle.textContent = `Your Trip to ${userdata.tripData[userdata.recommId].destination} in ${monthNameMap[userdata.startMonth]}`;
         }
         }else{
             userdata.currentPage ='mainPage'
@@ -778,9 +780,9 @@ async function getWeather(){
         return response.json();
     })
     .then(data => {
-        document.getElementById('weather-temp').textContent = `${Math.round(data.data.avgTemp)}°C`;
-        document.getElementById('weather-rain').textContent = `${Math.round(data.data.rainProbability)}%`;
-        document.getElementById('weather-wind').textContent = `${Math.round(data.data.windSpeed)} km/h`;
+        document.getElementById('weather-temp').textContent = `${Math.round(data.data.avgTemp||data.data.avg_temp)}°C`;
+        document.getElementById('weather-rain').textContent = `${Math.round(data.data.rainProbability||data.data.rain_probability)}%`;
+        document.getElementById('weather-wind').textContent = `${Math.round(data.data.windSpeed||data.data.avg_wind)} km/h`;
         return true;
     })
     .catch(error => {
@@ -817,8 +819,8 @@ async function getTrips(){
         alert("Could not reach the server.");
     });
 }
-function getSession(){
-    fetch(`http://localhost:3000/session`, {
+async function getSession(){
+    return fetch(`http://localhost:3000/session`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

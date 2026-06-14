@@ -784,6 +784,7 @@ dialog[open] {
     padding: 24px;
     height: 100%;
     box-sizing: border-box;
+    background-color: #abe2ff;
 }
 #ccfElements{
     display: flex;
