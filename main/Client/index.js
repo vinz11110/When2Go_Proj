@@ -5,7 +5,7 @@ let userdata = {
     selectDates:[],
     selectCalD:null,
     session: false,
-    recommId:'575647655',
+    recommId:null,
     currentPage:'mainPage',
     startMonth: null,
     sessionToken : null,
@@ -16,7 +16,7 @@ let userdata = {
     tripData: {},
 };
 window.addEventListener('load', () => {
-    // getSession();
+    getSession();
     let savedData = localStorage.getItem('when2go_data');
     if (savedData) {
         userdata = JSON.parse(savedData);
@@ -105,6 +105,7 @@ function logoutUsr(){
     userdata.savedDayPlanners={},
     userdata.savedRecommIds= [],
     userdata.tripData={},
+    userdata.deleteSavedId= [],
     sessionBtns();
     saveUsrData();
     window.location.reload();
@@ -190,7 +191,7 @@ async function toggleView(currentPage){
                 document.getElementById('chPage3').classList.add('hidden');
                 document.getElementById('finPage').classList.remove('hidden');
                 await getWeather();
-                sendSavedTrips();
+                sendUnsavedTrips();
 
             }
             
@@ -350,7 +351,7 @@ function calChangeMonth(switchDir){
         listContain.innerHTML = "";
     saveUsrData();
 }
-function delLi(element){
+function delLiItem(element){
     const allSelected = document.querySelectorAll('.selectedPl');
 
     const currentTrip = userdata.recommId;
@@ -545,35 +546,26 @@ function loadInTripData(id){
 
     userdata.recommId=id;
     userdata.selectDates = Dates;
-    userdata.months = [reverseMonthMap[getMonthFromCustomStyle(Dates[0])]];
+    userdata.months = [reverseMonthMap[getMonthFromDate(Dates[0])]];
     userdata.savedPackingLists[id] = tripData.packingList
     userdata.savedDayPlanners = tripData.dayPlanner
     saveUsrData();
 }
-function getMonthFromCustomStyle(customDateString) {
-    // If the input is "15.2.", splitting by '.' gives you ["15", "2", ""]
+function getMonthFromDate(customDateString) {
     const parts = customDateString.split('/');
-    
-    // The month number is at index 1
     const monthNumber = parseInt(parts[1], 10);
     
     return monthNumber;
 }
 function createDateList(startDateString, endDateString){
     const dates = [];
-    // 1. Convert inputs to Date objects
     const current = new Date(startDateString);
     const end = new Date(endDateString);
-
-    // 2. Loop until the current date passes the end date
     while (current <= end) {
         const day = current.getUTCDate();
-        const month = current.getUTCMonth() + 1; // Months are 0-indexed
-        
-        // 3. Format to "DD.M." and push to array
+        const month = current.getUTCMonth() + 1; 
         dates.push(`${day}/${month}`);
 
-        // 4. Move to the next day
         current.setUTCDate(current.getUTCDate() + 1);
     }
     return dates;
@@ -631,9 +623,8 @@ function convertDate(dateString){
     const isoString =dateString;
     const date = new Date(isoString);
 
-    // Use UTC methods to keep the original date intact
-    const day = date.getUTCDate();       // Returns 15 (as a number)
-    const month = date.getUTCMonth() + 1; // Returns 2 (months are 0-indexed in JS, so +1)
+    const day = date.getUTCDate();      
+    const month = date.getUTCMonth() + 1;
 
     const formattedDate = `${day}/${month}`;
 
@@ -649,20 +640,13 @@ function toggleRecommPick(element){
     }
     const newRecommId = element.id.replace('pick-', '');
 
-    // 2. Clear out the OLD active recommendation ID from your saved array
     if (userdata.recommId) {
         userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== userdata.recommId);
     }
-
-    // 3. Assign the new ID to your global active state tracker
     userdata.recommId = newRecommId;
-
-    // 4. Push the new ID into your arrays safely without duplicates
     if (!userdata.savedRecommIds.includes(newRecommId)) {
         userdata.savedRecommIds.push(newRecommId);
     }
-
-    // 5. Explicitly clear it from your deletion list so it doesn't get sent to the DELETE endpoint!
     if (userdata.deleteSavedId && Array.isArray(userdata.deleteSavedId)) {
         userdata.deleteSavedId = userdata.deleteSavedId.filter(id => id !== newRecommId);
     }
@@ -696,8 +680,6 @@ async function getTripData(ID){
     });
 }
 async function deleteSavedTrip(ID){
-    // const rawId = ID.replace('delete-', '')
-    // userdata.savedRecommIds = userdata.savedRecommIds.filter(id => id !== rawId)
     const rawId = ID.replace('delete-', '')
     let URL = `http://localhost:3000/api/trips/${rawId}`
     fetch(URL, {
@@ -755,7 +737,7 @@ function updatePlanLists(){
         alert("Could not reach the server.");
     });
 }
-function sendSavedTrips(){
+function sendUnsavedTrips(){
     fetch(`http://localhost:3000/api/trips/deleteTrips`, {
         method: 'DELETE',
         headers: {
@@ -884,17 +866,13 @@ function findCheckedRecomms(){
 async function login(event) {
     if (event) event.preventDefault();
     console.log('login')
-    //getting value from the inputs
     const email = document.getElementById('logUsername').value;
     const password = document.getElementById('logPassword').value;
 
-    //checking if data is valid
     if (!email || !password) {
         alert("Please fill in all fields.");
         return;
     }
-
-    //sending data to backend
     try {
         const response = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
@@ -909,9 +887,9 @@ async function login(event) {
         if (data.success) {
             alert("Logged in successfully."+ data.token)
             userdata.session = true;
-            userdata.sessionToken=data.token; //saving token to browsers local storage
+            userdata.sessionToken=data.token; 
             sessionBtns();
-            closeDialog(); //redirecting user to homepage
+            closeDialog();
             getTrips();
             saveUsrData();
         }   else {
@@ -924,12 +902,10 @@ async function login(event) {
 }
 async function register(event) {
     if (event) event.preventDefault();
-    // getting values from inputs
     const email = document.getElementById('signUsername').value;
     const password = document.getElementById('signPassword').value;
     const passwordRepeat = document.getElementById('repeatSignPassword').value;
 
-    //checking if information is valid
     if (!email || !password) {
         alert("Please fill in all fields.");
         return;
@@ -940,7 +916,6 @@ async function register(event) {
         return;
     }
 
-    //sending data to backend
     try {
         const response = await fetch('http://localhost:3000/api/auth/register', {
             method: 'POST',
@@ -955,9 +930,9 @@ async function register(event) {
         if (data.success) {
             alert("Account created.");
             userdata.session = true;
-            userdata.sessionToken=data.token; //saving token to browsers local storage
+            userdata.sessionToken=data.token; 
             sessionBtns();
-            closeDialog(); //redirecting user to homepag
+            closeDialog();
             saveUsrData();
         }   else {
             alert("Error: " + data.message);
