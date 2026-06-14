@@ -579,47 +579,6 @@ function createDateList(startDateString, endDateString){
     return dates;
 }
 function getRecomms(){
-    // const mockRecommendations = [
-    //     {
-    //         "ID": "575647655",
-    //         "City": "Istanbul",
-    //         "Country": "Turkey",
-    //         "Pic": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=300&q=80",
-    //         "DateRange": "15.07.2026 - 22.07.2026"
-    //     },
-    //     {
-    //         "ID": "984321554",
-    //         "City": "Marrakech",
-    //         "Country": "Morocco",
-    //         "Pic": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?auto=format&fit=crop&w=300&q=80",
-    //         "DateRange": "01.08.2026 - 08.08.2026"
-    //     },
-    //     {
-    //         "ID": "223411987",
-    //         "City": "Casablanca",
-    //         "Country": "Morocco",
-    //         "Pic": "https://images.unsplash.com/photo-1559586616-3df185a1e6c2?auto=format&fit=crop&w=300&q=80",
-    //         "DateRange": "10.08.2026 - 17.08.2026"
-    //     }
-    // ];
-    // const container = document.getElementById('recommendsList');
-    // container.innerHTML = "";
-    // for(const recomm of mockRecommendations){
-    //     const li = document.createElement('li')
-    //     li.className = "recomm-item";
-    //     li.innerHTML = `
-    //         <button type="button" class='recommPick' id="pick-${recomm.ID}" onclick='toggleRecommPick(this)'>
-    //             <img src="${recomm.Pic}" alt="${recomm.City}" class="recomm-img">
-    //             <div class="recomm-info">
-    //                 <strong>${recomm.City}, ${recomm.Country}</strong><br>
-    //                 <small>${recomm.DateRange}</small>
-    //             </div>
-    //         </button>
-    //         <div>
-    //             <input type="checkbox" class='recommCheck' id="check-${recomm.ID}">
-    //         </div>
-    //         `;
-    //     container.append(li)}
 
     fetch('http://localhost:3000/api/recommendations/getTripRecommendations', {
         method: 'POST',
@@ -710,33 +669,7 @@ function toggleRecommPick(element){
     saveUsrData();
 }
 async function getTripData(ID){
-    // const mockDataPackage = {
-    //     "id": ID, // Dynamically use whatever ID was requested
-    //     "Location": "Istanbul, Turkey",
-    //     "Months": ["Jul"],
-    //     "Dates": ["15.7", "16.7", "17.7", "18.7", "19.7", "20.7", "21.7", "22.7"],
-    //     "PackList": {
-    //         [`${ID}`]: [
-    //             { "text": "Passport", "checked": true },
-    //                 { "text": "Sunscreen", "checked": false },
-    //                 { "text": "Comfortable Walking Shoes", "checked": false }
-    //             ]
-    //         },
-    //     "DayPLanners": {
-    //         [`${ID}_15.7`]: [
-    //             "Arrive at Istanbul Airport",
-    //             "Check into hotel in Beyoğlu",
-    //             "Dinner near Galata Tower"
-    //         ],
-    //         [`${ID}_16.7`]: [
-    //             "Morning walk through Sultanahmet",
-    //             "Visit Hagia Sophia",
-    //             "Bosphorus Sunset Cruise"
-    //         ]
-    //     }
-    // };
-    // userdata.tripData[ID]=mockDataPackage;
-    // saveUsrData();
+
     let URL = `http://localhost:3000/api/trips/${ID}`
     return fetch(URL, {
         method: 'GET',
