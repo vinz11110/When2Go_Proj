@@ -887,7 +887,6 @@ async function login(event) {
         const data = await response.json();
 
         if (data.success) {
-            alert("Logged in successfully."+ data.token)
             userdata.session = true;
             userdata.sessionToken=data.token; 
             sessionBtns();
@@ -930,7 +929,6 @@ async function register(event) {
         const data = await response.json();
 
         if (data.success) {
-            alert("Account created.");
             userdata.session = true;
             userdata.sessionToken=data.token; 
             sessionBtns();
